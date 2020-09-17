@@ -1,0 +1,54 @@
+
+.accordion {
+    width: 80%;
+    height: 100%;
+    overflow: scroll;
+}
+
+#page-container .sh-accordion .panel .panel-collapse .panel-body{
+    background: #262626 !important;
+}
+
+mat-expansion-panel-header {
+    background-color: #bbbbbb;
+}
+
+.mat-expansion-panel-header.mat-expanded {
+    background-color: #bbbbbb !important;
+}
+
+mat-expansion-panel {
+    background-color: #EEE;
+}
+
+.accordionContent {
+    margin-top: 15px;
+}
+
+.tool {
+    cursor: pointer;
+    color: grey;
+    float: right;
+}
+
+.tool:hover {
+    background-color: rgb(206, 206, 206);
+}
+
+.tool:active {
+    color: #EEE;
+}
+
+.headeradresse {
+    margin: 5px;
+    padding: 5px;
+    background-color: #EEE;
+}
+
+.formField {
+    max-width: 90%;
+}
+
+.clear {
+    clear: both;
+}

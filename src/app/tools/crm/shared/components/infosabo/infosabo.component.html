@@ -1,0 +1,40 @@
+<div [ngStyle]="{'height.px': innerheight}">
+    <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate" color="warn"></mat-progress-bar>
+    <div *ngFor="let abo of abodaten" >
+        <!--<mat-card (click)="goToAbo(abo.adressnr, abo.vorgangsnr, abo.posnr)">-->
+        <mat-card (click)="goToAbo(abo.rbeznr, abo.vorgnr, abo.posnr)">
+            <table style="width: 80%">
+                <tr>
+                <th style="text-align: left">
+                    <h4>{{abo.objekt_txt}}</h4>
+                    <div><span i18n="@@fullAboart">Aboart</span>:     <span style="float: right">{{abo.artverk_txt}}</span></div>
+                    <div><span i18n="@@fullTimeSpan">Laufzeit</span>: <span style="float: right">{{abo.gueltigbis | date:'dd.MM.yyyy'}}</span></div>
+                    <div><span i18n="@@fullToBill">Fakturiert</span>: <span style="float: right">{{abo.tt_abokontr[0]['termin-neu'] | date:'dd.MM.yyyy'}}</span></div>
+                    <div><span i18n="@@fullStatus">Status</span>:     <span style="float: right">{{abo.stat_txt}}</span></div>
+                </th>
+                </tr>
+            </table>
+        </mat-card>
+    </div>
+</div>
+
+<!-- <mat-list [ngStyle]="{'height.px': innerheight}">
+    <mat-list-item *ngFor="let abo of abodaten">
+        <h4 mat-line>{{abo.artikelbez}}</h4>
+        <p mat-line>
+          <span>{{abo.zustellbis}} </span>
+        </p>
+        <p mat-line>
+          <span>{{abo.zustellbis}} -- </span>
+          <span class="demo-secondary-text">{{abo.naechstefaktura} -- </span>
+          <span class="demo-secondary-text">{{abo.gesperrt}}</span>
+        </p>
+         <p mat-line>
+          <span>{{abo.umlunt}}</span>
+         </p>
+        <button  mat-icon-button matTooltip="Umleitungen"><mat-icon>shuffle</mat-icon></button>
+        <button  mat-icon-button matTooltip="Unterbrechen"><mat-icon>notifications_paused</mat-icon></button>
+         <button  mat-icon-button matTooltip="Kündigen"><mat-icon>clear</mat-icon></button> 
+      </mat-list-item>
+     
+    </mat-list> -->

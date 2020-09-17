@@ -1,0 +1,50 @@
+<span i18n="@@changeClient">Kunde ändern</span><button mat-icon-button (click)="openkundensuche()"><mat-icon>search</mat-icon></button>
+<table class="full-width" cellspacing="0"><tr>
+    <td>
+        <mat-form-field class="full-width">
+  <input matInput placeholder="Kunde"  i18n-placeholder="@@client" [(ngModel)]="fnamekunde">
+</mat-form-field>
+    </td>
+    <td>
+       <mat-form-field class="full-width">
+  <input matInput placeholder="Vor-Name" i18n-placeholder="@@firstNamePlaceholder" disabled [(ngModel)]="vnamekunde">
+</mat-form-field>
+</td>
+  </tr>
+  <tr>
+      <td>
+          <mat-form-field class="full-width">
+  <input matInput placeholder="Nummer" i18n-placeholder="@@numberPlaceholder" disabled [(ngModel)]="beznrkunde">
+</mat-form-field>
+      </td>
+      <td>
+           <mat-form-field class="full-width">
+  <input matInput placeholder="Zusatz1" i18n-placeholder="@@addition1Placeholder" disabled [(ngModel)]="zusatz1kunde">
+</mat-form-field>
+      </td>
+  </tr>
+  <tr>
+      <td>
+          <mat-form-field class="full-width">
+  <input matInput placeholder="Zusatz2" i18n-placeholder="@@addition2Placeholder" disabled [(ngModel)]="zusatz2kunde">
+</mat-form-field>
+      </td>
+      <td>
+          <mat-form-field class="full-width">
+  <input matInput placeholder="Zusatz3" i18n-placeholder="@@addition3Placeholder" disabled [(ngModel)]="zusatz3kunde">
+</mat-form-field>
+      </td>
+  </tr>
+  <tr>
+      <td>
+         <mat-form-field class="full-width">
+  <input matInput placeholder="Strasse" i18n-placeholder="@@street" disabled [(ngModel)]="strassekunde">
+</mat-form-field> 
+      </td>
+       <td>
+           <mat-form-field class="full-width">
+  <input matInput placeholder="Ort" i18n-placeholder="@@place" disabled [(ngModel)]="ortkunde">
+</mat-form-field>
+       </td>
+  </tr>
+  </table>

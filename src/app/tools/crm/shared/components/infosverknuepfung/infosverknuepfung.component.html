@@ -1,0 +1,7 @@
+ <td style="width:10%">
+<!--    <button *ngIf="isActiveLink" pButton type="button" class="ui-button-secondary"   (click)="verknuepfungEinAus($event)" icon="fa fa-unlink" iconPos="left"></button>-->
+<!--    <button *ngIf="!isActiveLink" pButton type="button" class="ui-button-secondary"   (click)="verknuepfungEinAus($event)" icon="fa fa-link" iconPos="left"></button>-->
+
+     <button *ngIf="isActiveLink" mat-icon-button matTooltip="Nur Aufträge mit gleichem Objekt/Rubrik/Unterrurbik" i18n-matTooltip="@@Mathias" matTooltipPosition="below" (click)="verknuepfungEinAus($event)"><mat-icon>link</mat-icon></button>
+     <button *ngIf="!isActiveLink" mat-icon-button matTooltip="Alle Aufträge unabhängig Objekt/Rubrik/Unterrurbik" i18n-matTooltip="@@Mathias" matTooltipPosition="below" (click)="verknuepfungEinAus($event)"><mat-icon>link_off</mat-icon></button>
+</td>

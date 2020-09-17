@@ -1,0 +1,18 @@
+<mat-drawer-container class="mainContainer" autosize (window:resize)="windowResize()">
+
+  <mat-drawer #drawer class="sidenavContainer" mode="side">
+    <div style="float: right; padding-left: 5px; padding-right: 5px;">
+      <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded">
+        <mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon>
+      </button>
+    </div>
+    <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [lastAppModule]="lastAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+  </mat-drawer>
+
+  <div class="appMainframe">
+    <div><app-headeranzeige [currentAppModule]="currentAppModule" [modulename]="modulename" (onSidenavToggle)="drawer.toggle()"></app-headeranzeige></div>
+    <mat-progress-bar style="position:fixed;top:0;width:100%;z-index:100;" *ngIf="progressbar_visible" color="warn" mode="query"></mat-progress-bar>
+
+    <app-kovl></app-kovl>
+  </div>
+</mat-drawer-container>

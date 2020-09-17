@@ -1,0 +1,15 @@
+<div>
+   <mat-form-field class="example-full-width">
+   <input type="text"  matInput [formControl]="formctrl" [(ngModel)]="vertretervalue" placeholder="Vertreter" i18n-placeholder="@@representative" (ngModelChange)="Vertreterchange($event)" [matAutocomplete]="auto">
+   
+   <button mat-button *ngIf="vertretervalue" matSuffix mat-icon-button aria-label="Clear" (click)="deletevertreter(vertretervalue='')" >
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>
+
+<mat-autocomplete #auto="matAutocomplete">
+   <mat-option *ngFor="let ver of vertreters" [value]="ver.vertreter" (click)="additemforsearch(ver)">
+      {{ ver.vertreter}}
+   </mat-option>
+</mat-autocomplete>
+</div>

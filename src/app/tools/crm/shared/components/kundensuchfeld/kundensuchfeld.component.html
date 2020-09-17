@@ -1,0 +1,69 @@
+<!--<div  style="font-weight: bold;"><br>Kunde:-->
+
+<!--</div>-->
+<!--<div> -->
+<!--  <p-autoComplete [style]="{'width':'92%'}" [inputStyle]="{'width':'100%'}" delay="300" placeholder="Kunden" [(ngModel)]="kundetext"-->
+<!--    [suggestions]="kundendata" (completeMethod)="changeKunde($event)" field="fname" (onSelect)=selectedvaluekunde(kundetext) ></p-autoComplete>-->
+<!--</div>-->
+<!--<br>-->
+<!--<label class="sizelabel">Kunde Nr:</label><span ><input type="text" readonly pInputText [(ngModel)]="beznrkunde" placeholder="Kunden Nummer" style="width: 70%"/></span> <br>-->
+<!--<label class="sizelabel">Name:</label><span ><input type="text" readonly pInputText [(ngModel)]="fnamekunde" placeholder="Name" style="width: 70%"/></span> <br>-->
+<!--<label class="sizelabel">Vor-Name:</label><span ><input type="text" readonly pInputText [(ngModel)]="vnamekunde" placeholder="Vor-Name" style="width: 70%"/></span><br>-->
+<!--<label class="sizelabel">Zusatz1:</label><span ><input type="text" readonly pInputText [(ngModel)]="zusatz1kunde" placeholder="Zusatz1" style="width: 70%"/></span><br>-->
+<!--<label class="sizelabel">Zusatz2:</label><span ><input type="text" readonly pInputText [(ngModel)]="zusatz2kunde" placeholder="Zusatz2" style="width: 70%"/></span><br>-->
+<!--<label class="sizelabel">Zusatz3:</label><span ><input type="text" readonly pInputText [(ngModel)]="zusatz3kunde" placeholder="Zusatz3" style="width: 70%"/></span><br>-->
+<!--<label class="sizelabel">Strasse:</label><span ><input type="text" readonly pInputText [(ngModel)]="strassekunde" placeholder="Strasse" style="width: 70%"/></span><br>-->
+<!--<label class="sizelabel">Ort:</label><span ><input type="text" readonly pInputText [(ngModel)]="ortkunde" placeholder="Ort" style="width: 70%"/></span>-->
+
+
+<div>
+   <mat-form-field class="example-full-width">
+   <input  type="text"  matInput [formControl]="formctrl" placeholder="Kunde" i18n-placeholder="@@client" value="" (ngModelChange)="Kunden($event)" [matAutocomplete]="auto">
+ <!--  <section style="float:right; margin-top:8px">-->
+ <!--         <mat-slide-toggle [color]="color" [checked]="checkedKunde" [disabled]="disabled" (change)="changecheckedKunde()"  >-->
+ <!--           P/A-->
+ <!--        </mat-slide-toggle>-->
+ <!--</section>-->
+</mat-form-field>
+
+
+<mat-autocomplete #auto="matAutocomplete">
+   <mat-option *ngFor="let kunde of kunden" [value]="kunde.bfname" (click)="additemforsearch(kunde)">
+       <span *ngIf="kunde.bfname"> {{kunde.bfname}}, </span><span *ngIf="kunde.vname"> {{kunde.vname}}, </span><span *ngIf="kunde.bzusatz1"> {{kunde.bzusatz1}}, </span><span *ngIf="kunde.bzusatz2"> {{kunde.bzusatz2}}, </span><span *ngIf="kunde.bort"> {{kunde.bort}}, </span><span *ngIf="kunde.bbeznr"> {{kunde.bbeznr}} </span>
+   </mat-option>
+</mat-autocomplete>
+ 
+</div>
+
+<form [formGroup]="filter">
+<div formArrayName="itemforsearch">
+    
+    <div *ngFor="let _itemforsearch of filter.get('itemforsearch')?.controls; let i = index" >
+
+            <div [formGroupName]="i"  class="container" fxLayout fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+                <div >
+                     <div >
+                        <div>
+                  <mat-card>
+                    <mat-card-header>
+                    <mat-card-title><span i18n="@@client">Kunde</span><button fxFlex mat-icon-button (click)="closekunde(i)"><mat-icon>close</mat-icon></button>
+                    </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="50%"><input placeholder="Kundennummer" i18n-placeholder="@@clientNumberPlaceholder" matInput formControlName="beznrkunde" /></mat-form-field>
+                        <mat-form-field class="example-full-width" fxFlexOrder="2" fxFlex="50%"><input placeholder="Kunde" i18n-placeholder="@@client" matInput formControlName="fnamekunde" /></mat-form-field>
+                        <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="50%"><input placeholder="Strasse Nr" i18n-placeholder="@@streetNumberPlaceholder" matInput formControlName="strassekunde" /></mat-form-field>
+                        <mat-form-field class="example-full-width" fxFlexOrder="2" fxFlex="50%"><input placeholder="PLZ Ort" i18n-placeholder="@@fullPlacePlaceholder" matInput formControlName="ortkunde" /></mat-form-field>
+                        <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="50%"><input placeholder="Vorname" i18n-placeholder="@@firstNamePlaceholder" matInput formControlName="vnamekunde" /></mat-form-field>
+                        <mat-form-field class="example-full-width" fxFlexOrder="2" fxFlex="50%"><input placeholder="Zusatz1" i18n-placeholder="@@addition1Placeholder" matInput formControlName="zusatz1kunde" /></mat-form-field>
+                        <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="50%"><input placeholder="Zusatz2" i18n-placeholder="@@addition2Placeholder" matInput formControlName="zusatz2kunde" /></mat-form-field>
+                        <mat-form-field class="example-full-width" fxFlexOrder="2" fxFlex="50%"><input placeholder="Zusatz3" i18n-placeholder="@@addition3Placeholder" matInput formControlName="zusatz3kunde" /></mat-form-field>
+                    </mat-card-content>
+                  </mat-card>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</form>

@@ -1,0 +1,4 @@
+.mat-button, .mat-raised-button{
+    line-height: 23px !Important;
+    padding: 0 8px !Important;
+   }

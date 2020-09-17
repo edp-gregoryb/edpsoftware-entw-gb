@@ -1,0 +1,28 @@
+.container {
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+
+}
+
+.size100 {
+    width: 100%;
+}
+
+.hoeherow {
+    height: 50px;
+}
+
+table {
+    width: 100%;
+}
+
+.selected{
+    background-color: red;
+}
+
+.rowheigth {
+
+    height: 30px !important;
+
+}

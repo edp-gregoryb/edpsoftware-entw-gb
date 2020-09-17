@@ -1,0 +1,102 @@
+.containerfacts {
+    height: 200px;
+}
+.fact {
+    background-color: #c5010e;
+    margin-bottom: 10px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 150px; 
+    
+}
+
+.bgcolor {
+    background-color: #DDD;
+}
+
+.edpModuleCard {
+	background-color: darkgrey;
+	width: 200px;
+	height: 200px;
+	margin: 10px; 
+	text-align: center;
+	overflow:hidden;
+	cursor:pointer;
+}
+
+.edpModuleCard:hover {
+  background-color: #c5010e;
+}
+
+.edpModuleCard:focus {
+  background-color: #777;
+  outline: none;
+}
+
+.edpModuleCard > .moduleShorthand {
+	color: white;
+	position: relative;
+	top: 10px;
+	font-size: 20px;
+}
+
+.edpModuleCard > .moduleName {
+	color: black;
+	position: relative;
+	top: 8px;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.edpModuleCard > .moduleIcon {
+	color: white;
+	position: relative;
+	top: 15px;
+	left: -125px;
+}
+
+.edpModuleCard > .moduleIcon > .material-icons {
+	font-size: 160px;
+}
+
+app-openstreetmap {
+	width: 300px;
+}
+
+textarea {
+	max-height: 300px;
+    caret-color: black;
+}
+
+.clientTitle{
+	margin-top: 10px;
+}
+
+input {
+	margin: 1px;
+}
+
+.appMenu {
+	padding: 5px 15px;
+}
+
+.changeTelNummer {
+	max-width: 175px;
+}
+
+#foo:active {
+	color: green;
+	background-color: lightgreen;
+}
+.crop { 
+	overflow:hidden; 
+	white-space:nowrap; 
+	text-overflow:ellipsis; 
+	width:90%; 
+  }
+  .cropTitel { 
+	overflow:hidden; 
+	white-space:nowrap; 
+	text-overflow:ellipsis; 
+	width:90%; 
+  }

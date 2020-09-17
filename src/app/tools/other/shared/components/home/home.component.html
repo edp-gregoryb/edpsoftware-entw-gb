@@ -1,0 +1,117 @@
+<mat-drawer-container style="background-color: #DDD;" autosize (window:resize)="windowResize()">
+    <!-- Drawer -->
+    <mat-drawer #drawer class="sidenavContainer" mode="side">
+        <div style="float: right; padding-left: 5px; padding-right: 5px;">
+            <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+        </div>
+        <!-- Sidenav -->
+        <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+    </mat-drawer>
+
+    <!-- Header -->
+    <app-defaultheader [currentAppModule]="currentAppModule" [modulename]="modulename" (onSidenavToggle)="drawer.toggle()" #header></app-defaultheader>
+    
+    <!-- Lade-Balken -->
+    <mat-progress-bar *ngIf="httpRequestsLoading > 0" mode="indeterminate" color="warn"></mat-progress-bar>
+    
+    <!-- Header -->
+    <app-header [headerTitle]="headerTitle" [linkBack]="headerLinkBack"></app-header>
+    
+    <!-- Content -->
+    <div class="wrapper" [ngStyle]="{'height.px': innerheight}" style="overflow: scroll;">
+        <div class="smallWrapper">
+
+
+
+            <!-- Neues Objekt -->
+            <button mat-button class="objectbutton" matTooltip="Neues Objekt erstellen" routerLink="/workflow/workflow-show/newOrEditObject" [queryParams]="{newObject: 'true', bestehendesObjekt: 'false'}">
+                <mat-icon class="addObjectbutton">add_circle_outline</mat-icon>
+            </button>
+            <!-- Bestehendes Objekt -->
+            <button mat-button class="objectbutton" matTooltip="Bestehendes Objekt erstellen" routerLink="/workflow/workflow-show/newOrEditObject" [queryParams]="{newObject: 'false', bestehendesObjekt: 'true'}">
+                <mat-icon class="addObjectbutton">system_update_alt</mat-icon>
+            </button>
+            <!-- Workflow-Editor starten (nur temporaer hier (sollte noch anders gestaltet werden)) -->
+            <button mat-button *ngIf="vlpdBerecht" matTooltip="Workflow-Editor" routerLink="/workflow/workflow-show/Editor" class="objectbutton">
+                <mat-icon class="addObjectbutton">build</mat-icon>
+            </button>
+
+            <button mat-button class="objectbutton" matTooltip="Bestehendes Objekt Tabelle" routerLink="/workflow/workflow-show/bestehendeworkfows" >
+                <mat-icon class="addObjectbutton">folder_special</mat-icon>
+            </button>
+
+            <div class="clear"></div>
+
+<!--            <hr *ngIf="products" style="border-color: grey">-->
+            <br>
+
+
+
+            <!-- Alle Produkte -->
+            <div *ngFor="let prod of products ; let i = index">
+<!--                <pre>{{prod.aschlussel}}</pre>-->
+                <div *ngIf="newYear(i) === true">
+                    <div class="clear"></div>
+                    <div style="margin-top: 15px; margin-left: 10px;">
+                        <b>{{prod.aschlussel.substring(0,4)}}</b>
+                    </div>
+                </div>
+                <div *ngIf="prod && prod.objekt && prod.aschlussel" routerLink="/workflow/workflow-show/object/{{prod.objekt}}/{{prod.aschlussel}}" class="object">
+                    <!-- [queryParams]="{ aschlussel: prod.aschlussel }" -->
+                    <!-- Bearbeiten -->
+                    <button  class="editObjectbutton" mat-icon-button (click)="openProduktdetail( prod.objekt, prod.aschlussel, $event)">
+                     <mat-icon >input</mat-icon>
+                    </button>
+<!--                    <mat-icon class="editObject" routerLink="/workflow/workflow-show/newOrEditObject" [queryParams]="{newObject: 'false', objekt: prod.objekt, aschlussel: prod.aschlussel}">settings</mat-icon>-->
+                    <!-- Info -->
+                    <mat-icon style="margin-right: 10px" class="editObject" routerLink="/workflow/workflow-show/productInfo/{{prod.objekt}}/{{prod.aschlussel}}">attach_file</mat-icon>
+
+                    <button style="margin-right: 10px" class="editObjectbutton" mat-icon-button (click)="openFinishmodal(prod.objekt, $event)">
+                        <mat-icon >done</mat-icon>
+                    </button>
+                    <div class="clear"></div>
+<!--                    <div *ngIf="productAdditionalInfo[i]">-->
+                        <!-- Objekt -->
+<!--                        <span style="font-size: 1.2em;">{{productAdditionalInfo[i].objektname}}</span>-->
+                        <span style="font-size: 1.2em;">{{prod.obj_bezeichnung}}</span>
+                        <br>
+                        <!-- Aschlussel -->
+<!--                        <span style="font-size: 0.8em;">{{productAdditionalInfo[i].aschlusselname}}</span>-->
+                    <span style="font-size: 0.8em;">{{prod.ausgbez}}</span>
+                        <br>
+                        <!-- Untertitel -->
+<!--                        <span style="font-size: 0.8em;" *ngIf="productAdditionalInfo[i].untertitelname">{{productAdditionalInfo[i].untertitelname}}</span>-->
+                    <span style="font-size: 0.8em;" *ngIf="prod.untertitel">{{prod.untertitel}}</span>
+                        <br>
+                        <!-- Fortschritt -->
+<!--                        <span style="font-size: 0.8em;" *ngIf="productAdditionalInfo[i].fortschritt">{{productAdditionalInfo[i].fortschritt | number: '1.0-2'}}%</span>-->
+                    <span style="font-size: 0.8em;" *ngIf="prod.fortschritt">{{prod.fortschritt | number: '1.0-2'}}%</span>
+
+<!--                    </div>-->
+                </div>
+
+            </div>
+
+            <div class="clear"></div>
+            
+<!--            <br>-->
+<!--            <hr *ngIf="products" style="border-color: grey">-->
+<!--            <br>-->
+<!--            -->
+<!--            &lt;!&ndash; Neues Objekt &ndash;&gt;-->
+<!--            <button mat-button class="object" routerLink="/workflow/workflow-show/newOrEditObject" [queryParams]="{newObject: 'true'}">-->
+<!--                <mat-icon class="addObject">add_circle_outline</mat-icon>-->
+<!--            </button>-->
+<!--            &lt;!&ndash; Bestehendes Objekt &ndash;&gt;-->
+<!--            <button mat-button class="object" routerLink="/workflow/workflow-show/newOrEditObject" [queryParams]="{newObject: 'true', bestehendesObjekt: 'true'}">-->
+<!--                <mat-icon class="addObject">system_update_alt</mat-icon>-->
+<!--            </button>-->
+<!--            &lt;!&ndash; Workflow-Editor starten (nur temporaer hier (sollte noch anders gestaltet werden)) &ndash;&gt;-->
+<!--            <button mat-button *ngIf="vlpdBerecht" routerLink="/workflow/workflow-show/Editor" class="object">-->
+<!--                <mat-icon class="addObject">build</mat-icon>-->
+<!--            </button>-->
+<!--            -->
+<!--            <div class="clear"></div>-->
+        </div>
+    </div>
+</mat-drawer-container>

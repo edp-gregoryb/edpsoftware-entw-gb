@@ -1,0 +1,290 @@
+             <!-- ####################### START: ALTE TEMPLATES #################### -->
+              
+              <mat-tab *ngIf="(instanzdata.instanz === 'edp-entw')" label="Vorlage 1 hoch ALT">
+                
+                <div id="druckvorschau_alignment_spacer" style="height: 0px;">&nbsp;</div>
+                
+                <div class="druckvorschau" id="druckvorschau">
+
+                  <!--<img id="logo" src="../../assets/koemedia-logo.jpg" />-->
+                  <div id="header">
+                    <!--<img id="logo" src="{{url_logo+'/test.png'}}" />-->
+                    <img id="logo" src="{{url_logo}}" />
+                  </div>
+                  
+                  <div>
+                    <small>
+                        <span id="adressblock" class="print-element">
+                          {{meinVerkaufsdokumentFormular.controls.bestadr1.value}}<br *ngIf="meinVerkaufsdokumentFormular.controls.bestadr2.value != ''">
+                          {{meinVerkaufsdokumentFormular.controls.bestadr2.value}}<br *ngIf="meinVerkaufsdokumentFormular.controls.bestadr3.value != ''">
+                          {{meinVerkaufsdokumentFormular.controls.bestadr3.value}}<br *ngIf="meinVerkaufsdokumentFormular.controls.bestadr4.value != ''">
+                          {{meinVerkaufsdokumentFormular.controls.bestadr4.value}}<br *ngIf="meinVerkaufsdokumentFormular.controls.bestadr5.value != ''">
+                          {{meinVerkaufsdokumentFormular.controls.bestadr5.value}}<br *ngIf="meinVerkaufsdokumentFormular.controls.bestadr6.value != ''">
+                          {{meinVerkaufsdokumentFormular.controls.bestadr6.value}}<br *ngIf="meinVerkaufsdokumentFormular.controls.bestadr7.value != ''">
+                          {{meinVerkaufsdokumentFormular.controls.bestadr7.value}}<br *ngIf="meinVerkaufsdokumentFormular.controls.bestadr8.value != ''">
+                          {{meinVerkaufsdokumentFormular.controls.bestadr8.value}}<br *ngIf="meinVerkaufsdokumentFormular.controls.bestadr9.value != ''">
+                          {{meinVerkaufsdokumentFormular.controls.bestadr9.value}}<br>
+                          <br><br><br><br><br><br>
+                        </span>
+                        <span class="print-element">
+                          {{meinVerkaufsdokumentFormular.controls.ausstelldatum.value  | date :  "dd.MM.yyyy"}}
+                          <br><br><br><br><br><br>
+                        </span>
+                        <b id="bezeichnung" class="print-element" *ngIf="meinVerkaufsdokumentFormular.controls.sujet.value != ''">{{meinVerkaufsdokumentFormular.controls.sujet.value}}<br><br> </b>
+                        <span class="print-element">
+                          {{meinVerkaufsdokumentFormular.controls.indivAnrede.value}}
+                          <br><br>
+                        </span>
+                        <pre id="einleitungstext" class="print-element">{{meinVerkaufsdokumentFormular.controls.indivEinleitungstext.value}}</pre>
+                      <!--<pre class="pre-reset">{{meinVerkaufsdokumentFormular.controls.indivEinleitungstext.value}}</pre>-->
+                        <span class="print-element">
+                          <br><br>
+                        </span>
+
+                       <!-- <div [ngSwitch]="value">
+                        <div *ngSwitchCase="1">1. Template - <b>{{value}}</b> </div>
+                        <div *ngSwitchCase="2">2. Template - <b>{{value}}</b> </div>
+                        <div *ngSwitchCase="3">3. Template - <b>{{value}}</b> </div>
+                        <div *ngSwitchDefault>Default Template</div>
+                      </div> -->
+                      
+                      <div class="angebotsblock" *ngFor="let titel of meinVerkaufsdokumentFormular.controls.titel.controls; let i=index">
+                        <table class="print-element">
+                          <tr *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objBezeichnung.value != ''">
+                            <td class="angebotsspalte1">Titel<span *ngIf="meinVerkaufsdokumentFormular.controls.titel.length>1"> {{i+1}}</span>:</td><td class="right">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objBezeichnung.value}}</td>
+                          </tr>
+                          <tr *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.auflage.value != ''">
+                            <td class="angebotsspalte1">Auflage:</td><td class="right">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.auflage.value | number}} Exemplare</td>
+                          </tr>
+                          <!--<tr *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.rubBezeichnung.value != ''">-->
+                          <!--  <td class="angebotsspalte1"> Rubrik:</td><td>{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.rubBezeichnung.value}}</td>-->
+                          <!--</tr>-->
+                          <!--<tr *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.urubBezeichnung.value != ''">-->
+                          <!--  <td class="angebotsspalte1">Unterrubrik:</td><td>{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.urubBezeichnung.value}}</td>-->
+                          <!--</tr>-->
+                        </table>
+                          
+                        <div class="werbeformatblock print-element" *ngFor="let werbemittel of meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls; let j=index">
+                          
+                          <!-- Block Werbemittel mit unbestimmten Buchungen -->                        
+                          <table *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value == 'A'">
+                            <tr>
+                              <td class="angebotsspalte1">Ihre Werbung:</td><td class="right">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsanzahl.value}}x {{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformat.value}} <span *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatTyp.value == 'mm'" >({{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge1.value}} {{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge1Label.value}} * {{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge2.value}} mm {{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge2Label.value}})</span></td>
+                            </tr>
+                            <!-- Platzierung -->
+                            <tr *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.platzierung.value != ''">
+                              <td>Platzierung: </td><td class="right">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.platzierung.value}}</td>
+                            </tr>
+                          </table>
+                          
+                          <!-- Block Werbemittel mit exakten Buchungen -->
+                          <table *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value != 'A'">
+                            <tr>
+                              <td class="angebotsspalte1">Ihre Werbung:</td><td class="right">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsanzahl.value}}x {{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformat.value}} <span *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatTyp.value == 'mm'" >({{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge1.value}} {{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge1Label.value}} * {{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge2.value}} mm {{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge2Label.value}})</span></td>
+                            </tr>
+                            <tr>
+                              <td>Erscheinung:</td>                    
+                              <td class="right">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.rubBezeichnung.value}} {{erscheinungsdatenAufbereiten(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsausgbez.value,0)}}
+                                <!--<p *ngFor="let ersch of meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsausgbez.value">-->
+                                <!--  --{{ersch.value}}--,-- -->
+                                <!--</p>-->
+                              </td>
+                            </tr>
+                            <tr *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value != 'A' &&
+                                      meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.insertionsschlussAnzeige.value == true">
+                              <td>Anzeigenschluss: </td><td class="right">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.insertionsschlussDatum.value  | date :  "dd.MM.yyyy"}} für {{erscheinungsdatenAufbereiten(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsausgbez.value,1)}}</td>
+                            </tr>
+                            <!-- Platzierung -->
+                            <tr *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.platzierung.value != ''">
+                              <td>Platzierung: </td><td class="right">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.platzierung.value}}</td>
+                            </tr>
+                          </table>
+                          
+                          <!--Rabatte-->
+                          <table *ngFor="let zusatzpreisposition of meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls; let k=index">
+                            <tr *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.bezeichnung.value">
+                        <!--      <td *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.art.value == 'zuschlag'" class="angebotsspalte1">Zuschlag:</td>-->
+                        <!--      <td *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.art.value == 'rabatt'" class="angebotsspalte1">Rabatt:</td>-->
+                              <td class="angebotsspalte1">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.bezeichnung.value}}</td>
+                              <td class="right"><span *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.preisUser.value">
+                                  <span *ngIf="((meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.typ.value != '3') && (meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.typ.value != '5'))">CHF </span>{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.preisUser.value | number : '1.2-2'}}<span *ngIf="((meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.typ.value == '3') || (meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.typ.value == '5'))">%</span>
+                                </span></td>
+                            </tr>
+                          </table>
+              
+                          <!-- Gesamtpreis für Werbemittel -->
+                          <table>
+                            <tr>
+                              <td class="angebotsspalte1">Gesamtpreis:</td>
+                              <td class="right" *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value != 0">
+                                CHF {{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value | number : '1.2-2'}} exkl. MwSt.
+                                <span *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisAmasys.value != 0"> anstatt {{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisAmasys.value | number : '1.2-2'}}</span>
+                                <!-- {{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value | currency:"CHF"}} -->
+                              </td>
+                              <td class="right" *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value == 0">
+                                in Abklärung
+                              </td>
+                            </tr>
+                          </table>
+                          
+                          <table *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.hinweis.value != ''">
+                            <tr>
+                              <td class="angebotsspalte1">Spezielles:</td>
+                              <td class="right"><pre class="pre-reset">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.hinweis.value}}</pre></td>
+                            <tr>
+                          </table>
+                        
+                        </div> <!-- Werbemittel -->
+                      </div> <!-- Ende Angebotsblock -->
+                      <div id="dokumentSchluss" class="print-element">
+                          <pre>{{meinVerkaufsdokumentFormular.controls.indivSchlusssatz.value}}</pre>
+                          <p>
+                              <br><br>
+                              Freundliche Grüsse<br><br>
+                              <b>{{str_company}}</b>
+                              <br><br><br>
+                              {{meinVerkaufsdokumentFormular.controls.verfasser1.value}}<br>
+                              {{meinVerkaufsdokumentFormular.controls.verfasser1funktion.value}}
+                          </p>
+                      </div>
+                    </small>
+                  </div>
+                  <!-- Footer -->
+                  <div id="footer">
+                      <small><b>{{str_company}}</b>{{str_footer}}<span class="page-number"></span></small>
+                  </div>
+                  
+                </div> <!-- Ende Druckvorschau-DIV Template 1 -->
+              </mat-tab>
+              
+              <!--<mat-tab label="Vorlage 2">-->
+              <!--  <div class="druckvorschau">-->
+              <!--    <div class="pull-right" style="background-color: lightgrey; height: 45px; width:100%">-->
+              <!--      <span class="pull-right" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;-->
+              <!--                font-size: 20px;"><span style="color:red;">M</span>ega-Dispo</span><br>-->
+              <!--    </div>-->
+              <!--    <br><br><br><br>-->
+              <!--    <div>-->
+              <!--      <small>-->
+              <!--        Firma<br>-->
+              <!--        Mustermann AG<br>-->
+              <!--        Frau Katja Mustermann<br>-->
+              <!--        Perspektivenweg 33<br>-->
+              <!--        1234 Specimen<br>-->
+              <!--        <br><br>-->
+              <!--        Kriens, den {{meinVerkaufsdokumentFormular.controls.ausstelldatum.value  | date :  "dd.MM.yyyy"}}-->
+              <!--        <br><br><br>-->
+              <!--        <b>{{meinVerkaufsdokumentFormular.controls.bezeichnung.value}}</b><br>-->
+              <!--        <br>-->
+              <!--        {{meinVerkaufsdokumentFormular.controls.individuelleAnrede.value}}-->
+              <!--        <br><br>-->
+              <!--        <pre class="pre-reset">{{meinVerkaufsdokumentFormular.controls.individuellerEinleitungstext.value}}</pre>-->
+              <!--        <br><br>-->
+
+              <!--        <div [ngSwitch]="value">-->
+              <!--          <div *ngSwitchCase="1">1. Template - <b>{{value}}</b> </div>-->
+              <!--          <div *ngSwitchCase="2">2. Template - <b>{{value}}</b> </div>-->
+              <!--          <div *ngSwitchCase="3">3. Template - <b>{{value}}</b> </div>-->
+              <!--          <div *ngSwitchDefault>Default Template</div>-->
+              <!--        </div>-->-->
+              <!--        <div class="angebotsblock" *ngFor="let titel of meinVerkaufsdokumentFormular.controls.titel.controls; let i=index">-->
+              <!--          <table>-->
+              <!--            <tr><td class="angebotsspalte1">Titel {{i+1}}:</td><td class="angebotsspalte1">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value}}</td></tr>-->
+              <!--            <tr><td> Rubrik:</td><td>{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.rubrik.value}}</td>-->
+              <!--            <td *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.unterrubrik.value != ''" class="angebotsspalte1">-->
+              <!--              Unterrubrik:</td><td *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.unterrubrik.value != ''">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.unterrubrik.value}}</td>-->
+              <!--            </tr>-->
+                         
+              <!--            <tr><td></td><td></td></tr>-->
+                          
+              <!--            <tr><td colspan="2">-->
+              <!--              <table *ngFor="let werbemittel of meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls; let j=index">-->
+              <!--                <tr><td>&nbsp;</td></tr>-->
+                              
+              <!--                <tr>-->
+              <!--                  <td class="angebotsspalte1" *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value == 'Anzahl'">Anzahl Erscheinungen:</td>-->
+              <!--                  <td class="angebotsspalte1" *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value != 'Anzahl'">Erscheinung/Ausgabe:</td>-->
+                              
+              <!--                  <td class="angebotsspalte1">Werbemittel</td>-->
+              <!--                  <td class="angebotsspalte1">Preis</td>-->
+              <!--                  <td>Hinweis</td>-->
+              <!--                </tr>-->
+                              
+              <!--                <tr>-->
+              <!--                  <td class="angebotsspalte1">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungswert.value}}</td>-->
+              <!--                  <td class="angebotsspalte1">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformat.value}}</td>-->
+              <!--                  <td *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preis.value != ''">-->
+              <!--                    {{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preis.value | currency:"CHF"}}-->
+              <!--                  </td>-->
+              <!--                  <td>{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.hinweise.value}}</td>-->
+              <!--                </tr>-->
+                              
+              <!--                <tr><td class="angebotsspalte1">Werbeformat:</td><td>{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformat.value}}</td></tr>-->
+              <!--                <tr *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value == 'Anzahl'">-->
+              <!--                  <td>Anzahl Erscheinungen:</td><td>{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungswert.value}}</td>-->
+              <!--                </tr>-->
+              <!--                <tr *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value != 'Anzahl'">-->
+              <!--                  <td>Erscheinung/Ausgabe:</td><td>{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungswert.value}}</td>-->
+              <!--                </tr>-->
+              <!--                <tr *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value != 'Anzahl'&& -->
+              <!--                          meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.insertionsschlussAnzeige.value == true">-->
+              <!--                  <td>Insertionsschluss: </td><td>5 Arbeitstage vor Erscheinung</td></tr>-->
+              <!--                <tr>-->
+              <!--                  <td>Bruttopreis:</td>-->
+              <!--                <td *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preis.value != ''">-->
+              <!--                  {{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preis.value | currency:"CHF"}}-->
+              <!--                </td>-->
+              <!--                <td *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preis.value == ''">-->
+              <!--                  in Abklärung-->
+              <!--                </td>-->
+              <!--                </tr>-->
+
+              <!--                Rabatte-->
+              <!--                <tr><td colspan="2">-->
+              <!--                  <table *ngFor="let zusatzpreisposition of meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls; let k=index">-->
+              <!--                    <tr>-->
+              <!--                      <td *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.art.value == 'zuschlag'" class="angebotsspalte1">Zuschlag:</td>-->
+              <!--                      <td *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.art.value == 'rabatt'" class="angebotsspalte1">Rabatt:</td>-->
+              <!--                      <td>{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.bezeichnung.value}}<br>-->
+              <!--                          <span *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.betrag.value">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.betrag.value | currency:"CHF"}}</span></td>-->
+              <!--                    </tr>-->
+              <!--                  </table>-->
+              <!--                </td></tr>-->
+                              
+              <!--                <tr *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.hinweise.value != ''">-->
+              <!--                  <td>Hinweis(e):</td><td><pre class="pre-reset">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.hinweise.value}}</pre></td>-->
+              <!--                </tr>-->
+                            
+              <!--              </table>-->
+              <!--            </td></tr>-->
+              <!--          </table>-->
+              <!--        </div>-->
+              <!--        <br>-->
+              <!--        {{meinVerkaufsdokumentFormular.controls.schlusssatz.value}}-->
+              <!--        <br><br>-->
+              <!--        Freundliche Grüsse<br>-->
+              <!--        <br>-->
+              <!--        Mega-Dispo AG<br><br>-->
+              <!--        <table style="width:100%">-->
+              <!--          <tr>-->
+              <!--            <td style="width:50%" valign="top">-->
+              <!--              <pre class="pre-reset">{{meinVerkaufsdokumentFormular.controls.verfasser1.value}}</pre>-->
+              <!--            </td>-->
+              <!--            <td style="width:50%" valign="top">-->
+              <!--              <pre class="pre-reset">{{meinVerkaufsdokumentFormular.controls.verfasser2.value}}</pre>-->
+              <!--            </td>-->
+              <!--          </tr>-->
+              <!--        </table>-->
+              <!--      </small>-->
+              <!--    </div>-->
+              <!--  </div> <!-- Ende Druckvorschau-DIV Template 2 -->-->
+              <!--  <div id="footer">-->
+              <!--    <div align="center">-->
+              <!--        <hr/>-->
+              <!--        This is a footer that should show some info like our web address-->
+              <!--    </div>-->
+              <!--  </div>-->
+              <!--</mat-tab>-->
+              
+              
+              <!-- #######################  ENDE: ALTE TEMPLATES #################### -->

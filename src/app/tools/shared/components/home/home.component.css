@@ -1,0 +1,67 @@
+.edpModuleCard {
+	background-color: darkgrey;
+	width: 200px;
+	height: 200px;
+	margin: 10px; 
+	text-align: center;
+	overflow:hidden;
+	cursor:pointer;
+}
+
+.edpModuleCard:hover {
+  background-color: #c5010e;
+}
+
+.edpModuleCard:focus {
+  background-color: #777;
+  outline: none;
+}
+
+.edpModuleCard > .moduleShorthand {
+	color: white;
+	position: relative;
+	top: 10px;
+	font-size: 20px;
+}
+
+.edpModuleCard > .moduleName {
+	color: black;
+	position: relative;
+	top: 8px;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.edpModuleCard > .moduleIcon {
+	color: white;
+	position: relative;
+	top: 15px;
+	left: -125px;
+}
+
+.edpModuleCard > .moduleIcon > .material-icons {
+	font-size: 160px;
+}
+
+.content {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/*.releasebild {
+  background: url('../../../../../assets/rel90.jpg') no-repeat;
+  background-size: cover; 
+  height: 100px;
+}
+
+.releasebild2 {
+  background: url('../../../../../assets/rel90.jpg') no-repeat 0 100%;
+  background-size: cover; 
+  height: 100px;
+}*/
+
+.releasebild3 {
+  background: url('../../../../../assets/rel100.jpg') no-repeat 0 37%;
+  background-size: cover; 
+  height: 100px;
+}

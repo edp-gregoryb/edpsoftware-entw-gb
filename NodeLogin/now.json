@@ -1,0 +1,14 @@
+{
+    "version": 2,
+    "name": "loginbackend",
+    "builds": [
+    {
+        "src": "server.js",
+        "use": "@now/node-server",
+        "config": {"maxLambdaSize": "50mb"}
+    },
+    { "src": "/.*", "use": "@now/static" }
+
+]
+
+}

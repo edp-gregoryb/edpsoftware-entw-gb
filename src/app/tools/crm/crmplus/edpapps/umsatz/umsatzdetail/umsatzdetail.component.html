@@ -1,0 +1,279 @@
+<app-loading-screen></app-loading-screen>
+ <mat-drawer-container class="mainContainer" autosize (window:resize)="windowResize()">
+
+    <mat-drawer #drawer class="sidenavContainer" mode="side">
+        <div style="float: right; padding-left: 5px; padding-right: 5px;">
+            <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+        </div>
+        <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [lastAppModule]="lastAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+    </mat-drawer>
+
+    <div class="appMainframe">
+        <app-defaultheader [currentAppModule]="currentAppModule" [modulename]="modulename" (changeSicht)="sichtchange($event)" (onSidenavToggle)="drawer.toggle()" #header></app-defaultheader>
+        
+ <div style="overflow: hidden;" class="flex-container"
+        fxLayout="row" fxLayout.xs="column"
+        fxLayoutAlign="start stretch" fxLayoutAlign.xs="start start">
+            <div class="flex-item spalte1" fxFlex="0 0 30%" fxFlex.sm="100%">
+ <!--<mat-accordion>-->
+ 
+ <!-- Datum -->
+ <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title class="titelmargintop">
+       <span i18n="@@date">Datum</span>
+      </mat-panel-title>
+      <button mat-icon-button (click)="searchdaten($event)">
+     <i class="material-icons example-margin" >search</i>
+     </button>
+    </mat-expansion-panel-header>
+                    <div class="flex-container"
+                        fxLayout="row"
+                        fxLayout.xs="column"
+                        fxLayoutAlign="center center"
+                        fxLayoutAlign.xs="start">
+                      <div fxFlex="100%"> <!-- 65% -->
+                     <mat-form-field>
+                      <input matInput [matDatepicker]="picker" (dateInput)="getStartDate($event)" placeholder="von Datum" i18n-placeholder="@@fromDatePlaceholder">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                     <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field style="float:right;">
+                      <input matInput [matDatepicker]="picker1" (dateInput)="getEndtDate($event)" placeholder="bis Datum" i18n-placeholder="@@toDatePlaceholder">
+                      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                     <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                      </div>
+                    </div>
+                   
+    </mat-expansion-panel>
+    
+    <!-- Kunden -->
+  <mat-expansion-panel>
+    <mat-expansion-panel-header [ngClass]="{'changearrowcolor':kundeauswahlIn}">
+      <mat-panel-title class="titelmargintop">
+        <span i18n="@@clients">Kunden</span>
+      </mat-panel-title>
+    <section class="example-section">
+      <mat-slide-toggle class="example-margin" [color]="color" [checked]="checkedKunde" [disabled]="disabled" (change)="changesliderKunde($event)" (click)="changeslider($event)">
+            <span i18n="@@withWithout">ohne/mit</span>
+     </mat-slide-toggle>
+    </section>
+    </mat-expansion-panel-header>
+                    <div class="flex-container"
+                        fxLayout="row"
+                        fxLayout.xs="column"
+                        fxLayoutAlign="center center"
+                        fxLayoutAlign.xs="start">
+                      <div fxFlex="100%"> <!-- 65% -->
+                      <app-umsatzkunde [kundevondefault]="kundedefault" [sicht]="sicht" (deletedKunde)="kundedelete($event)" (selectedKunde)="kundeselect($event)"></app-umsatzkunde>
+                      
+                      </div>
+                    </div>
+    </mat-expansion-panel>
+    
+    <!-- Vermittler -->
+    <mat-expansion-panel>
+    <mat-expansion-panel-header [ngClass]="{'changearrowcolor':vermittlerauswahlIn}">
+      <mat-panel-title  class="titelmargintop">
+       <span i18n="@@agent">Vermittler</span>
+      </mat-panel-title>
+      <section class="example-section">
+      <mat-slide-toggle class="example-margin" [color]="color" [checked]="checkedVermittler" [disabled]="disabled" (change)="changesliderVermittler($event)" (click)="changeslider($event)">
+            <span i18n="@@withWithout">ohne/mit</span>
+     </mat-slide-toggle>
+    </section>
+    </mat-expansion-panel-header>
+                    <div class="flex-container"
+                        fxLayout="row"
+                        fxLayout.xs="column"
+                        fxLayoutAlign="center center"
+                        fxLayoutAlign.xs="start">
+                      <div fxFlex="100%"> <!-- 65% -->
+                      <app-umsatzvermittler [vermittlervondefault]="vermittlerdefault" [sicht]="sicht" (deletedvermittler)="vermittlerdeleted($event)" (selectedvermittler)="vermittlerselected($event)"></app-umsatzvermittler>
+                      </div>
+                    </div>
+    </mat-expansion-panel>
+    
+    <!-- Objekt -->
+     <mat-expansion-panel>
+    <mat-expansion-panel-header [ngClass]="{'changearrowcolor':objektauswahlIn}">
+      <mat-panel-title  class="titelmargintop">
+       <span i18n="@@object">Objekt</span>
+      </mat-panel-title>
+      <section class="example-section">
+      <mat-slide-toggle class="example-margin" [color]="color"  [checked]="checkedObjekt" [disabled]="disabled" (change)="changesliderObjekt($event)" (click)="changeslider($event)">
+            <span i18n="@@withWithout">ohne/mit</span>
+     </mat-slide-toggle>
+    </section>
+   
+    </mat-expansion-panel-header>
+                    <div class="flex-container"
+                        fxLayout="row"
+                        fxLayout.xs="column"
+                        fxLayoutAlign="center center"
+                        fxLayoutAlign.xs="start">
+                      <div fxFlex="100%"> <!-- 65% -->
+                      <app-umsatzobjekt  [sicht]="sicht" [objektvondefault]="objektdefault" (deletedobjekt)="objektdelete($event)" (selectedobjekt)="objektselected($event)"></app-umsatzobjekt>
+                      </div>
+                    </div>
+    </mat-expansion-panel>
+    
+    <!-- Vertreter -->
+      <mat-expansion-panel>
+    <mat-expansion-panel-header [ngClass]="{'changearrowcolor':vertreterauswahlIn}">
+      <mat-panel-title  class="titelmargintop">
+       <span i18n="@@representative">Vertreter</span>
+      </mat-panel-title>
+      <section class="example-section">
+      <mat-slide-toggle class="example-margin" [color]="color" [checked]="checkedVertreter" [disabled]="disabled" (change)="changesliderVertreter($event)" (click)="changeslider($event)">
+            <span i18n="@@withWithout">ohne/mit</span>
+     </mat-slide-toggle>
+    </section>
+    </mat-expansion-panel-header>
+                    <div class="flex-container"
+                        fxLayout="row"
+                        fxLayout.xs="column"
+                        fxLayoutAlign="center center"
+                        fxLayoutAlign.xs="start">
+                      <div fxFlex="100%"> <!-- 65% -->
+                      <app-umsatzvertreter [vertretervondefault]="vertreterdefault" [sicht]="sicht" (deletedvertreter)="vertreterdeleted($event)" (selectedvertreter)="vertreterselected($event)"></app-umsatzvertreter>
+                      </div>
+                    </div>
+    </mat-expansion-panel>
+    
+          <mat-expansion-panel>
+    <mat-expansion-panel-header [ngClass]="{'changearrowcolor':dyn1auswahlIn}">
+      <mat-panel-title  class="titelmargintop">
+       {{osgruppenOne.bez}}
+      </mat-panel-title>
+      <section class="example-section">
+      <mat-slide-toggle class="example-margin" [color]="color" [checked]="checkeddyn1" [disabled]="disabled" (change)="changesliderdyn1($event)" (click)="changeslider($event)">
+            <span i18n="@@withWithout">ohne/mit</span>
+     </mat-slide-toggle>
+    </section>
+    </mat-expansion-panel-header>
+                    <div class="flex-container"
+                        fxLayout="row"
+                        fxLayout.xs="column"
+                        fxLayoutAlign="center center"
+                        fxLayoutAlign.xs="start">
+                      <div fxFlex="100%"> <!-- 65% -->
+                      <app-umsatzdynamisch  [dynvondefault]="dyn1default"  [sicht]="sicht" [dynName]="osgruppenOne" (deleteddyn)="dyndeleted($event)" (selecteddyn)="dynselect($event)"></app-umsatzdynamisch>
+                      </div>
+                    </div>
+    </mat-expansion-panel>
+          <mat-expansion-panel>
+    <mat-expansion-panel-header [ngClass]="{'changearrowcolor':dyn2auswahlIn}">
+      <mat-panel-title  class="titelmargintop">
+       {{osgruppenTwo.bez}}
+      </mat-panel-title>
+      <section class="example-section">
+      <mat-slide-toggle class="example-margin" [color]="color" [checked]="checkeddyn2" [disabled]="disabled" (change)="changesliderdyn2($event)" (click)="changeslider($event)">
+            <span i18n="@@withWithout">ohne/mit</span>
+     </mat-slide-toggle>
+    </section>
+    </mat-expansion-panel-header>
+                    <div class="flex-container"
+                        fxLayout="row"
+                        fxLayout.xs="column"
+                        fxLayoutAlign="center center"
+                        fxLayoutAlign.xs="start">
+                      <div fxFlex="100%"> <!-- 65% -->
+                      <app-umsatzdynamisch [dynvondefault]="dyn2default"  [sicht]="sicht" [dynName]="osgruppenTwo" (deleteddyn)="dyn2deleted($event)" (selecteddyn)="dyn2select($event)"></app-umsatzdynamisch>
+                      </div>
+                    </div>
+    </mat-expansion-panel>
+          <mat-expansion-panel>
+    <mat-expansion-panel-header [ngClass]="{'changearrowcolor':dyn3auswahlIn}">
+      <mat-panel-title  class="titelmargintop">
+      {{osgruppenTree.bez}}
+      </mat-panel-title>
+      <section class="example-section">
+      <mat-slide-toggle class="example-margin" [color]="color" [checked]="checkeddyn3" [disabled]="disabled" (change)="changesliderdyn3($event)" (click)="changeslider($event)">
+            <span i18n="@@withWithout">ohne/mit</span>
+     </mat-slide-toggle>
+    </section>
+    </mat-expansion-panel-header>
+                    <div class="flex-container"
+                        fxLayout="row"
+                        fxLayout.xs="column"
+                        fxLayoutAlign="center center"
+                        fxLayoutAlign.xs="start">
+                      <div fxFlex="100%"> <!-- 65% -->
+                      <app-umsatzdynamisch [dynvondefault]="dyn3default" [sicht]="sicht" [dynName]="osgruppenTree" (deleteddyn)="dyn3deleted($event)" (selecteddyn)="dyn3select($event)"></app-umsatzdynamisch>
+                      </div>
+                    </div>
+    </mat-expansion-panel>
+          <mat-expansion-panel>
+    <mat-expansion-panel-header [ngClass]="{'changearrowcolor':dyn4auswahlIn}">
+      <mat-panel-title  class="titelmargintop">
+       {{osgruppenFor.bez}}
+      </mat-panel-title>
+      <section class="example-section">
+      <mat-slide-toggle class="example-margin" [color]="color" [checked]="checkeddyn4" [disabled]="disabled" (change)="changesliderdyn4($event)" (click)="changeslider($event)">
+            <span i18n="@@withWithout">ohne/mit</span>
+     </mat-slide-toggle>
+    </section>
+    </mat-expansion-panel-header>
+                    <div class="flex-container"
+                        fxLayout="row"
+                        fxLayout.xs="column"
+                        fxLayoutAlign="center center"
+                        fxLayoutAlign.xs="start">
+                      <div fxFlex="100%"> <!-- 65% -->
+                      <app-umsatzdynamisch [dynvondefault]="dyn4default" [sicht]="sicht" [dynName]="osgruppenFor" (deleteddyn)="dyn4deleted($event)" (selecteddyn)="dyn4select($event)"></app-umsatzdynamisch>
+                      </div>
+                    </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+    <mat-expansion-panel-header [ngClass]="{'changearrowcolor':dyn5auswahlIn}">
+      <mat-panel-title  class="titelmargintop">
+       {{osgruppenFive.bez}}
+      </mat-panel-title>
+      <section class="example-section">
+      <mat-slide-toggle class="example-margin" [color]="color" [checked]="checkeddyn5" [disabled]="disabled" (change)="changesliderdyn5($event)" (click)="changeslider($event)">
+            <span i18n="@@withWithout">ohne/mit</span>
+     </mat-slide-toggle>
+    </section>
+    </mat-expansion-panel-header>
+                    <div class="flex-container"
+                        fxLayout="row"
+                        fxLayout.xs="column"
+                        fxLayoutAlign="center center"
+                        fxLayoutAlign.xs="start">
+                      <div fxFlex="100%"> <!-- 65% -->
+                      <app-umsatzdynamisch [dynvondefault]="dyn5default" [sicht]="sicht" [dynName]="osgruppenFive" (deleteddyn)="dyn5deleted($event)" (selecteddyn)="dyn5select($event)"></app-umsatzdynamisch>
+                      </div>
+                    </div>
+    </mat-expansion-panel>
+    </div>
+    <div style="margin-left:5px;"></div>
+    
+    <!-- 2. Spalte -->
+    <div class="flex-item spalte2" fxFlex="0 0 70%" fxFlex.sm="100%">
+        <!-- Chart -->
+        <div  style="height: 400px; margin-bottom: 5px;" class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="start">
+            <div fxFlex="50%">
+                <!-- 65% -->
+                <app-umsatzchart [umsatzdata]="umsatzforchart"></app-umsatzchart>
+            </div>
+            <div fxFlex="50%">
+                <!-- 65% -->
+                <app-piechart [piedata]="diagramdaten"></app-piechart>
+            </div>
+        </div>
+        
+        <!-- Tabelle -->
+        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="start">
+            <div fxFlex="100%">
+                <div [ngStyle]="{'height.px': tableHeight}" style="overflow-y: auto;">
+                    <!-- 65% -->
+                    <app-umsatztabelle [umsatzdata]="umsatzforchart" (diagramdata)="diagramdatachanges($event)" (selecteddropdownvalue)="dropdownvalue($event)"></app-umsatztabelle>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+</mat-drawer-container>

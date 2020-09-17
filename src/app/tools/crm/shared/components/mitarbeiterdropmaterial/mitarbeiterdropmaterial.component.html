@@ -1,0 +1,12 @@
+<!--<mat-select class="input-full-width" placeholder="Mitarbeiter" [(ngModel)]="mitarbeiter" (change)="selectedMitarbeiter($event)" >-->
+<!--  <mat-option class="input-full-width" *ngFor="let mitar of mitarbeiterdata" [value]="mitar.mitbeznr">-->
+<!--    {{ mitar.gesname}}-->
+<!--  </mat-option>-->
+<!--</mat-select>-->
+
+<mat-select class="input-full-width" placeholder="Mitarbeiter" i18n-placeholder="@@colleaguesPlaceholder" [(ngModel)]="mitarbeiter" (selectionChange)="selectedMitarbeiter(mitarbeiter)" >
+  <!--<mat-option>leer</mat-option>-->
+  <mat-option class="input-full-width" *ngFor="let mitar of mitarbeiterdata" [value]="mitar.mitbeznr" >
+    {{ mitar.gesname}}
+  </mat-option>
+</mat-select>

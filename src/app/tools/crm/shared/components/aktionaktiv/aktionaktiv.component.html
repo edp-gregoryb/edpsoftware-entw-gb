@@ -1,0 +1,12 @@
+  <button mat-icon-button  [ngClass]="{'angezeigt': aktivterm}"  [matMenuTriggerFor]="menu">
+<i class="material-icons">notifications</i>
+ </button>
+ 
+<mat-menu #menu="matMenu">
+     <button mat-menu-item (click)="openAgenda(terminitem)">
+        <mat-icon>info</mat-icon>
+        <!--<span>Information</span>-->
+         <div >{{terminitem}}</div>
+      </button>
+        
+    </mat-menu>

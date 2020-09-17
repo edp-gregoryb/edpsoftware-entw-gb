@@ -1,0 +1,76 @@
+.mat-paginator {
+    display: block;
+    height: 43px;
+}
+.mat-paginator-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 40px;
+    padding: 0 8px;
+    flex-wrap: wrap-reverse;
+    margin-top: -25px;
+}
+
+.mat-row {
+    min-height: 30px;
+}
+
+ .mat-column-vertreter {
+    max-width: 50px;
+}
+
+ .mat-column-datum {
+    max-width: 140px;
+}
+
+ .mat-column-nettoNetto {
+    max-width: 70px;
+}
+
+ .mat-column-NAME {
+    max-width: 150px;
+}
+
+ .mat-column-sujet {
+    max-width: 100px;
+}
+
+ .mat-column-sujetnr {
+    max-width: 50px;
+}
+
+ .mat-column-aufnr {
+    max-width: 60px;
+}
+
+ .mat-column-objekt {
+    max-width: 80px;
+}
+
+ .mat-column-aufart {
+    max-width: 50px;
+}
+
+ 
+
+.mat-header-row {
+    min-width: 100%;
+    min-height: 35px;
+}
+
+.overflow {
+  /*  width: 10em;*/
+  /*outline: 1px solid #000;*/
+  /*margin: 0 0 2em 0;*/
+  
+  /**
+   * Required properties to achieve text-overflow
+   */
+      white-space: nowrap;
+    overflow: hidden;
+}
+
+.ellipsis { 
+ text-overflow: ellipsis;
+ }

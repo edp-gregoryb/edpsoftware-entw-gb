@@ -1,0 +1,18 @@
+<div [ngStyle]="{'height.px': innerheight}">
+    <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate" color="warn"></mat-progress-bar>
+    <input #variable type="file"
+        id="uploadFile"
+        class="hidden-input"
+        accept=""
+        (change)="selectFile($event); variable.value=''"
+        *ngIf="kundenbez">
+    <!-- image/jpeg, .jpeg, image/png, .png, image/pjpeg, .jpg -->
+    <mat-progress-bar *ngIf="saveimage" mode="indeterminate" color="warn"></mat-progress-bar>
+    <!-- .target.files[0] -->
+    <mat-card class="search" *ngFor="let item of maillinks">
+        <mat-card-content style="margin: 10px 10px 10px 10px">
+            <!--<p>Dataname: {{item.dataname}}</p>-->
+            <p><span style="text-decoration: underline;cursor:pointer" (click)="openMedia(item.dataname)"> {{item.dataname}}</span></p>
+        </mat-card-content>   
+    </mat-card>
+</div>

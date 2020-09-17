@@ -1,0 +1,91 @@
+<mat-progress-bar *ngIf="searchauftrag" mode="indeterminate" color="warn"></mat-progress-bar>
+<div class="example-header">
+    <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" i18n-placeholder="@@filterPlaceholder">
+    </mat-form-field>
+</div>
+<div class="example-container mat-elevation-z8">
+    <mat-table #table [dataSource]="terminlistsource">
+
+        Position Column
+        <ng-container matColumnDef="vetreter">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.vetreter}}" *matHeaderCellDef></mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.vetreter}}" *matCellDef="let element">
+                {{element.vetreter}}
+                <!--<ngu-letter-avatar avatar-shape='round' avatar-char-count='2' avatar-height="24px" avatar-width="24px" avatar-font-size="15" *ngIf="element.vetreter" avatar-data='{{element.vetreter}}'></ngu-letter-avatar>-->
+            </mat-cell>
+        </ng-container>
+
+        
+        <ng-container matColumnDef="termdatum">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.termdatum}}" *matHeaderCellDef i18n="@@appointment">Termin</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.termdatum}}" *matCellDef="let element"> {{element.termdatum }} </mat-cell>
+        </ng-container>
+
+        
+        <ng-container matColumnDef="termzeit">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.termzeit}}" *matHeaderCellDef i18n="@@time">Zeit</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.termzeit}}" *matCellDef="let element"> {{element.termzeit}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="termaktivic">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.termaktivic}}" *matHeaderCellDef i18n="@@activity">Aktivität</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.termaktivic}}" *matCellDef="let element">
+                <mat-icon> {{element.termaktivic}}</mat-icon>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="beznr">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.beznr}}" *matHeaderCellDef i18n="@@clientNumber">Kunden Nr</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.beznr}}" *matCellDef="let element"> {{element.beznr}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="NAME">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.NAME}}" *matHeaderCellDef i18n="@@client">Kunde</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.NAME}}" *matCellDef="let element"> {{element.NAME}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="termkontaktpers">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.termkontaktpers}}" *matHeaderCellDef i18n="@@contact">Kontakt</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.termkontaktpers}}" *matCellDef="let element"> {{element.termkontaktpers}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="termrapptext">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.termrapptext}}" *matHeaderCellDef i18n="@@description">Beschreibung</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.termrapptext}}" class="gross" *matCellDef="let element"> {{element.termrapptext}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="objekt">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.objekt}}" *matHeaderCellDef i18n="@@object">Objekt</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.objekt}}" class="gross" *matCellDef="let element"> {{element.objekt}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="memotext">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.memotext}}" *matHeaderCellDef i18n="@@comment">Kommentar</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.memotext}}" class="gross" *matCellDef="let element"> {{element.memotext}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="_id">
+            <mat-header-cell showCoulmn showInput="{{spalteshow._id}}" *matHeaderCellDef i18n="@@action">Aktion </mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow._id}}" *matCellDef="let element">
+                 <button mat-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon>
+                      </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="openDialog()" i18n="@@comment">Kommentar</button> 
+                    <!--<button mat-menu-item (click)="gotoFamily(element)">Go to current family</button>-->
+                    <!--<button mat-menu-item (click)="createNewFam(element)">Create new family</button>-->
+                    <!--<button mat-menu-item (click)="openDeleteDialog(element._id)">Delete</button> -->
+                 </mat-menu>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"  [matMenuTriggerFor]="appMenu">
+            <mat-menu #appMenu="matMenu">
+              <button mat-menu-item (click)="gotoTermindetail(row)" i18n="@@appointmentDetail">Termindetail</button>
+            </mat-menu>
+        </mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>
+   

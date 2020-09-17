@@ -1,0 +1,16 @@
+.example-fill-remaining-space {
+ 
+  flex: 1 1 auto;
+}
+
+#xxx {
+    margin-top: 120mm;
+    position: absolute;
+    color: green;
+}
+.disabled {
+            pointer-events: none; 
+            cursor: default;
+            color: #404040;
+            text-decoration: none;
+        }

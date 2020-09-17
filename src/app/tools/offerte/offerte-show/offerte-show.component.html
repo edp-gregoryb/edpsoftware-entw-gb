@@ -1,0 +1,971 @@
+
+<div #mainpane>
+<mat-drawer-container class="mainContainer" autosize>
+     <!--VIEW Edit/Neues Dokument-->
+    <mat-progress-bar  style="position:fixed;top:0;width:100%;z-index:100;" *ngIf="progressbar_visible" color="warn" mode="query"></mat-progress-bar>
+    <mat-drawer #drawer class="sidenavContainer" mode="side">
+      
+        <div style="float: right; padding-left: 5px; padding-right: 5px;">
+            <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+        </div>
+        <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [lastAppModule]="lastAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules" #sidenav></app-sidenav>
+    </mat-drawer>
+    
+    <app-defaultheader [currentAppModule]="currentAppModule" [modulename]="modulename" (changeSicht)="sichtchange($event)" (onSidenavToggle)="drawer.toggle()"  #header></app-defaultheader>
+  
+
+<!--<div><app-headersomedia [termindaten]="backtoagendadata"></app-headersomedia></div>-->
+
+
+<div class="app-content" id="mainpane">
+<!--[termindaten]="backtoagendadata"-->
+    <form [formGroup]="meinVerkaufsdokumentFormular" novalidate>
+    <!--<form [formGroup]="meinVerkaufsdokumentFormular" novalidate (ngSubmit)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, true);verkaufsdokumentStatus_updater();">-->
+    <!--<form [formGroup]="meinVerkaufsdokumentFormular" novalidate (ngSubmit)="save(meinVerkaufsdokumentFormular)">-->
+
+      <div class="flex-container"
+        fxLayout="row" fxLayout.xs="column"
+        fxLayoutAlign="start stretch" fxLayoutAlign.xs="start start">
+            <div class="flex-item spalte1" fxFlex="0 0 40%" fxFlex.sm="100%"> <!-- Spalte 1 Start -->
+              <h4>
+                <span class="hauptaktion">{{wofa_action}}</span>
+                <span class="pull-right">
+                  <!-- Vorerfassung- und Auftrag-Button -->
+                  <!-- Nur anzeigen, wenn Offerte abgeschlossen -->
+                  <span *ngIf="verkaufsdokumentStatus === 'lock_outline'">
+                    <!-- Vorerfassung- und Auftrag-Button (aktiviert) -->
+                    <span *ngIf="meinVerkaufsdokumentFormular.controls.sujet.valid">
+                      <button mat-button *ngIf="showVorerfassungButton" (click)="vorerfassung()" #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="menuinnendienst" i18n>Vorerfassung</button>
+                      <button mat-button *ngIf="showAuftragButton" (click)="auftrag()" i18n>Auftrag</button>
+                    </span>
+                    <!-- Vorerfassung- und Auftrag-Button (deaktiviert) -->
+                    <span *ngIf="!meinVerkaufsdokumentFormular.controls.sujet.valid">
+                      <button mat-button *ngIf="showVorerfassungButton" onClick="javascript:alert('Bezeichnung des Dokuments muss richtig ausgefüllt sein')" i18n>Vorerfassung</button>
+                      <button mat-button *ngIf="showAuftragButton" onClick="javascript:alert('Bezeichnung des Dokuments muss richtig ausgefüllt sein')" i18n>Auftrag</button>
+                    </span>
+                  </span>
+                  
+                  <span matTooltip="{{documentIs}} {{verkaufsdokumentStatus === 'lock_open' ? openEditing : lockedEditing}}"><button type="button" (click)="verkaufsdokumentStatus_manual_unlock(meinVerkaufsdokumentFormular.controls.aufnr.value)" mat-icon-button [disabled]="verkaufsdokumentStatus === 'lock_open'"><mat-icon>{{verkaufsdokumentStatus}}</mat-icon></button></span>
+                  
+                  <!--<span *ngIf="activePrintTemplate != 'willkommen'" matTooltip="Drucken... [alt]-[p]"><button type="button" mat-icon-button (click)="multiprint(true, meinVerkaufsdokumentFormular.controls.aufnr.value, false)"><mat-icon>print</mat-icon></button></span>-->
+                  <!--<span *ngIf="activePrintTemplate != 'willkommen'" matTooltip="Dokument als PDF anzeigen"><button type="button" (click)="showPDF(meinVerkaufsdokumentFormular.controls.aufnr.value)" mat-icon-button><mat-icon>picture_as_pdf</mat-icon></button></span>-->
+                  <!--<span *ngIf="(activePrintTemplate != 'willkommen') && (pdfBlobURL != '#')" matTooltip="Dokument als PDF herunterladen"><a [href]="sanitizeURL(pdfBlobURL)" download="{{'offerte_' + meinVerkaufsdokumentFormular.controls.aufnr.value + '.pdf'}}"><button type="button" mat-icon-button><mat-icon>cloud_download</mat-icon></button></a></span>-->
+                  <!--<span *ngIf="(instanzdata.instanz.indexOf('edp')>-1) && (activePrintTemplate != 'willkommen')" matTooltip="Mail verschicken..."><a target="_blank" [href]="sanitizeURL(buildEMailURL(meinVerkaufsdokumentFormular.value))"><button type="button" mat-icon-button><mat-icon>email</mat-icon></button></a></span>-->
+                  <!--<span *ngIf="verkaufsdokumentStatus === 'lock_open'" matTooltip="Aktualisieren [alt]-[a]"><button type="button" mat-icon-button (click)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)"><mat-icon>refresh</mat-icon></button></span>-->
+                  <!--<span *ngIf="(verkaufsdokumentStatus === 'lock_open') && (activePrintTemplate != 'willkommen')" matTooltip="Speichern und Abschliessen"><button type="button" mat-icon-button color="warn" (click)="multiprint(false, meinVerkaufsdokumentFormular.controls.aufnr.value, true)" [disabled]="!meinVerkaufsdokumentFormular.valid"><mat-icon>save</mat-icon></button></span>-->
+  
+                  <!-- neue Anordnung Tasks -->
+                  
+                  <!-- PDF-Preview 27.09.17/RPS nur anzeigen, wenn Dokument nicht abgeschlossen -->
+<!--                  <span *ngIf="((verkaufsdokumentStatus !== 'lock_outline') && (activePrintTemplate != 'willkommen') && (!hidePreview))" matTooltip="Dokument als PDF anzeigen" i18n-matTooltip="@@pdfDoc"><button type="button" (click)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false, 'saveandshow')" mat-icon-button><mat-icon>picture_as_pdf</mat-icon></button></span>-->
+                  <!-- Vor 27.09.17/RPS      <span *ngIf="(activePrintTemplate != 'willkommen')" matTooltip="Dokument als PDF anzeigen"><button type="button" (click)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false, 'saveandshow')" mat-icon-button><mat-icon>picture_as_pdf</mat-icon></button></span>-->
+  
+                  <!-- PDF-Aufbereitung wenn in PDF nicht dargestellt werden soll 27.09.2017/RPS -->
+                  <!--<span *ngIf="((verkaufsdokumentStatus !== 'lock_outline') && (hidePreview))" matTooltip="Dokument aufbereiten"><button type="button" (click)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false, 'save')" mat-icon-button><mat-icon>backup</mat-icon></button></span>-->
+  
+                  <!-- PDF Download und Mail-Versand-->
+                  <span *ngIf="(verkaufsdokumentStatus === 'lock_outline') && (activePrintTemplate != 'willkommen') && (!hidePreview)" matTooltip="Dokument als PDF herunterladen" i18n-matTooltip="@@pdfDownload"><a [href]="sanitizeURL(pdfBlobURL)" [download]="createPdfFilename(meinVerkaufsdokumentFormular.controls.sujet.value)"><button type="button" mat-icon-button><mat-icon>cloud_download</mat-icon></button></a></span>
+                  <!--<span *ngIf="(verkaufsdokumentStatus === 'lock_outline') && (activePrintTemplate != 'willkommen')" matTooltip="Dokument als PDF herunterladen"><a [href]="sanitizeURL(pdfBlobURL)" download="{{'meinVerkaufsdokumentFormular.controls.aufnr.value + '.pdf'}}"><button type="button" mat-icon-button><mat-icon>cloud_download</mat-icon></button></a></span>-->
+                  <span *ngIf="(verkaufsdokumentStatus === 'lock_outline') && (activePrintTemplate != 'willkommen') && (!hidePreview)" matTooltip="Mail verschicken..." i18n-matTooltip="@@sendMail"><a [target]="instanzdata.linkTarget" [href]="sanitizeURL(buildEMailURL(meinVerkaufsdokumentFormular.value))"><button type="button" mat-icon-button><mat-icon>email</mat-icon></button></a></span>
+                  <!--<span matTooltip="Mail verschicken..."><a target="_blank" [href]="sanitizeURL(buildEMailURL(meinVerkaufsdokumentFormular.value))"><button type="button" mat-icon-button><mat-icon>email</mat-icon></button></a></span>-->
+  
+                  <!-- Aktualisieren -->
+                  <span *ngIf="verkaufsdokumentStatus === 'lock_open'" matTooltip="Aktualisieren [alt]-[a]" i18n-matTooltip="@@updateDoc"><button type="button" mat-icon-button (click)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)"><mat-icon>refresh</mat-icon></button></span>
+  
+<!--                   Speichern-->
+<!--                  <span *ngIf="(activePrintTemplate != 'a4-hoch-freeform') && (verkaufsdokumentStatus === 'lock_open') && (activePrintTemplate != 'willkommen') && (pdfBlobURL != '#') && (!hidePreview)" matTooltip="Speichern und Abschliessen hoch und quer" i18n-matTooltip="@@saveFinish"><button type="button" mat-icon-button color="warn" (click)="multiprint(false, meinVerkaufsdokumentFormular.controls.aufnr.value, true)" [disabled]="!meinVerkaufsdokumentFormular.valid"><mat-icon>save</mat-icon></button></span>-->
+                  <span *ngIf="(activePrintTemplate == 'a4-hoch-freeform') && (verkaufsdokumentStatus === 'lock_open') && (pdfBlobURL != '#') && (!hidePreview)" matTooltip="Speichern und Abschliessen Freeform" i18n-matTooltip="@@saveFinishFreeform"><button type="button" mat-icon-button color="warn" (click)="multiprint(false, meinVerkaufsdokumentFormular.controls.aufnr.value, true)" [disabled]="!meinVerkaufsdokumentFormular.valid"><mat-icon>save</mat-icon></button></span>
+<!--                   Spezialfall: hidePreview=true-->
+                  <span *ngIf="((verkaufsdokumentStatus !== 'lock_outline') && (!hidePreview))" matTooltip="Speichern und Abschliessen hidePreview" i18n-matTooltip="@@saveFinishHidePreview"><button type="button" color="warn" (click)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false, 'saveandfinalize')" [disabled]="!meinVerkaufsdokumentFormular.valid" mat-icon-button><mat-icon>save</mat-icon></button></span>
+      
+      
+                  <!-- JSON-Inspector -->            
+                  <span *ngIf="intdebug" matTooltip="JSON-Inspector" i18n-matTooltip="@@jsonInspector"><button type="button" mat-icon-button color="warn" (click)="logJSON2console()"><mat-icon>rowing</mat-icon></button></span>
+                  
+                  <!-- Ende: neue Anordnung Tasks -->
+  
+                </span>
+              </h4>
+              <br>
+              
+              <!-- START Spalte 1 für Freeform-Vorlagen -->
+<!--              <div *ngIf="((activePrintTemplate == 'a4-hoch-freeform') && (verkaufsdokumentStatus !== 'lock_outline'))"> -->
+
+<!--                <mat-card class="card">-->
+<!--                  <mat-card-content>-->
+<!--                    <strong i18n="@@basicData">Basisdaten</strong>-->
+<!--                    <br><br>-->
+<!--                    <div class="flex-container"-->
+<!--                        fxLayout="row"-->
+<!--                        fxLayout.xs="column"-->
+<!--                        fxLayoutAlign="center center"-->
+<!--                        fxLayoutAlign.xs="start">-->
+<!--                      <div fxFlex="100%"> &lt;!&ndash; 65% &ndash;&gt;-->
+<!--                        <mat-form-field class="input-full-width">-->
+<!--                          <input matInput placeholder="Bezeichnung des Dokuments" i18n-placeholder="@@nameDoc" required autofocus formControlName="sujet">-->
+<!--                          <mat-hint *ngIf="!meinVerkaufsdokumentFormular.controls.sujet.valid" i18n="@@letterMinimum">mind. 5 Buchstaben</mat-hint>-->
+<!--                        </mat-form-field>-->
+<!--                      </div>-->
+<!--       -->
+<!--                    </div>-->
+<!--                     -->
+<!--                  </mat-card-content>-->
+<!--                </mat-card>-->
+<!--                -->
+<!--                &lt;!&ndash; Edis Tipps &ndash;&gt;-->
+<!--                <div style="width: 60%; margin: 0 auto 0 auto;">-->
+<!--                -->
+<!--                  <div style="width: 100%; height: 380px; background: url('assets/edi_rot_gruen_256.png') no-repeat center bottom;">-->
+<!--                    &nbsp;-->
+<!--                  </div>-->
+<!--                  <h1 i18n="@@freeFormTippsTitle">Tipps für das Arbeiten mit Freeform Vorlagen</h1>-->
+<!--                  <br><br>-->
+<!--                  <p><span i18n="@@freeFormTippsA">Sie können direkt im Preview-Bereich Ihren Text editieren. Das Editormenü erscheint, -->
+<!--                  sobald Sie entweder einen Text auswählen oder an eine leere Stelle doppelklicken.</span><br>-->
+<!--                  <br><span i18n="@@freeFormTippsB">Wenn Sie einen neuen Abschnitt beginnen, erscheint ein Plus-Symbol über welches-->
+<!--                  Sie weitere Elemente wie z.B. eine Tabelle in Ihr Dokument einfügen können.</span></p>-->
+<!--                </div>-->
+<!--              </div> &lt;!&ndash; ENDE Spalte 1 für Freeform-Vorlagen &ndash;&gt;              -->
+              
+              
+              <!-- START Spalte 1 wenn abgeschlossen -->
+              <div *ngIf="verkaufsdokumentStatus === 'lock_outline'"> 
+
+                <div style="width: 60%; margin: 0 auto 0 auto;">
+                  <br><br><br><br><br><br><br><br><br><br>
+                  <p style="text-align:center;">
+                    <i style="color: light-grey; font-size:160px!important" class="material-icons">lock_outline</i>
+                  </p>
+
+                  <h1 i18n="@@documentClosed">Dokument ist abgeschlossen</h1>
+                  <br><br>
+                  <p i18n="@@openForChange">Zur erneuten Bearbeitung bitte zuerst für Änderungen frei geben.</p>
+                </div>
+              </div> <!-- ENDE Spalte 1 wenn abgeschlossen -->
+              
+              
+              <!-- START Vorlagen Standard-Prozess -->
+              <div *ngIf="((activePrintTemplate != 'a4-hoch-freeform') && (verkaufsdokumentStatus !== 'lock_outline'))" id="standardProcess">
+
+                <!-- ab hier folgen die eigentlichen Controls vom Formular meinVerkaufsdokumentFormular -->
+                <mat-card class="card" *ngIf="!hidePreview">
+  
+                  <!--<img mat-card-image src="assets/img/examples/examples.jpg">-->
+                  <mat-card-content>
+                    <strong i18n="@@basicData">Basisdaten</strong>
+                    <br><br>
+                    <div class="flex-container"
+                        fxLayout="row"
+                        fxLayout.xs="column"
+                        fxLayoutAlign="center center"
+                        fxLayoutAlign.xs="start">
+                      <div fxFlex="46%">
+                        <mat-form-field color="warn" class="input-full-width">
+                          <input matInput placeholder="Bezeichnung des Dokuments" i18n-placeholder="@@nameDoc" required autofocus formControlName="sujet" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)">
+                          <mat-hint *ngIf="!meinVerkaufsdokumentFormular.controls.sujet.valid" i18n="@@letterMinimum">mind. 5 Buchstaben</mat-hint>
+                        </mat-form-field>
+                      </div>
+                      <div fxFlex></div>
+                      <div fxFlex="22%">
+                        <mat-form-field  class="input-full-width">
+                          <input matInput type="date" placeholder="Ausstelldatum" i18n-placeholder="@@dateOfIssue" formControlName="ausstelldatum" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)">
+                        </mat-form-field>
+                      </div>
+                      <div fxFlex></div>
+                      <div fxFlex="22%">
+                        <mat-form-field  class="input-full-width">
+                          <input matInput type="date" placeholder="Tarif ab" i18n-placeholder="@@rateFrom" formControlName="tarifabdatum" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                      <!--value="new Date().toLocaleDateString();"-->
+                    <br>
+                    
+                    <!-- Block Dokumentenanfang -->
+                    <mat-form-field color="accent" class="input-full-width">
+                      <!--<input matInput type="text" formControlName="indivAnrede" placeholder="Individuelle Anrede">-->
+                      <textarea matInput type="text" formControlName="indivAnrede" placeholder="Individuelle Anrede" i18n-placeholder="@@indivTitle" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)"></textarea>
+                    </mat-form-field>
+                    <br>
+                      <!--<table class="input-full-width" cellspacing="0"><tr>-->
+                      <!--<td width="80%">-->
+                      <div class="flex-container"
+                        fxLayout="row"
+                        fxLayout.xs="column"
+                        fxLayoutAlign="center center"
+                        fxLayoutAlign.xs="start">
+                      <div fxFlex="73%">
+                      <mat-form-field color="accent" class="input-full-width">
+                      <textarea  matInput placeholder="Kontaktname" i18n-placeholder="@@contacting" formControlName="bestZustaendiger"  (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)"></textarea>
+                      <!--<mat-icon matSuffix>clear</mat-icon>-->
+                    </mat-form-field>
+                    </div>
+                    <!--</td>-->
+                    <!--<td width="20%">-->
+                    <div fxFlex></div>
+                    <div fxFlex="22%">
+                    <mat-form-field color="accent" class="input-full-width">
+                      <textarea  matInput placeholder="Kontakt-Nr" i18n-placeholder="@@contactNum" formControlName="bestBeznr" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)"></textarea>
+                      <!--<mat-icon matSuffix>clear</mat-icon>-->
+                    </mat-form-field>
+                    </div>
+                    </div>
+                    <div class="flex-container"
+                        fxLayout="row"
+                        fxLayout.xs="column"
+                        fxLayoutAlign="center center"
+                        fxLayoutAlign.xs="start">
+                      <div fxFlex="66%">
+                      <mat-form-field color="accent" class="input-full-width">
+                      <input  matInput placeholder="Vermittlername" i18n-placeholder="@@agentName"  [matAutocomplete]="auto" formControlName="vermname" (ngModelChange)="getVermittler($event)"  (click)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)" />
+                      <!--<mat-icon matSuffix>clear</mat-icon>-->
+<!--                        (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.controls.vermname.value, false)"-->
+                    </mat-form-field>
+<!--                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">-->
+<!--                          <mat-option *ngFor="let option of (filteredVermittler | async)" [value]="option.fname"  >{{option.fname}}</mat-option>-->
+<!--                        </mat-autocomplete>-->
+                        <mat-autocomplete #auto="matAutocomplete" >
+                          <mat-option *ngFor="let option of filteredVermittler" [value]="option.fname" (click)="vermitterAuswahl(option)" >{{option.fname}}</mat-option>
+                        </mat-autocomplete>
+                    </div>
+                    <!--</td>-->
+                    <!--<td width="20%">-->
+                    <div fxFlex></div>
+                     <div fxFlex="22%">
+                    <mat-form-field color="accent" class="input-full-width">
+                      <input  matInput placeholder="Vermittler-Nr"  i18n-placeholder="@@agentNum" formControlName="vermzustBeznr" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)"/>
+                      <!--<button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">-->
+                      <!--<mat-icon>close</mat-icon>-->
+
+                      <!--</button>-->
+                    </mat-form-field>
+                    </div>
+                      <div fxFlex="20%">
+                        <section>
+                          <mat-checkbox placeholder="Chiffre" value="true" labelPosition="before"  i18n-placeholder="@@agentNum" formControlName="chiffre" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)" (change)="changeChiffre($event)" >Chiffre:</mat-checkbox>
+                        </section>
+                      </div>
+                    </div>                 
+
+                    <mat-form-field color="accent" class="input-full-width" >
+                      <textarea matInput  placeholder="Individueller Einleitungstext" i18n-placeholder="@@introduction" formControlName="indivEinleitungstext" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)"></textarea>
+                    </mat-form-field>
+                    <!--<br><br>-->
+                    <mat-form-field color="accent" class="input-full-width">
+                      <textarea matInput placeholder="Schlusssatz" i18n-placeholder="@@ending" formControlName="indivSchlusssatz" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)"></textarea>
+                    </mat-form-field>
+                    <!--<br>-->
+                      <!--<table class="input-full-width" cellspacing="0"><tr>-->
+                      <!--<td width="80%">-->
+
+                  <!--  </td>-->
+                  <!--</tr></table>-->
+                    
+                    <!--<br>-->
+  
+                    <!-- Verfasser-Block -->
+                    <!--<div class="flex-container"-->
+                    <!--    fxLayout="row"-->
+                    <!--    fxLayout.xs="column"-->
+                    <!--    fxLayoutAlign="center center"-->
+                    <!--    fxLayoutAlign.xs="start">-->
+                    <!--  <div fxFlex="45%">-->
+                        <!--<mat-form-field class="input-full-width">-->
+                        <!--   <textarea matInput placeholder="Verfasser1" required formControlName="verfasser1" value="{{mitarbeitername}}-->
+                        <!--{{mitarbeiterabteilung}}"></textarea>-->
+                        <!--</mat-form-field>-->
+                    <!--  </div>-->
+                    <!--  <div fxFlex></div>-->
+                    <!--</div>-->
+                    
+                    <!--<br><br>-->
+                    
+                    <!--<mat-checkbox formControlName="gueltigOhneUnterschrift" [(ngModel)]="checked">Hinweis gültig ohne Unterschrift</mat-checkbox>-->
+  
+                  </mat-card-content>
+                </mat-card>
+  
+                <!-- Wenn hidePreview===true, soll neu Sujet abgefragt werden 27.09.2017/RPS-->
+                <mat-card class="card" *ngIf="hidePreview">
+                  <mat-card-content>
+                    <strong i18n="@@basicData">Basisdaten</strong>
+                    <br><br>
+                    <div class="flex-container"
+                        fxLayout="row"
+                        fxLayout.xs="column"
+                        fxLayoutAlign="center center"
+                        fxLayoutAlign.xs="start">
+                      <div fxFlex="100%"> <!-- 65% -->
+                        <mat-form-field color="warn" class="input-full-width">
+                          <input matInput placeholder="Bezeichnung des Dokuments" i18n-placeholder="@@nameDoc" required formControlName="sujet">
+                          <mat-hint *ngIf="!meinVerkaufsdokumentFormular.controls.sujet.valid" i18n="@@letterMinimum">mind. 5 Buchstaben</mat-hint>
+                        </mat-form-field>
+                      </div>
+                      <!--<div fxFlex></div>-->
+                      <!--<div fxFlex="30%">-->
+                      <!--  <mat-form-field  class="input-full-width">-->
+                      <!--    <input matInput type="number" placeholder="Volumen CHF" formControlName="preisUser" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)">-->
+                      <!--  </mat-form-field>-->
+                      <!--</div>-->
+                    </div>
+                     
+                  </mat-card-content>
+                </mat-card>
+  
+                <!-- Objekt: Start -->
+                <div formArrayName="titel"> <!-- Start: FormArray Objekt -->
+                  <mat-card class="card" *ngFor="let titel of meinVerkaufsdokumentFormular.controls.titel.controls; let i=index"> <!-- Start: Repeater Objekt -->
+                    <mat-card-content [formGroupName]="i">
+                      
+                      <div style="margin-bottom: 20px;">
+                        <span i18n="@@object">Objekt</span> {{i + 1}}: <strong><span *ngIf="(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value != '')">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objBezeichnung.value}}</span></strong>
+                          <button *ngIf="(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value == '')" mat-raised-button color="warn" type="button" (click)="openObjektAuswahlDialog(i)"><mat-icon>search</mat-icon> <span i18n="@@chooseObject">Objekt auswählen</span></button> <!-- type="button" damit Formular nicht unnötig abgeschickt wird -->
+                          <button type="button" mat-icon-button class="pull-right" *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls.length > 1" (click)="removeTitel(i)"><mat-icon>clear</mat-icon></button><br>
+                      </div>
+                      
+                      <!-- alte Darstellung  -->
+                      <!--<strong>Objekt {{i + 1}}</strong>-->
+                      <!--<button type="button" mat-icon-button class="pull-right" *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls.length > 1" (click)="removeTitel(i)"><mat-icon>clear</mat-icon></button><br>-->
+                      
+                      
+                      <div class="flex-container"
+                          fxLayout="row"
+                          fxLayout.xs="column"
+                          fxLayoutAlign="center center"
+                          fxLayoutAlign.xs="start">
+                        
+                        <!--<div fxFlex="30%"> <!-- Objekt -->
+                          <!--<span *ngIf="(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value != '')">{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objBezeichnung.value}}</span>-->
+                          <!--<button *ngIf="(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value == '')" mat-raised-button color="warn" type="button" (click)="openObjektAuswahlDialog(i)"><mat-icon>search</mat-icon> Objekt auswählen</button> <!-- type="button" damit Formular nicht unnötig abgeachickt wird -->
+                        <!--</div>-->
+                        <!--<div fxFlex></div>-->
+                        
+                        <div fxFlex="30%"> <!-- Rubrik -->
+  
+                          <mat-select class="input-full-width" placeholder="Rubrik" i18n-placeholder="@@rubric" (focus)="rubrikAuswahlDropdown2(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value,i)" (ngModelChange)="clearUrubrick(i)" (change)="urubrikAuswahlDropdown2(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value,meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.rubrik.value,i);resetUrubrik(i);removeAlleWerbemittelEinesTitels(i);" formControlName="rubrik">
+                            <mat-option class="input-full-width" *ngFor="let rub of rubrikdataarray[i]" [value]="rub.rubrik">
+                              {{ rub.rubrik_bezeichnung}}
+                            </mat-option>
+                          </mat-select>
+                        </div>
+                        <div fxFlex></div>
+                        <div fxFlex="30%"> <!-- Unterrubrik -->
+                          <mat-select class="input-full-width" placeholder="Urubrik" i18n-placeholder="@@urubric" (focus)="urubrikAuswahlDropdown2(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value,meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.rubrik.value,i)" formControlName="unterrubrik" (change)="removeAlleWerbemittelEinesTitels(i);">
+<!--                            <mat-option class="input-full-width" value=""></mat-option>-->
+                            <mat-option class="input-full-width" *ngFor="let urub of urubrikdataarray[i]" [value]="urub.urubrik">
+                              {{ urub.urubrik_bezeichnung}}
+                            </mat-option>
+                          </mat-select>
+                        </div>
+                        
+                        <div fxFlex></div>
+
+                        
+                      </div>
+                      <div class="flex-container"
+                           fxLayout="row"
+                           fxLayout.xs="column"
+                           fxLayoutAlign="center center"
+                           fxLayoutAlign.xs="start">
+
+                        <div fxFlex="30%"> <!-- Abschluss -->
+                          <mat-select class="input-full-width" placeholder="Abschluss" i18n-placeholder="@@completionWHpercentA" formControlName="abschlussnr" (focus)="abschlussAuswahlDropdown(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value,meinVerkaufsdokumentFormular.controls.kundBeznr.value,i)" (change)="removeAlleZusatzpreispositionen(i, -meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls.length);">
+                            <!--<mat-select class="input-full-width" placeholder="Abschluss" (focus)="urubrikAuswahlDropdown2(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value,meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.rubrik.value,i)" formControlName="abschlussnr" (change)="removeAlleWerbemittelEinesTitels(i);">-->
+                            <mat-option class="input-full-width" [value]="0" i18n="@@noAddition">kein Abschluss</mat-option>
+
+                            <mat-option class="input-full-width" *ngFor="let abschluss of abschlussdataarray[i]" [value]="abschluss.abschlussnr">
+                              {{ abschluss.abschlussbez }}
+                            </mat-option>
+
+                          </mat-select>
+                        </div>
+                        <div fxFlex></div>
+                        <div fxFlex="30%"> <!-- Kombivarante (focus)="kvarianteAuswahlDropdown(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value, i)" -->
+                          <mat-select class="input-full-width" placeholder="Kombivariante" i18n-placeholder="@@completionWHpercentA" formControlName="kvariante" (focus)="kvariantenAuswahlDropdown(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value, i)">
+                            <!--<mat-select class="input-full-width" placeholder="Abschluss" (focus)="urubrikAuswahlDropdown2(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value,meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.rubrik.value,i)" formControlName="abschlussnr" (change)="removeAlleWerbemittelEinesTitels(i);">-->
+                            <mat-option class="input-full-width" [value]="0" i18n="@@noAddition">Kombivarante</mat-option>
+                            <mat-option class="input-full-width" *ngFor="let kvar of kvariantedataarray[i]; let ii = index;" [value]="kvar.kvariante">
+                              {{ kvar.bezeichnung }}
+                            </mat-option>
+                          </mat-select>
+                        </div>
+                        <div fxFlex></div>
+                      </div>
+
+                      <!--<br>-->
+                      
+                      <div formArrayName="werbemittel"> <!-- Start: FormArray Werbemittel -->
+                        <mat-card class="panel-indented-1" *ngFor="let werbemittel of meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls; let j=index"> <!-- Start: Repeater Werbemittel -->
+                          <mat-card-content [formGroupName]="j">
+                            <!--<span class="cardheadline">-->
+                              
+                              <div class="flex-container"
+                                fxLayout="row"
+                                fxLayout.xs="column"
+                                fxLayoutAlign="center center"
+                                fxLayoutAlign.xs="start">
+                              <div fxFlex="30%">
+                                <strong><span i18n="@@adMedium">Werbemittel</span> {{j + 1}}</strong>
+                              </div>
+                              <div fxFlex></div>
+                              <div fxFlex="30%">
+                                 
+                                <mat-select class="input-full-width" formControlName="ausgabevariante" placeholder="Ausgabevariante" i18n-placeholder="@@outputVersion"
+                                  *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value == 'A'"
+                                  (focus)="ausgabevariantenAuswahlDropdown(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value,i)"
+                                  (change)="removeAlleZusatzpreispositionen(i, j);">
+                                  <!--<mat-option value=""></mat-option>-->
+                                  <mat-option class="input-full-width" *ngFor="let ausgabevariante of ausgabevariantendataarray[i]" [value]="ausgabevariante.ausgvar">
+                                    {{ ausgabevariante.ausgvar}} <!-- //ausgbez -->
+                                  </mat-option>
+                                </mat-select>
+                               
+                              </div>
+                              <div fxFlex></div>
+                              <div fxFlex="15%">
+                                <mat-select class="input-full-width" formControlName="sujetnr" placeholder="Sujet" i18n-placeholder="@@sujet"
+                                  (change)="removeAlleZusatzpreispositionen(i, j);">
+                                  <mat-option class="input-full-width" *ngFor="let sujet of meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.sujetnrarray.value" [value]="sujet">
+                                    {{ sujet }}
+                                  </mat-option>
+                                </mat-select>
+                              </div>
+                              <div fxFlex="15%">
+                                <button class="pull-right" type="button" mat-icon-button *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls.length > 1" (click)="removeWerbemittel(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel, i, j)">
+                                  <mat-icon>clear</mat-icon>
+                                </button>
+                              </div>
+                            </div>
+                            <!--</span>-->
+                            <br><br><br>
+                            <div class="flex-container"
+                                fxLayout="row"
+                                fxLayout.xs="column"
+                                fxLayoutAlign="center center"
+                                fxLayoutAlign.xs="start">
+                              <div fxFlex="30%"> <!-- Werbeformat -->
+                                <mat-select class="input-full-width" placeholder="Werbeformate" i18n-placeholder="@@adFormat" formControlName="werbeformatID" (focus)="werbeformatAuswahlDropdown2(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value,meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.rubrik.value,meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.unterrubrik.value,i)"
+                                (selectionChange)="removeAlleZusatzpreispositionen(i, j);">
+                                  
+                                  <!-- Default-Eintrag, damit dieser markiert ist, auch wenn nach Abgleich mit amasys die werbeformatID an die Felder dismenge1, dismenge2 und disanz angepasst wurde -->
+                                  <mat-option class="input-full-width" *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatTyp.value == 'mm'" value="MM|{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge1.value}}|{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge2.value}}|{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge1.value*meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge2.value}}|">MM</mat-option>
+                                  
+                                  <!-- normale Einträge für Werbeformate aus entsprechender Methode -->
+                                  <mat-option class="input-full-width" *ngFor="let werbe of werbeformatdataarray[i]" [value]="werbe.werbeformatID">
+                                    {{ werbe.bez}}
+                                  </mat-option>
+                                </mat-select>
+                                
+                                <!-- optionale Felder, je nach Werbeform -->
+                                <!--<span *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatTyp.value == 'mm'">-->
+                                <span *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatID.value.substring(0,2).toLowerCase() == 'mm'">
+                                  <!-- Hinweis:   Falls amasys noch nicht rechnen kann, werden - falls die ersten zwei Stellen der werbeformatID 'mm' sind - dennoch die Controlsfür Dismenge1 und Dismenge2 angezeigt -->
+                                  <!--            Auf diese Weise kann der Benutzer Daten eingeben, damit amasys eher rechnen kann -->
+                                
+                                  <br>
+                                  <span *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge1Values.value;then dismenge1_gui_select else dismenge1_gui_input"></span>
+                            
+                                  <ng-template #dismenge1_gui_select>
+                                    <br>
+                                    <mat-select formControlName="werbeformatDismenge1" placeholder="{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge1Label.value}}"
+                                      (change)="removeAlleZusatzpreispositionen(i, j);">
+                                      <mat-option *ngFor="let wert1 of meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge1Values.value" [value]="wert1">
+                                        {{wert1}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </ng-template>
+                                  <ng-template #dismenge1_gui_input>
+                                    <mat-form-field class="input-half-width">
+                                      <input matInput type="number" formControlName="werbeformatDismenge1" min="1" max="24" placeholder="{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge1Label.value}}" (change)="removeAlleZusatzpreispositionen(i, j);">
+                                    </mat-form-field>
+                                  </ng-template>
+                                  
+                                  <span *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge2Values.value;then dismenge2_gui_select else dismenge2_gui_input"></span>
+                                  <ng-template #dismenge2_gui_select>
+                                    <br>
+                                    <mat-select formControlName="werbeformatDismenge2" placeholder="{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge2Label.value}}"
+                                      (change)="removeAlleZusatzpreispositionen(i, j);">
+                                      <mat-option *ngFor="let wert2 of meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge2Values.value" [value]="wert2">
+                                        {{wert2}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </ng-template>
+                                  <ng-template #dismenge2_gui_input>
+                                    <mat-form-field class="input-half-width">
+                                      <input matInput type="number" formControlName="werbeformatDismenge2" min="1" max="1000" placeholder="{{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge2Label.value}}" (change)="removeAlleZusatzpreispositionen(i, j);">
+                                    </mat-form-field>
+                                  </ng-template>
+                                  
+                                </span> <!-- Ende optionale Felder MM -->
+                                
+                                <!-- Start optionale Felder ANZAHL -->
+                                <span *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatTyp.value.toLowerCase() == 'anzahl'">
+                                  <br><br>
+                                  <mat-form-field class="input-half-width">
+                                      <input matInput type="number" formControlName="werbeformatDisanz" min="1" max="99999" placeholder="Menge" i18n-placeholder="@@amount" (change)="removeAlleZusatzpreispositionen(i, j);">
+                                  </mat-form-field>
+                                </span> <!-- Ende optionale Felder ANZAHL -->
+                                
+                              </div>
+                              <div fxFlex></div>
+                              <div fxFlex="30%"> <!-- Erscheinungsart -->
+                                <mat-select class="input-full-width" formControlName="buchungsartErscheinung" id="buchungsartErscheinung" placeholder="Anzahl/Erscheinung" i18n-placeholder="@@quantityAppearence2" (selectionChange)="removeAlleZusatzpreispositionen(i, j);">
+                                  <mat-option value="A" i18n="Anzahl Erscheinungen@@quantityAppearence">Anzahl Ersch.</mat-option>
+                                  <mat-option value="E" i18n="Erscheinungen / Ausgabe@@appearenceEdition">Ersch. / Ausg.</mat-option>
+                                </mat-select>
+                              </div>
+                              <div fxFlex></div>
+                              <div fxFlex="30%"> <!-- Erscheinungswert -->
+                              
+                                <!-- buchungsartErscheinung => Anzahl -->
+                                
+                                <input matInput type="number" formControlName="erscheinungsanzahl" min="1" max="52" placeholder="Anzahl" i18n-placeholder="@@nrOfEditionsA" value="1" *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value == 'A'" (change)="removeAlleZusatzpreispositionen(i, j);">
+                             
+                                <!-- buchungsartErscheinung => Erscheinung -->
+                                
+                                <mat-select class="input-full-width" formControlName="erscheinungsaschlussel" placeholder="Erscheinung" i18n-placeholder="@@appearance" multiple 
+                                  *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value != 'A'"
+                                  (focus)="erscheinungsAuswahlDropdown2(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value,meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.rubrik.value,meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.unterrubrik.value,i)"
+                                   (openedChange)="removeAlleZusatzpreispositionen(i, j);">
+                                  <mat-option class="input-full-width" *ngFor="let ersch of erscheinungsdataarray[i]"  [value]="ersch.aschlussel">
+                                    {{ ersch.ausgbezmitausgvar}}
+                                  </mat-option>
+                                </mat-select>
+                              
+                              </div>
+
+                            </div>
+
+                              <div class="flex-container"
+                                   fxLayout="row"
+                                   fxLayout.xs="column"
+                                   fxLayoutAlign="center center"
+                                   fxLayoutAlign.xs="start">
+                            <div fxFlex="100%" *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value != 'A' && meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsaschlussel.value.length > 1">
+                              <mat-checkbox style="margin-left:0;" formControlName="sujetverteilt" value="true" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)" i18n="@@showsujetErscheinung">eig. Sujet pro Erscheinung</mat-checkbox>
+                            </div>
+                              </div>
+<!--                            </div>-->
+                            <!-- Insertionsschluss -->
+                            <div class="flex-container"
+                                fxLayout="row"
+                                fxLayout.xs="column"
+                                fxLayoutAlign="center center"
+                                fxLayoutAlign.xs="start"
+                                *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value != 'A'">
+                              <div fxFlex="30%">
+                                <mat-checkbox style="margin-left:0;" formControlName="insertionsschlussAnzeige" value="true" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)" i18n="@@showinsertEnd">Insert.schluss anzeigen</mat-checkbox>
+                              </div>
+
+                              <div fxFlex></div>
+                              <div fxFlex="30%" *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.insertionsschlussAnzeige.value == true">
+                                <mat-form-field color="accent" class="input-full-width">
+                                  <input matInput type="date" placeholder="Insertionsschluss (Tag)" i18n-placeholder="@@insertionEnd" formControlName="insertionsschlussDatum">
+                                </mat-form-field>
+                              </div>
+                              <div fxFlex></div>
+                              <div fxFlex="30%" *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.insertionsschlussAnzeige.value == true">
+                                <mat-form-field color="accent" class="input-full-width">
+                                  <input matInput type="time" placeholder="Zeit (SS:MM)" i18n-placeholder="@@timeATM" formControlName="insertionsschlussUhrzeit">
+                                </mat-form-field>
+                              </div>
+                            </div>
+                            <!--<br>-->
+                  
+                            <!-- Platzierung alt -->
+                            <!--<mat-select class="input-full-width" placeholder="Platzierung" (focus)="platzierungsAuswahlDropdown2(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value,meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.rubrik.value,meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.unterrubrik.value,i);" formControlName="platzierung">-->
+                            <!--  <mat-option class="input-full-width" *ngFor="let platz of platzierungsdataarray[i]" [value]="platz.plazbez">-->
+                            <!--    {{platz.plazbez}}-->
+                            <!--  </mat-option>-->
+                            <!--</mat-select>-->
+                            
+                            <!-- Farbigkeitszeile -->
+                            <div class="flex-container"
+                                fxLayout="row"
+                                fxLayout.xs="column"
+                                fxLayoutAlign="center center"
+                                fxLayoutAlign.xs="start">
+                              <div fxFlex="100%">
+                                <mat-radio-group formControlName="werbeformatFarbanz" (change)="removeAlleZusatzpreispositionen(i, j);">
+                                  <mat-radio-button style="margin-right: 12px;" value="" i18n="@@noColor">keine</mat-radio-button>
+                                  <mat-radio-button style="margin-right: 12px;" value="0" i18n="Schwarz-Weiss@@commaBlackWhite">s/w</mat-radio-button>
+                                  <mat-radio-button value="4" i18n="@@commaColored">farbig</mat-radio-button>
+                                </mat-radio-group>
+                              </div>
+                            </div>
+                            <br>
+                            <!-- Internet-Zuschlag und Platzierung -->
+                            <div class="flex-container"
+                                fxLayout="row"
+                                fxLayout.xs="column"
+                                fxLayoutAlign="center center"
+                                fxLayoutAlign.xs="start">
+                              <div fxFlex="45%">
+                                <mat-select class="input-full-width" formControlName="intcode" placeholder="Internet-Zuschlag" i18n-placeholder="@@internetAddition"
+                                  (focus)="internetZuschlagsAuswahlDropdown2(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value,i)"
+                                  (change)="removeAlleZusatzpreispositionen(i, j);">
+                                  
+                                  <mat-option class="input-full-width" [value]="" i18n="@@noAddition">keiner</mat-option>
+                                  <mat-option class="input-full-width" *ngFor="let inetzuschlag of internetzuschlagsdataarray[i]" [value]="inetzuschlag.intcode">
+                                    {{ inetzuschlag.intbez}}
+                                  </mat-option>
+                                </mat-select>
+                              </div>
+                              <div fxFlex></div>
+                              <div fxFlex="50%">
+                                <!-- Platzierung neu -->
+                                <mat-form-field color="accent" class="input-full-width">
+                                  <input matInput placeholder="Platzierung" i18n-placeholder="@@placement" class="input-full-width" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value,false);" [matAutocomplete]="auto" formControlName="platzierung" (focus)="platzierungsAuswahlDropdown2(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.objekt.value,meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.rubrik.value,meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.unterrubrik.value,i);">
+                                </mat-form-field>
+                                <mat-autocomplete #auto="matAutocomplete">
+                                  <mat-option class="input-full-width" *ngFor="let platz of platzierungsdataarray[i]" [value]="platz.plazbez">
+                                    {{platz.plazbez}}
+                                  </mat-option>
+                                </mat-autocomplete>
+                              </div>
+                            </div>
+                            
+                            <!--<br>-->
+                            <mat-form-field color="accent" class="input-full-width">
+                              <textarea matInput placeholder="Spezielles (Hinweise zum Werbemittel)" i18n-placeholder="@@specialAdMedium" formControlName="hinweis"></textarea>
+                            </mat-form-field>
+                            <!--<br>-->
+                            <!--<br>-->
+                            
+                            <div class="flex-container"
+                                fxLayout="row"
+                                fxLayout.xs="column"
+                                fxLayoutAlign="center center"
+                                fxLayoutAlign.xs="start">
+                              <div fxFlex></div>
+                              <div fxFlex="20%"> <!-- BK -->
+                                <mat-form-field color="accent" class="input-full-width">
+                                  <input matInput type="number" min="0" formControlName="bk" placeholder="Beraterkommission in %" i18n-placeholder="@@adviserCommission" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value,false);">
+                                </mat-form-field>
+                              </div>
+                              <div fxFlex></div><div fxFlex="20%"> <!-- berechneter Preis -->
+                                <mat-form-field color="accent" class="input-full-width">
+                                  <input matInput type="number" min="0" formControlName="preisAmasys" readonly placeholder="berechn. Preis" i18n-placeholder="Berechneter Preis@@calcPrice" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value,false);">
+                                </mat-form-field>
+                              </div>
+                              <div fxFlex></div>
+                              <div fxFlex="20%">  <!-- Bruttopreis -->
+                                <mat-form-field color="accent" class="input-full-width">
+                                  <input matInput type="number" min="0" formControlName="preisUser"  placeholder="Preis (Werbemittel)" i18n-placeholder="@@priceAdMedium" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false);">
+                                </mat-form-field>
+                                <!--< small>berechneter Preis: CHF {{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisAmasys.value | currency:"CHF"}}</small> -->
+                              </div>
+                            </div>
+                            
+                            <!-- Startmöglichkeit für Zusatzpositionen -->
+                            <div class="flex-container" style="border-top: 1px solid black;padding-top: 14px;"
+                              *ngIf = "preispositionendataarray[i][j].length >= 1"
+                              fxLayout="row"
+                              fxLayout.xs="column"
+                              fxLayoutAlign="center center"
+                              fxLayoutAlign.xs="start">
+                              <!--<div fxFlex="5%">-->
+                              <!--  <button md-mini-fab (click)="preispositionenAuswahlDropDown2(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsaufdetnr.value,j)"><mat-icon>system_update_alt</mat-icon></button>                                -->
+                              <!--</div>-->
+                              <!--<div fxFlex></div>-->
+                              <div fxFlex="45%">
+                                
+                                <!--<span *ngIf="preispositionendataarray[j].length > 0">-->
+                                  <mat-select class="input-full-width" formControlName="preisposdropdown" placeholder="Rabatte/Zuschläge" i18n-placeholder="@@discountAddition">
+                                    <mat-option class="input-full-width" [value]="" selected i18n="@@pricePosition">Preisposition auswählen</mat-option>
+                                    <mat-option class="input-full-width" *ngFor="let preisposition of preispositionendataarray[i][j];" [value]="preisposition.posKey">
+                                      {{preisposition.bezeichnung}}
+                                    </mat-option>
+                                  </mat-select>
+                                <!--</span>-->
+                              </div>
+                              <div fxFlex></div>
+                              <div fxFlex="50%">
+                                <!--<button mat-button (click)="addZusatzpreisposition2(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen,0,meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisposdropdown.value,preispositionendataarray[j])">Preispos hinzufügen <mat-icon>vertical_align_top</mat-icon></button>-->
+                                <button mat-button (click)="addZusatzpreisposition2(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen,meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.length,meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisposdropdown.value,preispositionendataarray[i][j])" type="button"><span i18n="@@addPricePosition">Preispos hinzufügen</span> +</button>     <!-- type="button" damit Button nicht submitted  -->                         
+                              </div>
+                            </div>
+                            
+                            <!--Zusatzpreisposition -->
+
+                            <div formArrayName="zusatzpreispositionen" *ngIf="meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.length > 0"> <!-- Start: FormArray Zusatzpreispositionen -->
+                              <mat-card class="panel-indented-2" *ngFor="let zusatzpreispositionen of meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls; let k=index"> <!-- Start: Repeater Zusatzpreispositionen -->
+                                <mat-card-content [formGroupName]="k">
+                                  <strong>Preisposition  {{k + 1}}</strong>
+                                  <button type="button" mat-icon-button class="pull-right" (click)="removeZusatzpreisposition(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen, k)"><mat-icon>clear</mat-icon></button><br>
+                                  <br><br>
+
+                                  <mat-form-field color="accent" class="input-full-width">
+                                    <input matInput type="text" formControlName="bezeichnung" placeholder="Bezeichnung" i18n-placeholder="@@description">
+                                  </mat-form-field>
+                                  <br><br>
+
+                                  <div class="flex-container"
+                                      fxLayout="row"
+                                      fxLayout.xs="column"
+                                      fxLayoutAlign="center center"
+                                      fxLayoutAlign.xs="start">
+                                    <div fxFlex="40%">
+                                      <mat-select class="input-full-width" formControlName="typ" placeholder="Typ" i18n-placeholder="@@typ">
+                                        <mat-option value="1" i18n="@@approachPerUnity">Ansatz je Einheit</mat-option>
+                                        <mat-option value="2" i18n="@@sweepingPerEdition">Pauschal je Ausg.</mat-option>
+                                        <mat-option value="3" i18n="@@percentage">Prozentsatz</mat-option>
+                                        <mat-option value="7" i18n="@@sweepingAll">Pauschal alle Ausg.</mat-option>
+                                        <mat-option value="4" i18n="@@sweepingPerObject">Pauschal je Objekt</mat-option>
+                                        <mat-option value="5" i18n="@@percentageNotRounded">Prozentsatz ungerundet</mat-option>
+                                      </mat-select>
+                                    </div>
+                                    <div fxFlex></div>
+                                    <div fxFlex="20%"> <!-- berechneter Preis -->
+                                      <mat-form-field color="accent" class="input-full-width">
+                                        <input matInput type="number" min="-1000000" max="100000" readonly formControlName="preisAmasys" placeholder="berechn. Preis" i18n-placeholder="@@calcPrice" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false);">
+                                      </mat-form-field>
+                                    </div>
+                                    <div fxFlex></div>
+                                    <div fxFlex="20%">  <!-- Bruttopreis -->
+                                      <mat-form-field color="accent" class="input-full-width">
+                                        <input matInput type="number" min="-100000" max="100000"  formControlName="preisUser" placeholder="Preis (Preispos)" i18n-placeholder="@@pricePriceposition" (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false);">
+                                      </mat-form-field>
+                                      <!--< small>berechneter Preis: CHF {{meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisAmasys.value | currency:"CHF"}}</small> -->
+                                    </div>
+                                  </div>
+                                </mat-card-content>
+                              </mat-card>
+                            </div> <!-- Ende: FormArray Zusatzpreispositionen -->
+                            
+                            <mat-checkbox class="pull-right" formControlName="seitenumbruch" (Change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false);"><span style="color: rgba(0,0,0,.54);" i18n="@@addPagebreak">Seitenumbruch einfügen</span></mat-checkbox>
+                            
+                            <!--<mat-checkbox  [(ngModel)]="checkedSeitenumbruch"> + Seitenumbruch</mat-checkbox>-->
+                            <!--<mat-checkbox value="false" formControlName="pagebreak"  (change)="AbgleichOfferte(meinVerkaufsdokumentFormular.value, false)"> Seitenumbruch </mat-checkbox>-->
+                            <!--<mat-checkbox style="margin-left:0;" formControlName="pagebreak" value="false" >Seitenumbruch</mat-checkbox>-->
+                            <!--(change)="addPagebreak()"-->
+                            
+                          </mat-card-content>
+                          <mat-card-actions>
+                            <button type="button" mat-button (click)="addWerbemittel(meinVerkaufsdokumentFormular.controls.titel.controls[i].controls.werbemittel, i, j+1)"><span i18n="@@addAdMedium">Werbemittel hinzufügen</span> +</button>
+                          </mat-card-actions>
+                         
+                        </mat-card> <!-- Ende: Repeater Werbemittel -->
+                        
+                      </div> <!-- Ende: FormArray Werbemittel -->
+  
+                    </mat-card-content>
+                    <mat-card-actions>
+                      <button type="button" mat-button (click)="addTitel(i+1)" style="cursor: default"><span i18n="@@addObject">Objekt hinzufügen</span> +</button>
+                    </mat-card-actions>
+                  </mat-card>  <!-- Ende: Repeater Objekt -->
+                </div> <!-- Ende: FormArray Objekt -->
+                <!-- Objekt: Ende -->
+              
+              </div> <!-- ENDE Vorlagen Standard-Prozess -->
+              
+              <!-- leere Druckvorschau, falls hidePreview===true, sonst kann amasys nicht richtig gefüttert werden; 27.09.2017/RPS -->
+              <div *ngIf="hidePreview">
+                <div id="druckvorschau_alignment_spacer" style="height: 0px;">&nbsp;</div>
+                <div id="druckvorschau"></div>
+              </div>
+
+            </div> <!-- Spalte 1 Ende -->
+
+
+<!--======================================== oben: Erfassungs-Formular, unten: Preview/Templates ===============================================================-->
+
+
+            <div *ngIf="hidePreview==false" id="previewPane" class="flex-item spalte2" fxHide.sm  fxFlex> <!-- Spalte 2 ="50%" Start -->
+            
+              <div style="display: flex; justify-content: center;">
+                <mat-select class="vorlagen" color="primary" placeholder="Vorlage" i18n-placeholder="@@model" [(ngModel)]="activePrintTemplate"
+                    [ngModelOptions]="{standalone: true}" (ngModelChange)="onTemplateChange()" [disabled]="verkaufsdokumentStatus === 'lock_outline'" 
+                    matTooltip="Vorlage auswählen" i18n-matTooltip="@@chooseModel" matTooltipPosition="below">
+                <!--<mat-select color="primary" placeholder="Vorlage" [(ngModel)]="activeITOAprintTemplate" [ngModelOptions]="{standalone: true}">-->
+                  
+                  <!-- mit neuer Material Version müsste folgendes gehen -->
+                  <!-- <mat-select placeholder="Vorlage" [(value)]="activePrintTemplate"> -->
+                  
+                  <!--<mat-option value="A4 hoch 1">A4 hoch 1 <mat-icon style="vertical-align:middle;">crop_portrait</mat-icon></mat-option>-->
+                  <!--<mat-option value="a4-hoch-1" (onSelectionChange)="onTabSelectChange">A4 hoch 1</mat-option>-->
+                  <!--<mat-option value="a4-quer-1" (onSelectionChange)="onTabSelectChange">A4 quer 1</mat-option>-->
+                  <!--<mat-option value="a4-hoch-freeform" (onSelectionChange)="onTabSelectChange">A4 hoch freeform</mat-option>-->
+                  
+                  <mat-option *ngFor="let vorlage of instanzdata.vorlagen" [value]="vorlage.value">
+                    {{ vorlage.bezeichnung }}
+                  </mat-option>
+
+                  <!--<mat-option *ngIf="intdebug" value="DATA">Data</mat-option>-->
+                </mat-select>
+              </div>
+              
+              <div *ngIf="activePrintTemplate=='willkommen'">
+                <div id="druckvorschau" style="width: 60%; margin: 0 auto 0 auto;">
+                  <!--<div style="width: 100%; height: 450px; background: url('../assets/edi_rot_gruen_256.png') no-repeat center bottom;">-->
+                  <div style="width: 100%; height: 450px; background: url('assets/edi_rot_gruen_256.png') no-repeat center bottom;">
+                    &nbsp;
+                  </div>
+                  <h1><span i18n="@@welcomeMessageA">Willkommen beim</span><br><span i18n="@@welcomeMessageB">edpOffert- & Auftrags-Tool</span></h1>
+                  <p i18n="@@tutorialText">Wählen Sie als erstes die gewünschte Dokumentenvorlage über das DropDown "Vorlage" oben in der Mitte der rechten Bildschirmspalte
+                  und erfassen Sie dann Ihre Offerte/Ihren Auftrag im linken Bildschirmbereich (oder bei freeform Vorlagen direkt im Dokument).</p>
+                </div>
+                <div id="druckvorschau_alignment_spacer"></div>
+              </div>
+              
+              <app-a4-hoch-1 *ngIf="activePrintTemplate=='a4-hoch-1'" [verkaufsdokument]="meinVerkaufsdokumentFormular" [templatedata]="instanzdata"></app-a4-hoch-1>
+              <app-a4-hoch-2 *ngIf="activePrintTemplate=='a4-hoch-2'" [verkaufsdokument]="meinVerkaufsdokumentFormular" [templatedata]="instanzdata"></app-a4-hoch-2>
+              <app-a4-hoch-3 *ngIf="activePrintTemplate=='a4-hoch-3'" [verkaufsdokument]="meinVerkaufsdokumentFormular" [templatedata]="instanzdata"></app-a4-hoch-3>
+              <app-a4-hoch-4 *ngIf="activePrintTemplate=='a4-hoch-4'" [verkaufsdokument]="meinVerkaufsdokumentFormular" [templatedata]="instanzdata"></app-a4-hoch-4>
+              <app-a4-hoch-5 *ngIf="activePrintTemplate=='a4-hoch-5'" [verkaufsdokument]="meinVerkaufsdokumentFormular" [templatedata]="instanzdata"></app-a4-hoch-5>
+              <app-a4-quer-1 *ngIf="activePrintTemplate=='a4-quer-1'" [verkaufsdokument]="meinVerkaufsdokumentFormular" [templatedata]="instanzdata"></app-a4-quer-1>
+              <app-a4-quer-2 *ngIf="activePrintTemplate=='a4-quer-2'" [verkaufsdokument]="meinVerkaufsdokumentFormular" [templatedata]="instanzdata"></app-a4-quer-2>
+              <app-a4-quer-3 *ngIf="activePrintTemplate=='a4-quer-3'" [verkaufsdokument]="meinVerkaufsdokumentFormular" [templatedata]="instanzdata"></app-a4-quer-3>
+              <app-a4-quer-4 *ngIf="activePrintTemplate=='a4-quer-4'" [verkaufsdokument]="meinVerkaufsdokumentFormular" [templatedata]="instanzdata"></app-a4-quer-4>
+              <app-a4-quer-5 *ngIf="activePrintTemplate=='a4-quer-5'" [verkaufsdokument]="meinVerkaufsdokumentFormular" [templatedata]="instanzdata"></app-a4-quer-5>
+              <app-a4-quer-6 *ngIf="activePrintTemplate=='a4-quer-6'" [verkaufsdokument]="meinVerkaufsdokumentFormular" [templatedata]="instanzdata"></app-a4-quer-6>
+              
+<!--              <div *ngIf="activePrintTemplate=='a4-hoch-freeform'"> &lt;!&ndash; ENDE a4-hoch-freeform &ndash;&gt;-->
+<!--                <div id="druckvorschau" class="druckvorschau_freeform">-->
+<!--                  <style>-->
+<!--                    .a4-hoch-freeform {-->
+<!--                      color: black;-->
+<!--                      font-size: 11px!important;-->
+<!--                      font-family: Arial, Helvetica Neue, Helvetica, sans-serif!important; -->
+<!--                    }-->
+<!--                    #header, .header {-->
+<!--                      padding-bottom: 50px!important;-->
+<!--                      -->
+<!--                    }-->
+<!--                    -->
+<!--                    #footer, .footer {-->
+<!--                      width: 100%;-->
+<!--                      text-align: left;-->
+<!--                      font-size: 9px!important;-->
+<!--                      font-family: Arial, Helvetica Neue, Helvetica, sans-serif!important;-->
+<!--                    }-->
+<!--                    -->
+<!--                    #footer > small, .footer > small,-->
+<!--                    #footer > small > b, .footer > small > b,-->
+<!--                    #footer > small > span, .footer > small > span {-->
+<!--                      padding: 0px!important;-->
+<!--                    }-->
+<!--                    -->
+<!--                    #footer > small, .footer > small {-->
+<!--                      font-size: inherit!important;-->
+<!--                    }-->
+<!--                    td {-->
+<!--                      padding-left: 0;-->
+<!--                    }-->
+<!--                    -->
+<!--                    .page-number {-->
+<!--                      float: right;-->
+<!--                    }-->
+<!--                    -->
+<!--                    p {-->
+<!--                      position: relative;-->
+<!--                      display: block;-->
+<!--                      page-break-inside: avoid;-->
+<!--                      margin-top: 0px;-->
+<!--                      margin-bottom: 0px;-->
+<!--                      padding-bottom: 40px;-->
+<!--                    }-->
+<!--                    -->
+<!--                    pre {-->
+<!--                      position: relative;-->
+<!--                      display: block;-->
+<!--                      page-break-inside: avoid;-->
+<!--                      font-family: inherit;-->
+<!--                      margin-top: 0px;-->
+<!--                      margin-bottom: 0px;-->
+<!--                      padding-bottom: 20px;-->
+<!--                      white-space: pre-wrap;-->
+<!--                    }-->
+<!--                    -->
+<!--                    #mainTemplateLogo {-->
+<!--                      position: relative;-->
+<!--                      display: block;-->
+<!--                      height: 45px!important; /* 60px */-->
+<!--                    }-->
+<!--                  </style>-->
+<!--                  <div id="header">-->
+<!--                    <br><br>-->
+<!--                    <img id="mainTemplateLogo" src="{{'assets/' + instanzdata.instanz + '/logo_.png'}}" />-->
+<!--                  </div>-->
+<!--              -->
+<!--                  <div class="print-element a4-hoch-freeform" [froalaEditor]="options" [(froalaModel)]="editorContent"></div>-->
+<!--                  -->
+<!--                  <div id="footer" class="a4-hoch-freeform">-->
+<!--                      <small><span innerHTML="{{instanzdata.fusszeile}}"></span><span class="page-number"></span></small>-->
+<!--                  </div>-->
+<!--                </div> &lt;!&ndash; ENDE Druckvorschau &ndash;&gt;-->
+<!--                <div id="druckvorschau_alignment_spacer"></div>  -->
+<!--              </div> &lt;!&ndash; ENDE a4-hoch-freeform &ndash;&gt;-->
+
+              <!--<div *ngIf="activePrintTemplate=='DATA'">-->
+              <!--  <div id="druckvorschau_alignment_spacer"></div>-->
+              <!--  <div style="margin: 20px;" id="druckvorschau">-->
+              <!--    <pre>Formular gültig?: {{meinVerkaufsdokumentFormular.valid | json}}</pre>-->
+              <!--    <pre>Datenstruktur: <br>{{meinVerkaufsdokumentFormular.value | json}}</pre>-->
+              <!--  </div>-->
+              <!--</div>-->
+              
+              <!-- ************************************************************************************************** -->
+              <!-- Ab hier Templates -->
+              <!-- ************************************************************************************************** -->
+
+            <!--<mat-tab-group fxFlexAlign = "start" (selectChange)="onTabSelectChange($event);" selectedIndex="0">-->
+              
+              <!--<mat-tab label="A4 hoch 1">-->
+              <!--  <app-a4-hoch-1 [verkaufsdokument]="meinVerkaufsdokumentFormular" [templatedata]="instanzdata"></app-a4-hoch-1>-->
+              <!--</mat-tab>-->
+              
+              <!--<mat-tab label="A4 quer 1" *ngIf="((instanzdata.instanz.indexOf('sopm')>-1) || (instanzdata.instanz.indexOf('edp')>-1))">-->
+              <!--  <app-a4-quer-1 [verkaufsdokument]="meinVerkaufsdokumentFormular" [templatedata]="instanzdata"></app-a4-quer-1>-->
+              <!--</mat-tab>-->
+              
+              <!--<mat-tab label="A4 hoch freeform" *ngIf="((instanzdata.instanz.indexOf('koe')>-1) || (instanzdata.instanz.indexOf('edp')>-1))">-->
+              <!--<mat-tab label="A4 hoch freeform">-->
+                
+                
+              <!--</mat-tab>-->
+              
+              <!-- ************************************************************************************************** -->
+              <!-- Bis hier Templates -->
+              <!-- ************************************************************************************************** -->
+              
+              <!--<mat-tab label="Data" *ngIf="!this.router.url.includes('c9users.io')">-->
+            <!--  <mat-tab label="Data">-->
+                
+            <!--  </mat-tab>-->
+
+            <!--</mat-tab-group>-->
+
+          </div><!-- Spalte 2 Ende -->
+        
+      </div>
+    </form>
+</div> <!-- End 2nd View -->
+
+
+<!--Scroll to top-->
+<div class="btn-scroll2top" [ngClass]="{'show-scroll': scroll2topVisible}" (click)="scroll2top()">
+  <mat-icon>vertical_align_top</mat-icon>
+</div>
+
+<!-- </mat-drawer-container> -->
+</mat-drawer-container>
+</div>
+
+<mat-menu #menuinnendienst="matMenu" [overlapTrigger]="false" x-position="before">
+  <button style="padding-left: 250px;" mat-icon-button>
+    <mat-icon >close</mat-icon>
+  </button>
+  <div style="padding-right: 8px; padding-left: 8px; width: 300px;">Email: {{mailinnendienst}}</div>
+  <div style="padding-right: 8px; padding-left: 8px">Mitteilung von {{meinVerkaufsdokumentFormular.value.verfasser1}}</div>
+  
+  <div style="padding-right: 8px; padding-left: 8px">
+    <span class="example-full-width" (click)="$event.stopPropagation()">
+      <textarea rows="7" matInput placeholder="Kunden Daten" style="background-color: #eee;" id="innendiensttxt" #innendiensttxt>
+      </textarea>
+    </span>
+  </div>
+  <button mat-icon-button style="float:right" (click)="sendEmailtoinnendienst(innendiensttxt.value)">
+    <mat-icon >send</mat-icon>
+  </button>
+</mat-menu>

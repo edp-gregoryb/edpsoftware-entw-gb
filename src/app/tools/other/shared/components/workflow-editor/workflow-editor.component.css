@@ -1,0 +1,68 @@
+
+.sidenavContainer {
+    /* Bereich der Sidenav */
+    background-color: #888;
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.wrapper {
+    margin: 20px;
+}
+
+.smallWrapper {
+    width: 95%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.scrollContainer {
+    width: 95%;
+    max-width: 1200px;
+    overflow: auto;
+    margin: auto;
+}
+
+input {
+    caret-color: black;
+}
+
+.move {
+    /*float: right;*/
+    cursor: pointer;
+}
+
+.button {
+    border: solid grey 1px;
+    cursor: pointer;
+}
+
+.step {
+    margin: 5px;
+    padding: 10px 5px;
+    text-align: center;
+    width: 300px;
+    float: left;
+    border: solid grey 1px;
+    background-color: #f1f1f1;
+}
+
+.task {
+    text-align: left;
+    padding: 5px;
+    border-bottom: solid lightgrey 1px;
+}
+
+.todo {
+    margin-left: 20px;
+}
+
+.editButton {
+    vertical-align: middle;
+    line-height: 20px
+}
+
+.clear {
+    clear: both;
+}

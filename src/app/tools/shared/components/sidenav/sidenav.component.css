@@ -1,0 +1,31 @@
+.sidenavFullWidth {
+  width: 200px;
+}
+
+.sidenavContent {
+	padding-left: 5px;
+  padding-right: 5px;
+}
+
+.appName {
+  margin-left: 15px;	
+ 	font-size: 11px !important;
+}
+
+.showCircle {
+  border-radius: 100px;
+  border: solid 2px #c5010e;
+  padding: 5px;
+  left: -7px;
+  position: relative;
+}
+
+.sidenavDivider {
+	border-bottom: 2px solid darkgrey;
+}
+
+.sidenavAppName {
+  display: inline-block;
+  line-height: 130%;
+  vertical-align: middle;
+}

@@ -1,0 +1,6 @@
+<mat-select class="input-full-width" placeholder="Aktion" i18n-placeholder="@@action" [(ngModel)]="aktion" (selectionChange)="selectedAktion($event)" >
+  <mat-option i18n="@@empty">leer</mat-option>
+  <mat-option class="input-full-width" *ngFor="let aktion of aktiondata" [value]="aktion.aktid">
+    {{ aktion.bes}}
+  </mat-option>
+</mat-select>

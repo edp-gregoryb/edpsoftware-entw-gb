@@ -1,0 +1,69 @@
+<button style="float: right;"  mat-icon-button (click)="onNoClick()"> <mat-icon>close</mat-icon></button>
+<p>Codeart</p>
+<form [formGroup]="codeartForm" (ngSubmit)="onSubmit()">
+<div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+    <div class="item item-1" fxFlex="33%" fxFlexOrder="1" fxLayoutGap="10px">
+        <mat-form-field class="size100" fxFlex>
+            <input matInput type="text" placeholder="Code-Art" [(ngModel)]="cart" formControlName="cart">
+        </mat-form-field>
+        <mat-form-field class="size100" fxFlex>
+            <input matInput type="text" placeholder="Code-Wert" [(ngModel)]="cwert" formControlName="cwert">
+        </mat-form-field>
+    </div>
+
+    <!--<div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+    <div class="item item-2" fxFlex="33%" fxFlexOrder="2" fxLayoutGap="10px">
+        <mat-form-field class="size100" fxFlex>
+            <input matInput type="text" placeholder="Sprache" [(ngModel)]="sprache" formControlName="sprache">
+        </mat-form-field>
+        <mat-form-field class="size100" fxFlex>
+            <input matInput type="text" placeholder="Firma" [(ngModel)]="firma" formControlName="firma">
+        </mat-form-field>
+    </div>
+
+    <div class="item item-3" fxFlex="33%" fxFlexOrder="2" fxLayoutGap="10px">
+        <mat-form-field class="size100" fxFlex>
+            <input matInput type="text" placeholder="Code-laenge" [(ngModel)]="laenge" formControlName="laenge">
+        </mat-form-field>
+        <mat-form-field class="size100" fxFlex>
+            <input matInput type="text" placeholder="Code-Kz" [(ngModel)]="kz" formControlName="kz">
+        </mat-form-field>
+    </div>
+</div>
+
+<div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+    <div class="item item-3" fxFlex="100%" fxFlexOrder="1" fxLayoutGap="10px">
+        <mat-form-field class="size100" fxFlex>
+            <input matInput type="text" placeholder="Code-Text" #text maxlength="60" [(ngModel)]="ctext" formControlName="ctext">
+            <mat-hint align="end">{{text.value.length}} / 60</mat-hint>
+        </mat-form-field>
+
+    </div>
+</div>
+<div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+    <div class="item item-4" fxFlex="100%" fxFlexOrder="1" fxLayoutGap="10px">
+        <mat-form-field class="size100" fxFlex>
+            <input matInput type="text" placeholder="Code-Text1" #text1 maxlength="60" [(ngModel)]="ctext1" formControlName="ctext1">
+            <mat-hint align="end">{{text1.value.length}} / 60</mat-hint>
+        </mat-form-field>
+
+    </div>
+</div>
+<div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+    <div class="item item-5" fxFlex="100%" fxFlexOrder="1" fxLayoutGap="10px">
+        <mat-form-field class="size100" fxFlex>
+            <input matInput type="text" placeholder="Code-Text2" #text2 maxlength="60" [(ngModel)]="ctext2" formControlName="ctext2">
+            <mat-hint align="end">{{text2.value.length}} / 60</mat-hint>
+        </mat-form-field>
+
+    </div>
+</div>
+    <br>
+<div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="right" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+    <span class="example-spacer"></span>
+    <button  mat-raised-button color="primary" [mat-dialog-close]="" (click)="selectCodeart()" cdkFocusInitial>Auswählen</button>
+    <button  mat-raised-button color="primary" [mat-dialog-close]="" (click)="updateCodeart()">Speichern</button>
+    <button  mat-raised-button color="primary" [mat-dialog-close]="" (click)="deleteCodeart()">Löschen</button>
+    <button  mat-raised-button color="primary" (click)="neueCodeart()">Neu</button>
+</div>
+</form>

@@ -1,0 +1,160 @@
+@import '~@angular/material/_theming';
+@import '../../../../../custom_theme.scss';
+
+h2 {
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: #000;
+    margin: 0px;
+    height: 100%;
+    vertical-align: middle;
+    display: table-cell;
+}
+
+th {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align: left;
+    vertical-align: middle;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 5px;
+    border-bottom: 1px solid #E0E0E0;
+    color: rgba(0, 0, 0, 0.54)
+}
+
+th:first-child {
+    padding-left: 20px;
+}
+
+th:last-child {
+    padding-right: 20px;
+}
+
+th.formular:first-child {
+    padding-left: 0px;
+}
+
+th:hover {
+    cursor: pointer;
+}
+
+th:hover > mat-icon {
+    visibility: visible;
+}
+
+th.selected {
+    color: #000;;
+}
+
+th.selected > mat-icon {
+    visibility: visible;
+}
+
+td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    font-weight: 400;
+    font-size: 13px;
+    padding: 5px;
+    border-top: 1px solid #E0E0E0;
+}
+
+td:first-child {
+    padding-left: 20px;
+}
+
+td:last-child {
+    padding-right: 20px;
+}
+
+td.formular:first-child {
+    padding-left: 0px;
+}
+
+tbody > tr:hover {
+    background-color: #ECECEC;
+}
+
+mat-icon.sort {
+    font-size: 12px;
+    vertical-align: middle;
+    display: inline;
+    visibility: hidden;
+    line-height: initial;
+}
+
+mat-icon {
+    vertical-align: middle;
+    display: inline;
+    line-height: initial;
+}
+
+p {
+    display: inline;
+}
+
+p.showSelectedItems {
+    margin: 0px;
+    display: table-cell;
+    vertical-align: middle;
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+    font-size: 16px;
+}
+
+tr.selected {
+    background-color: #E0E0E0;
+}
+
+.table-container {
+    table-layout: fixed;
+    width: 100%;
+    display: inline-table;
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+}
+
+.pagination {
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+    font-size: 12px;
+    color: #757575;
+    text-align: right;
+    border-top: 1px solid #E0E0E0;
+    padding: 5px;
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+.pagination > .element {
+    margin-left: 20px;
+}
+
+.paddingRight12 {
+    padding-right: 12px;
+}
+
+.select {
+    width: 0px;
+}
+
+.toolbar {
+    padding: 5px 5px 5px 20px;
+    width: calc(100% - 25px);
+    height: 40px;
+    display: table;
+    vertical-align: middle;
+}
+
+.short {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 25px;
+}

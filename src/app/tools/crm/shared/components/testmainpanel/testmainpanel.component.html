@@ -1,0 +1,99 @@
+
+  <div  *ngIf="!canEdit">
+   <div *ngIf="!needupdate" > 
+     <div *ngIf="!neuertermin" >
+         <div  *ngIf="!termingeloescht" >
+        <div>  <button *ngIf="showEdit" style="float: right;margin-right:8%" pButton type="button" class="ui-button-secondary"  (click)=editieren() icon="fa-pencil-square-o" iconPos="left"  ></button>
+        <!--<button *ngIf="buttonNeuerTermin" style="float: right;margin-right:0%;" pButton type="button" class="ui-button-secondary" (click)=neuerTermin() icon="fa fa-plus" iconPos="left" ></button> <!--*ngIf="showEdit"-->
+         <button *ngIf="showEdit" style="float: right;margin-right:0%;" pButton type="button" class="ui-button-secondary" (click)=showDeleteDialog() icon="fa fa-trash" iconPos="left" ></button>
+      <ul >
+          <!--*ngFor="let termine of termindetaillist"-->
+        <!--  <span  class="important">{{termine.NAME}}</span>  <span style="float: right;margin-top: 10px;margin-right: 10px" >{{termine.beznr}}</span><br>-->
+        <!--  <span   style="font-size: 16pt; margin-bottom: 15px;" >{{termine.termkontaktpers}}</span>-->
+        <!--  <br>-->
+        <!--  <span  >{{termine.strasse}}</span>-->
+        <!--  <br>-->
+        <!--  <span  >{{termine.ort}} </span>-->
+        <!--  <br>-->
+        <!--  <div *ngIf="agenturanwesend"> -->
+        <!--  <div  style="font-weight: bold;"><br>Agentur:</div>-->
+        <!--  <span  ng-if="termine.agenturname" >{{termine.agenturname}}</span>-->
+        <!--  <br>-->
+        <!--  <span  >{{termine.agenturstrasse}}</span>-->
+        <!--  <br>-->
+        <!--  <span  >{{termine.agenturort}} </span>-->
+        <!--  </div>-->
+        <!--<span  style="font-weight: bold;"><br>Notiz</span> von:<span > {{termine.termmitarbeitername}} </span> am:<span > {{termine.rapdatum | usdatestringtochstring}}</span> <br>-->
+        <!--  <span >{{termine.termrapptext}} </span>-->
+          <!--<br>-->
+        <!--    <div  ><span style="font-weight: bold;">Objekt:</span>-->
+        <!--  <span >{{termine.objektbezeichnung}} <span *ngIf="termine.rubrik ||termine.urubrik ||termine.aschlussel" > /</span> </span> -->
+        <!--   <span *ngIf="termine.rubrik">{{termine.rubrik}} <span *ngIf="termine.urubrik || termine.aschlussel"> /</span> </span> -->
+        <!--  <span *ngIf="termine.urubrik"  >{{termine.urubrik}}  </span> -->
+        <!--   <span *ngIf="termine.aschlussel" ><label>Ausgabe:</label> {{termine.ausgbez}}  </span> </div>-->
+          <br>
+<div style="background-color: #d3d3d3;margin-right:20px;">
+     <div class="w3-container w3-margin-left">    
+       <div style="font-weight: bold;"><span i18n="@@note">Notiz</span>:</div> 
+       </div>
+        <div class="w3-container w3-margin-left w3-margin-right" >    
+      <textarea style="width: 100%" placeholder="Notiz" i18n-placeholder="@@note" [(ngModel)]="termrapptext" rows="10"></textarea>
+      </div>
+       <div class="w3-container w3-margin-left">    
+    <!--<app-agentursuchfeld [agenturdata]="termindetaillist" (agenturvalueChanged)="NewAgenturvalueChanged($event)" [objekt]="termine.objekt" [beznr]="termine.beznr"></app-agentursuchfeld>-->
+    </div>
+    <!--<br>-->
+    <div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+    <app-kontaktpersdropmaterial [kundenNr]="beznrkunde" [kontaktpers]="kontaktpersnr" (kontaktpersonChanged)=NewkontaktpersonChanged($event) ></app-kontaktpersdropmaterial>
+    </div>
+    <!--<br>-->
+    <div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+    <app-aktivitaetdropmaterial  [aktivitaet]="aktivitaetfordrop" (aktivitaetonvalueChanged)=NewaktivitaetonvalueChanged($event) ></app-aktivitaetdropmaterial>
+    </div>
+    <!--<br>-->
+    <div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+    <app-mitarbeiterdropmaterial  [mitarbeiter]="mitarbeiterbezfordrop" (mitarbeiteronvalueChanged)=NewmitarbeiteronvalueChanged($event) ></app-mitarbeiterdropmaterial>
+    </div>
+    <!--<br>-->
+    <div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+    <app-aschluesseldropmaterial [objektvalue]="objektfordrop" [aschluessel]="aschluessel" (ausgabeonvalueChanged)=NewausgabeonvalueChanged($event) ></app-aschluesseldropmaterial>
+    </div>
+   
+      <div >
+           <div class="w3-container w3-margin-left w3-margin-right w3-margin-top"> 
+          <app-datumzeitauswahl #datumzeit ></app-datumzeitauswahl>
+            </div>
+ <div class="w3-container w3-margin-left">    
+  <button  type="button"  pButton (click)="showSuccessandSaveTermin(termrapptext,datumzeit)" label="Speichern" class="ui-button-success"></button>
+  <button type="button"  pButton (click)="showInfo()" label="Auftrag" class="ui-button-info"></button>
+ <!--<button type="button"  pButton (click)="showOfferte(termine)" label="Offerte" class="ui-button-info">-->
+<!--</button> -->
+</div>
+</div>
+</div>
+      </ul>
+      </div>
+    </div>
+   </div>
+  </div>
+  </div>
+  <p-dialog header="Termin Löschen" [(visible)]="display">
+    <span i18n="@@cancelDateA">Termin mit Beznr</span>: {{beznrkunde}} <span i18n="@@cancelDateB">löschen</span> ?
+    <button type="button"  pButton (click)="deleteTermin($event)" label="Löschen" class="ui-button-info"></button>
+</p-dialog>
+
+ <p-messages [value]="msgs" [closable]="false"></p-messages>
+ <!-- </div>-->
+<div *ngIf="canEdit" >
+<!--<app-mainpaneledit [terminlist]="termindetaillist"></app-mainpaneledit>-->
+</div>
+<div  *ngIf="termingeloescht" >
+  <p i18n="@@dateCanceled">Termin Gelöscht</p>
+</div>
+<div *ngIf="neuertermin" >
+<!--<app-main-new [kundevonauswahl]="kundevonauswahlnew" [termmitbeznr]="termindetaillist" ></app-main-new>-->
+</div>
+
+
+
+

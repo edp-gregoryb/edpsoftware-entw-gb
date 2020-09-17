@@ -1,0 +1,25 @@
+<div style="margin: 15px 0; padding: 10px;" class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
+    <table style="float: left; min-width: 70%;cursor: pointer;">
+        <tr>
+            <th>Ort</th>
+            <th>PLZ</th>
+            <th>Zus</th>
+            <th>Kanton</th>
+            <th>Land</th>
+            <th>ONRP</th>
+        </tr>
+
+        <tr *ngFor="let item of suchresultplzort" (click)="openPlzort(item)" >
+            <td>{{item.ort}}</td>
+            <td>{{item.plz}}</td>
+            <td>{{item.plzzu}}</td>
+            <td>{{item.bundesland}}</td>
+            <td>{{item.land}}</td>
+            <td>{{item.orderptt}}</td>
+        </tr>
+    </table>
+
+
+    <div class="clear"></div>
+</div>
+

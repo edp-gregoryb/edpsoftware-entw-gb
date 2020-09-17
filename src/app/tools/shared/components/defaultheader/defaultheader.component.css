@@ -1,0 +1,60 @@
+.headerleft {
+  flex: 1 1 auto;
+  margin-top:5px;
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+.disabled {
+  pointer-events: none; 
+  cursor: default;
+  color: #404040;
+  text-decoration: none;
+}
+
+.anmeldeinformationen {
+  margin-left: 10px; 
+  border-bottom: 1px solid darkgrey; 
+  padding-bottom: 5px;
+}
+
+.small-icons {
+  font-size: 15px;
+}
+
+.vcenter {  
+  vertical-align: middle;
+}
+
+.instanz-mandant {
+  overflow: hidden;
+}
+
+.instanz {
+  float:left; 
+  width: 115px; 
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+  overflow: hidden;
+}
+
+.mandant {
+  float:right; 
+  margin-right: 10px;
+}
+
+.edprot {
+  color:#c5010e;
+}
+
+.mat-menu-item {
+  line-height: 37px;
+  height: 37px;
+  font-size: 13px;
+}
+
+.mat-menu-item .mat-icon {
+  font-size: 20px;
+}

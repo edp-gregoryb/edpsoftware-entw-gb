@@ -1,0 +1,1830 @@
+import { Component, OnInit, ViewChild, ElementRef, HostListener, ViewEncapsulation } from '@angular/core';
+import { Validators, FormGroup, FormArray, FormBuilder, FormControl, NgModel } from '@angular/forms';
+// import { Verkaufsdokument } from './verkaufsdokument';
+// import { Titeldata } from './titeldata';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs/Observable';
+import { OfferteshowService } from '../../shared/services/offerteshow.service';
+import { GetofferteService } from '../../shared/services/getofferte.service';
+import { ActivatedRoute } from '@angular/router';
+import { ObjektauswahlService } from '../../shared/services/objektauswahl.service';
+import { RubrikauswahlService } from '../../shared/services/rubrikauswahl.service';
+import { UnterrubrikauswahlService } from '../../shared/services/unterrubrikauswahl.service';
+import { WerbeformateService } from '../../shared/services/werbeformate.service';
+import { PlatzierungsauswahlService } from '../../shared/services/platzierungsauswahl.service';
+import { PreispositionenService } from '../../shared/services/preispositionen.service';
+import { AschluesselauswahlService } from '../../shared/services/aschluesselauswahl.service';
+import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
+import { Instanztemplatedata } from './instanztemplatedata';
+
+// old imports
+// import { ObjektdropmaterialComponent } from '../../shared/components/objektdropmaterial/objektdropmaterial.component';
+// import { RubrikdropmaterialComponent } from '../../shared/components/rubrikdropmaterial/rubrikdropmaterial.component';
+// import { UrubrikdropmaterialComponent } from '../../shared/components/urubrikdropmaterial/urubrikdropmaterial.component';
+// import { AdrkundenService } from '../../shared/adrkunden.service';
+// import { MitarbeiterService } from '../../shared/services/mitarbeiter.service';
+// import { ZustaendigeService } from '../../shared/services/zustaendige.service';
+// import { TexteService } from '../../shared/services/texte.service';
+
+@Component({
+    selector: 'app-offerte-show',
+    templateUrl: './offerte-show.component.html',
+    styleUrls: ['./offerte-show.component.css'],
+    host: { '(window:keydown)': 'keyDown($event)' },
+    //encapsulation: ViewEncapsulation.None               // TODO: evtl. später wieder rausnehmen, falls nicht mehr gebraucht (eingefügt für Autocompleter bei Objektauswahl)
+})
+
+export class OfferteShowComponent implements OnInit {
+  public meinVerkaufsdokumentFormular: FormGroup;   // Form Model
+  
+  // kundenname:string;
+  // firmenname:string;
+  // strasse:string;
+  // ort:string;
+  // kundendata:any;
+  // mitarbeiterdata:any;
+  // mitarbeitername:string;
+  // mitarbeiterabteilung:string;
+  // gefiltereteAdressen:any;
+  // filteredOptions: Observable<any>;
+  // stateCtrl: FormControl;
+
+  printTemplateOrientation: string;
+  activePrintTemplate:      string;
+  urlparams:                any;
+  objektdata:               any;
+  
+  //filteredObjektdata:       any;
+  
+  rubrikdataarray:          any[];
+  urubrikdataarray:         any[];
+  werbeformatdataarray:     any[];
+  platzierungsdataarray:    any[];
+  preispositionendataarray: any[][];
+  preisposdropdown:         string;
+  erscheinungsdataarray:    any[];
+  wofa_action:              string;
+  progressbar_visible:      boolean;
+  verkaufsdokumentStatus:   string = "lock_open";
+  // objektAutocompleter:      boolean;  // steuert, ob Objektauswahl via DropDown oder Autocompleter erfolgt
+  snackBarRef:              any;
+  previewpaneWidth:         number;
+
+  // Templatevariablen 
+  testmode:                 boolean;
+  url_logo:                 string;
+  str_company:              string;
+  str_footer:               string;
+  instanz:                  string;
+  instanzdata:              Instanztemplatedata;
+  
+  // Material für Objekt-Autocompleter
+    
+    selectedObjekt: any;
+    objektCtrl: FormControl;
+    formObjekte: any;
+
+  // @ViewChild(TemplateRef) template: TemplateRef<any>;
+
+  // Ende Material für Objekt-Autocompleter
+
+  
+  constructor(
+    private _fb: FormBuilder,
+    // private adrkundenService: AdrkundenService,
+    // private mitarbeiterService: MitarbeiterService,
+    private offerteshowService:OfferteshowService,
+    private getofferteService:GetofferteService,
+    private route:ActivatedRoute,
+    private objektauswahlService:ObjektauswahlService, 
+    private rubrikauswahlService:RubrikauswahlService,
+    private unterrubrikauswahlService:UnterrubrikauswahlService, 
+    private werbeformateService:WerbeformateService, 
+    private platzierungsauswahlService:PlatzierungsauswahlService,
+    private preispositionenService:PreispositionenService,
+    private aschluesselauswahlService: AschluesselauswahlService,
+    public dialog: MatDialog,
+    public snackBar: MatSnackBar) {
+  
+        
+    // Start Labor Objekt-Autocompleter
+          
+      this.objektCtrl = new FormControl();
+      this.formObjekte = this.objektCtrl.valueChanges
+          .startWith(this.objektCtrl.value)
+          .map(val => this.objektDisplayFn(val))
+          .map(obj_bezeichnung => this.filterObjekte(obj_bezeichnung));
+      
+    // Ende Labor Objekt-Autocompleter  
+      
+  }
+  
+  // Funktionen Objekt-Autocompleter
+    
+    objektDisplayFn(value: any): string {
+      
+      console.log("objektDisplayFn, val:" + value);
+      
+      return value && typeof value === 'object' ? value.obj_bezeichnung : value;
+      
+    }
+    
+  
+    filterObjekte(val: string) {
+      
+      if (val) {
+        
+        const filterValue = val.toLowerCase();
+        
+        console.log("filterValue: " + filterValue);
+        console.log("filtered: " + JSON.stringify(this.objektdata.filter(pTitel => pTitel.obj_bezeichnung.toLowerCase().startsWith(filterValue))));
+        
+        return this.objektdata.filter(pTitel => pTitel.obj_bezeichnung.toLowerCase().startsWith(filterValue));
+        //return this.objektdata.filter((pTitel => pTitel.obj_bezeichnung.toLowerCase().startsWith(filterValue)) || (pTitel => pTitel.objekt.toLowerCase().startsWith(filterValue)));
+        //return this.objektdata.filter((pTitel => pTitel.objekt.toLowerCase().startsWith(filterValue)) || (pTitel => pTitel.obj_bezeichnung.toLowerCase().startsWith(filterValue)));
+      }
+      
+      return this.objektdata;
+    }
+  
+  // Ende Funktionen Objekt-Autocompleter
+  
+ 
+  // Scroll detector
+  @HostListener('window:scroll', ['$event']) onScrollEvent($event){
+
+    const div_druckvorschauHeight   = document.getElementById('druckvorschau').offsetHeight;
+    // console.log("div_druckvorschauHeight: " + div_druckvorschauHeight);
+    
+    // const div_formHeight            = $event.srcElement.scrollingElement.clientHeight;
+    const div_formHeight            = $event.target.scrollingElement.scrollHeight;
+    // console.log("div_formHeight: " + div_formHeight);
+    
+    // const browser_window_scrollTop  = $event.srcElement.scrollingElement.scrollTop;
+    const browser_window_scrollTop  = $event.target.scrollingElement.scrollTop;
+    // console.log("browser_window_scrollTop: " + browser_window_scrollTop);
+
+    var div_alignment_spacerHeight  = '';
+    let div_alignment_spacer        = document.getElementById('druckvorschau_alignment_spacer');
+
+    div_alignment_spacerHeight      = (browser_window_scrollTop - (div_druckvorschauHeight / div_formHeight * browser_window_scrollTop))  + 'px';
+    // console.log("div_alignment_spacerHeight: " + div_alignment_spacerHeight);
+    div_alignment_spacer.style.height     = div_alignment_spacerHeight;
+    div_alignment_spacer.style.transition = "max-height 1s";
+    
+  } 
+
+
+  ngOnInit() {
+      
+    // Formularinitialisierung
+    
+    //objekt dropdown initialisieren
+    this.objektauswahldropdown();
+    
+    // Helper-Arrays initialisieren
+    this.rubrikdataarray          = [[{}]];                    
+    this.urubrikdataarray         = [[{}]];
+    this.werbeformatdataarray     = [[{}]];
+    this.platzierungsdataarray    = [[{}]];
+    this.preispositionendataarray = [[{}]];
+    this.erscheinungsdataarray    = [[{}]];
+    
+    this.progressbar_visible      = true;
+    this.testmode                 = false;
+    this.printTemplateOrientation = "hoch";
+    this.activePrintTemplate      = "a4-hoch-1";
+    // this.objektAutocompleter      = false;
+    
+    this.previewpaneWidth = Math.floor(document.getElementById('mainpane').offsetWidth/2);
+    console.log("previewpaneWidth: " + this.previewpaneWidth);
+    
+    
+    
+    // Start: Routing-Abfrage [URL-Parameter]
+    this.urlparams = this.route.params.subscribe(params => {
+      
+      var amasys_offerte_neu_laden = false;
+      if ((Object.keys(params).length == 1) && (params['aufnr'])) {
+        amasys_offerte_neu_laden = true;
+        this.verkaufsdokumentStatus = "lock";
+        console.log("verkaufsdokumentStatus = " + this.verkaufsdokumentStatus);
+      }
+      
+      
+      // Start Erkennung Laufzeitumgebung    
+      
+      this.instanz    = this.cleanupParams(params['instanz']);
+      if (this.instanz==="") this.instanz = window.location.hostname;
+      console.log("Instanz = " + this.instanz);
+      console.log("Verwendete App-URL: " + window.location.hostname);
+      
+      // RegEx für Instanz-Erkennung
+      var regularExpression_testHosts = /(c9users.io)|(185.5)|(edp-entw)/gi; 
+      var regularExpression_somedia = /(10.1.2)|(sopm-prod)/gi; 
+      var regularExpression_koemedia = /(172.16)|(koe-prod)/gi; 
+      
+      console.log("RegEx-Test testHosts: " + this.instanz.search(regularExpression_testHosts));
+      console.log("RegEx-Test somedia: " + this.instanz.search(regularExpression_somedia));
+      console.log("RegEx-Test kömedia: " + this.instanz.search(regularExpression_koemedia));
+      
+      // Defaults für edp oder unbekannte Laufzeitumgebungen
+      this.testmode = true;
+      this.url_logo     = "../../assets/edp-logo.png";
+      this.str_company  = "edp-services ag";
+      this.str_footer   = " | horwerstrasse 62 | 6010 Kriens | Fon 041 349 17 17 | Fax 041349 17 18 | info@edp.ch | www.edp.swiss";
+      
+      this.instanzdata  = {
+        instanz: "edp-entw",
+        firmenbezeichnung: "edp-services ag",
+        fusszeile: "<b>edp-services ag</b> | horwerstrasse 62 | 6010 Kriens | Fon 041 349 17 17 | Fax 041349 17 18 | info@edp.ch | www.edp.swiss"
+      };
+      
+      if (this.instanz.search(regularExpression_somedia) >= 0 ) { 
+        this.testmode = false;
+        this.instanz = "sopm-prod";
+        console.log("App läuft produktiv auf somedia" );
+        this.url_logo     = "../../assets/somedia-logo.png";
+        this.str_company  = "Somedia Promotion";
+        this.str_footer   = " | Sommeraustrasse 32 | 7007 Chur | Telefon +41 81 255 58 58 | promotion@somedia.ch | www.somedia-promotion.ch";
+
+        this.instanzdata  = {
+          instanz: "sopm-prod",
+          firmenbezeichnung: "Somedia Promotion",
+          fusszeile: "Somedia Promotion - Sommeraustrasse 32 - 7007 Chur | Telefon +41 81 255 58 58 | promotion@somedia.ch | www.somedia-promotion.ch"
+        };
+
+      }
+      
+      if (this.instanz.search(regularExpression_koemedia) >= 0 ) { 
+        this.testmode = false;
+        this.instanz = "koe-prod";
+        console.log("App läuft produktiv auf kömedia" );
+        this.url_logo     = "../../assets/koemedia-logo.jpg";
+        this.str_company  = "Kömedia AG";
+        this.str_footer   = " | Geltenwilenstrasse 8a | 9001 St. Gallen | T 071 226 92 92 | F 071 226 92 93 | info@koemedia.ch | www.koemedia.ch";
+
+        this.instanzdata  = {
+          instanz: "koe-prod",
+          firmenbezeichnung: "Kömedia AG",
+          fusszeile: "<b>Kömedia</b> | Geltenwilenstrasse 8a | 9001 St. Gallen | T 071 226 92 92 | F 071 226 92 93 | info@koemedia.ch | www.koemedia.ch"
+        };
+
+      }
+      
+      if (this.instanz.search(regularExpression_testHosts) >= 0 ) { 
+        this.instanz = "edp-entw";
+      }
+      console.log("Instanz = " + this.instanz);
+
+      // Ende Erkennung Laufzeitumgebung
+      
+      
+      console.log("Aufruf Offertmodul, Übergabe-Parameter: " + JSON.stringify(params));
+      console.log("Aufruf Offertmodul, amasys_offerte_neu_laden: " + amasys_offerte_neu_laden);
+      
+      // Inititalisierung der Formularstruktur zum Start
+      this.meinVerkaufsdokumentFormular = this._fb.group({
+        systemfeedback: [''],
+        dokumentsprache: ['d'],
+        guisprache: ['d'],
+        // termid: [''],
+        termid: [this.cleanupParams(params['termid'])],
+        // firma: [''],
+        firma: [this.cleanupParams(params['firma'])],
+        // aufnr: ['0'],                                   
+        aufnr: [this.cleanupParams(params['aufnr'])],                                   
+        abgeschlossen: [''],
+        fremdID: [''],
+        kundBeznr: [this.cleanupParams(params['beznr'])],
+        // bestBeznr: [''],
+        bestBeznr: [this.cleanupParams(params['termKontaktBeznr'])],
+        sujet: ['', [Validators.required, Validators.minLength(5)]],
+        currency: ['CHF'],
+        preisUser: [0],
+        preisAmasys: [0],
+        bestadr1: [''],
+        bestadr2: [''],
+        bestadr3: [''],
+        bestadr4: [''],
+        bestadr5: [''],
+        bestadr6: [''],
+        bestadr7: [''],
+        bestadr8: [''],
+        bestadr9: [''],
+        indivAnrede: [''],
+        indivEinleitungstext: [''],
+        indivSchlusssatz: [''],
+        ausstelldatum: [new Date().toISOString().split('T')[0]],
+        // gebvertr: [''],
+        gebvertr: [this.cleanupParams(params['termmitbeznr'])],
+        verfasser1: [''],
+        verfasser1funktion: [''],
+        titel: this._fb.array([
+            this.initTitel(this.cleanupParams(params['objekt']),this.cleanupParams(params['rubrik']),this.cleanupParams(params['urubrik'])),
+        ])
+      });
+      
+      // Wenn kein Titel gewählt -> auswählen lassen
+      if (this.cleanupParams(params['objekt'])=='') {
+        this.openObjektAuswahlDialog(0);
+      }
+      else {
+        // Neue Erst-Initialisierung:
+        this.AbgleichOfferte(this.meinVerkaufsdokumentFormular.value, amasys_offerte_neu_laden);
+      }
+      
+    }); // Ende: Routing-Abfrage [URL-Parameter]
+    
+  } // Ende OnInit
+  
+  
+  // Helperfunktionen
+  // ================
+  
+  
+  public openObjektAuswahlDialog(titelindex:number) {
+    
+    let dialogRef = this.dialog.open(DialogObjektAuswahlDialog);
+    // dialogRef.afterClosed().subscribe(result => {
+    //   this.selectedObjekt = result;
+    // });
+    
+    // Herausschälen der benötigten FormControls/-Arrays
+    const helper_titel = <FormArray> this.meinVerkaufsdokumentFormular.controls['titel'];
+    const einzeltitel = <FormGroup> helper_titel.at(titelindex);
+    // console.log("einzeltitel [" + titelindex + "]: " + einzeltitel);
+    
+    dialogRef.afterClosed()
+      .subscribe(selection => {
+        if (selection) {
+          
+          // console.log("Selection: " + selection);
+          
+          this.selectedObjekt = JSON.parse(selection);
+          
+          //this.selectedObjekt = selection;
+          console.log("selectedObjekt: " + this.selectedObjekt[0]);
+          console.log("selectedObjekt (stringified): " + JSON.stringify(this.selectedObjekt));
+          // console.log("selectedObjekt (objekt): " + this.selectedObjekt['objekt']);
+          console.log("selectedObjekt (objekt): " + this.selectedObjekt[0].objekt);
+          // console.log("titel [" + titelindex + "] wird upgedatet");
+          
+          
+          // objekt-Angaben in den Datenstrukturen setzen
+          einzeltitel.controls.objekt.patchValue(this.selectedObjekt[0].objekt);
+          einzeltitel.controls.objBezeichnung.patchValue(this.selectedObjekt[0].obj_bezeichnung);
+          // einzeltitel.controls.objBezeichnung.disable();
+          
+          // Ur-Abgleich mit amasys, wenn es der erste Titel einer Offerte ist
+          if (titelindex==0) this.AbgleichOfferte(this.meinVerkaufsdokumentFormular.value, false);
+          
+          // DropDowns (Rubrik und Urubrik) updaten lassen
+          this.rubrikAuswahlDropdown2(einzeltitel.controls.objBezeichnung.value,titelindex);
+          this.urubrikAuswahlDropdown2(einzeltitel.controls.objBezeichnung.value,einzeltitel.controls.rubrik.value,titelindex);
+          
+          // this.selectedObjekt = selection;
+        } else {
+          console.log("Objektauswahl-Dialog: nichts gewählt.");
+          // User clicked 'Cancel' or clicked outside the dialog
+        }
+      });
+  }
+  
+  
+  onTabSelectChange($event:any) {
+    
+    this.activePrintTemplate = $event.tab.textLabel;
+    console.log("Aktives Template (raw): " + this.activePrintTemplate);
+    
+    // Print-Template-Namen abstrahieren für Matching mit StyleSheet-"Schlüssel"
+    this.activePrintTemplate = this.activePrintTemplate.replace(/\s+/g, '-').toLowerCase();
+    console.log("Aktives Template (nice): " + this.activePrintTemplate);
+    
+    // Ausrichtung des Templates anhand des TabLabels auslesen
+    this.printTemplateOrientation = (this.activePrintTemplate.indexOf("quer")>-1) ? "quer" : "hoch";
+    console.log("printTemplateOrientation: " + this.printTemplateOrientation);
+    
+    
+    // Beginn Auto-Scaling (noch nicht richtig funktional)
+    let previewScaleFactor:number = 1;
+    
+    if (this.printTemplateOrientation ==="quer") {
+      previewScaleFactor = this.previewpaneWidth / 1120;  // 1120 = Breite des Templates mit Ausrichtung "quer" in Pixeln
+    }
+    else previewScaleFactor = 1;    // this.previewpaneWidth / 792;  // 792 = Breite des Templates mit Ausrichtung "hoch" in Pixeln
+    
+    let transformstring: string ="scale(";
+    console.log("previewScaleFactor: = " + previewScaleFactor);
+    transformstring += previewScaleFactor + ")";
+    console.log("transformstring: " + transformstring);
+    document.getElementById('druckvorschau').style.transform = "scale("+previewScaleFactor+")";
+    document.getElementById('druckvorschau').style.transform = transformstring;
+  }
+  
+  
+  removeRow(array, indexI) {
+  
+    console.log("Array to be truncated: " + JSON.stringify(array));
+    console.log("length of array before removing row: " + array.length);
+    array = array.slice(0); // make copy
+    array.splice(indexI, 1);
+    console.log("length of array after removing row: " + array.length);
+    return array;
+  
+  }
+  
+  cleanupParams(param: string) {
+    
+    var ret_param: string;
+    
+    // Test, ob Parameter vorhanden, falls ja diesen Wert zurückgeben, ansonsten leeren String
+    if (param) ret_param=param;
+    else ret_param = "";
+    
+    return ret_param;
+    
+  }
+
+  // Hotkeys
+  keyDown($event) {
+    
+    if ($event.altKey && $event.keyCode == 80) {
+        console.log('WOFA-Druckfunktion gestartet');
+        this.print();
+    }
+
+    // Bei 'Ctrl + P'
+    if ($event.ctrlKey && $event.keyCode == 80) {
+        console.log('Browsereigene Print-Funktion aufgerufen -> Hinweis an Benutzer');
+        alert('Bitte verwenden Sie zum Drucken des Dokuments die entsprechende Schaltfläche oder die Tastenkombination [Alt]+[p] und brechen Sie den laufenden Druckprozess ab. (Ansonsten drucken Sie lediglich einen Screenshot des Bildschirms.)');
+    }
+
+    // Bei 'Alt + A'
+    if ($event.altKey && $event.keyCode == 65) {
+        this.AbgleichOfferte(this.meinVerkaufsdokumentFormular.value, false);
+    }
+  }
+
+  print() {
+    
+    // Initialisierung
+    let printWindow;
+    let printContent;
+    let printStyles = "";
+    let page_defs;
+    
+    // Stylesheet aus Template-Komponente muss neuem Printfenster angehängt werden,
+    // daher wird dieses aus dem Dokumenten-Header extrahiert und später im neuen
+    // Print-Dokument wiederum angehängt
+    let head = document.getElementsByTagName('head')[0];
+    let allStyleSheets = head.getElementsByTagName('style');
+    let styleSheet;
+    
+    console.log("Aktives Print-Template im Druckaufbereitungsprozess: " + this.activePrintTemplate);
+    
+    // Loop über alle gefundenen StyleSheets; Test, ob StyleSheet zum aktuell ausgewählten (Print-) Template passt
+    // [im zugehörigen StyleSheet muss zu diesem Zweck am Anfang eine passende Regel hinterlegt werden]
+    for (var j in allStyleSheets){
+      
+    	styleSheet = allStyleSheets[j].outerHTML;   // nimm komplettes Stylesheet 
+    	
+    	if (styleSheet && (styleSheet.indexOf(this.activePrintTemplate)>-1)) {  // ist Kennung auffindbar (könnte bei Bedarf verschnellert werden, wenn nur die ersten 30 Zeichen [Substring von StyleSheet] geprüft würden)
+    	  console.log("TemplateStyleSheet gefunden: " + styleSheet);
+    	  console.log("*********************");
+    	  printStyles = styleSheet;                 // gefundenes StyleSheet zur Weiterverwendung der Variable printStyles zuweisen 
+    	  break;                                    // Stylesheet gefunden, Loop kann abgebrochen werden
+    	}
+    }
+    
+    // Seitendefinitionen gemäss Seitenausrichtung hoch | quer
+    if (this.printTemplateOrientation === 'hoch') {
+      // Hochformat
+      page_defs = 
+      `
+              // Absoulte Grösse der Print-Page
+              var printPageWidth = 792;
+              var printPageHeight = 1120;
+  
+              // Abstände der Print-Page zum Inhalt
+              var pageMarginTop = 29;
+              var pageMarginRight = 100;
+              var pageMarginBottom = 29;
+              var pageMarginLeft = 100;
+      `
+    }
+    else {
+      // Querformat
+      page_defs =
+      `
+              // Absoulte Grösse der Print-Page
+              var printPageWidth = 1120;
+              var printPageHeight = 792;
+            
+              // Abstände der Print-Page zum Inhalt
+              var pageMarginTop = 29;
+              var pageMarginRight = 100;
+              var pageMarginBottom = 29;
+              var pageMarginLeft = 100;
+            
+      `
+      
+    }
+    
+    // eigentlichen Dokumenteninhalt aus Template-Vorschau extrahieren
+    printContent = document.getElementById('druckvorschau').innerHTML;
+    console.log('InnerHTML von Druckvorschau');
+    console.log(printContent);
+    
+    // neuen Browser-Tab für den Druck/die PDF-Generierung öffnen
+    console.log('Neues Fenster fürs Drucken vorbereiten...');
+    printWindow = window.open('_blank', 'top=0,left=0,bottom=0,right=0');
+    
+    console.log('Neues Fenster fürs Drucken öffnen...');
+    // printWindow.document.open();
+    
+    console.log('Neues Fenster fürs Drucken befüllen...');
+    // im neuen Tab das Dokument aufbauen
+    printWindow.document.write(`
+      <!DOCTYPE html>
+
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <title>edpOffert-Tool drucken</title>
+          <style>
+            body {
+          
+              margin: 0px;
+              
+              /* template-spezifisch */
+              font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+              font-size: 13px; /* 13px */
+              color: rgb(85, 85, 85);
+              
+              /* unbenutzt */
+              /*display: block;*/
+              /*position: relative;*/
+            }
+
+            #header, .header {
+              padding-bottom: 50px;
+            }
+
+            #footer, .footer {
+              /*display: table-footer-group;
+              position: absolute;
+              bottom: 0px;*/
+              width: 100%;
+              text-align: left;
+              font-size: 9px;
+            }
+
+            #footer > small, .footer > small,
+            #footer > small > b, .footer > small > b,
+            #footer > small > span, .footer > small > span {
+              padding: 0px;
+            }
+
+            #footer > small, .footer > small {
+              font-size: inherit;
+            }
+
+            .page-number {
+              float: right;
+            }
+
+            p {
+              position: relative;
+              display: block;
+              page-break-inside: avoid;
+              margin-top: 0px;
+              margin-bottom: 0px;
+              padding-bottom: 40px;
+            }
+
+            pre {
+              position: relative;
+              display: block;
+              page-break-inside: avoid;
+              font-family: inherit;
+              margin-top: 0px;
+              margin-bottom: 0px;
+              padding-bottom: 40px;
+              white-space: pre-wrap;
+            }
+
+            small {
+              font-size: 13px;
+              position: relative;
+              display: block;
+              margin: 0px;
+              padding: 0px;
+            }
+
+            table {
+              font-size: inherit;
+            }
+
+            td {
+              vertical-align: top;
+              width: 150px;
+              padding: 0px;
+            }
+
+            td.right {
+              width: auto;
+            }
+
+            td > pre {
+              padding-bottom: 0px;
+            }
+
+            img#logo {
+              position: relative;
+              display: block;
+              /*height: 1.5cm;*/
+              height: 60px;
+              margin-top: 0px;
+              /*margin-bottom: 29mm;*/
+              margin-bottom: 100px;
+            }
+
+            span#adressblock {
+              display: block;
+              padding-top: 50px;
+            }
+
+            b#bezeichnung {
+              font-size: 14px;
+            }
+
+            pre#einleitungstext {
+              padding-bottom: 8mm;
+            }
+
+            div.werbeformatblock {
+              position: relative;
+              display: block;
+              margin-top: 0px;
+              margin-bottom: 0px;
+              padding-bottom: 40px;
+            }
+          </style>
+          ${printStyles}
+        </head>
+
+        <body>
+          ${printContent}
+
+          <script>             
+            console.log('print window generator gestartet');
+
+            // page_defs einfügen gemäss Definition entsprechend Seitenausrichtung
+            ${page_defs}
+            
+            // Bedruckbarer Bereich wird berechnet:
+            var pageWidth = printPageWidth - pageMarginLeft - pageMarginRight;
+            var pageHeight = printPageHeight - pageMarginTop - pageMarginBottom;
+
+            // Abstände der Print-Page zum Inhalt werden gesetzt:
+            var pageStyle = document.createElement('style');
+            document.head.appendChild(pageStyle);
+            pageStyle.innerHTML =
+              '@page {'
+              + 'margin-top: ' + pageMarginTop + 'px;'
+              + 'margin-right: ' + pageMarginRight + 'px;'
+              + 'margin-bottom: ' + pageMarginBottom + 'px;'
+              + 'margin-left: ' + pageMarginLeft + 'px;'
+              + '}'
+              // Alle margins werden entfernt
+              + '*{margin: 0px !important;}';
+
+            // Absolute bedruckbare Breite wird gesetzt:
+            document.body.style.width = pageWidth + 'px';
+
+            // Header und Footer Template werden definiert:
+            var headerTemplate = document.getElementById('header');
+            var footerTemplate = document.getElementById('footer');
+
+            // HeaderHeight und FooterHeight werden definiert 
+            // (ACHTUNG: Margin wird nicht bekrücksichtigt!)
+            // und danach aus vorerst aus Body entfernt:
+            if (headerTemplate) {
+              headerTemplate.removeAttribute('id');
+              headerTemplate.className = 'header';
+              var headerHeight = headerTemplate.offsetHeight;
+              //headerTemplate.remove();
+            } else {
+              var headerHeight = 0;
+            }
+
+            if (footerTemplate) {
+              footerTemplate.removeAttribute('id');
+              footerTemplate.className = 'footer';
+              var footerHeight = footerTemplate.offsetHeight;
+              //footerTemplate.remove();
+            } else {
+              var footerHeight = 0;
+            }
+
+            // Absolute bedruckbare Höhe pro Seite (ohne Header und Footer) wird berechnet
+            var pagedContentHeight = pageHeight - headerHeight - footerHeight;
+
+            // Holt alle Elemente der Klasse 'print-elemet'
+            var printElements = document.getElementsByClassName('print-element');
+
+            var bodyHeight = getBodyHeight();
+
+            var height = 0;
+            var page = 0;
+
+            var pagedPrintElements = [];
+
+            var pagedContent = [];
+
+            for (var i = 0; i <= printElements.length; i++) {
+
+              // Setzt neue Höhen
+              oldHeight = height;
+              if (printElements[i]) {
+                height = height + printElements[i].offsetHeight;
+              }
+
+              if (height > pagedContentHeight || i == printElements.length) {
+                // Erhöhe Seitenzahl
+                page = page + 1;
+
+                // Fügt Header hinzu
+                if (headerTemplate) {
+                  var header = headerTemplate.cloneNode(true);
+
+                  // Fügt aktuelle Seitenzahl jedem Element mit der Klasse 'page-number' hinzu
+                  var pageNumber = header.getElementsByClassName('page-number');
+                  for (var i3 = 0; i3 < pageNumber.length; i3++) {
+                    pageNumber[i3].innerHTML = page;
+                  }
+
+                  pagedContent.push(header);
+                }
+
+                // Fügt jedes Print-Element der aktuellen Seite hinzu
+                for (var i2 = 0; i2 < pagedPrintElements.length; i2++) {
+                  pagedContent.push(pagedPrintElements[i2]);
+                }
+
+                // Fügt Spacer hinzu (wenn nötig)
+                if (oldHeight < pagedContentHeight) {
+                  var spacerHeight = pagedContentHeight - oldHeight;
+                  var spacer = document.createElement('div');
+                  spacer.className = 'spacer';
+                  spacer.style.width = pageWidth + 'px';
+                  spacer.style.height = spacerHeight + 'px';
+                  pagedContent.push(spacer);
+                }
+
+                // Fügt Footer hinzu
+                if (footerTemplate) {
+                  var footer = footerTemplate.cloneNode(true);
+
+                  // Fügt aktuelle Seitenzahl jedem Element mit der Klasse 'page-number' hinzu
+                  var pageNumber = footer.getElementsByClassName('page-number');
+                  for (var i3 = 0; i3 < pageNumber.length; i3++) {
+                    pageNumber[i3].innerHTML = page;
+                  }
+
+                  pagedContent.push(footer);
+                }
+
+                // Setzt Werte zurück
+                if (printElements[i]) {
+                  height = printElements[i].offsetHeight;
+                }
+                pagedPrintElements = [];
+              }
+
+              // Setzt die Elemente für die aktuelle Seite
+              if (printElements[i]) {
+                pagedPrintElements.push(printElements[i]);
+              }
+            }
+
+            // pagedDom wird erstellt
+            var pagedDom = document.createElement('div');
+            pagedDom.id = "pagedDom";
+
+            // Fügt jeddes Element dem pagedDom hinzu
+            for (i = 0; i < pagedContent.length; i++) {
+              pagedDom.appendChild(pagedContent[i]);
+            }
+
+            // Leert den Body
+            document.body.innerHTML = '';
+
+            // Fügt den neuen Inhalt ein
+            document.body.appendChild(pagedDom);
+            
+            // Wenn Logo geladen ist
+            var logo = document.getElementById('logo');
+            logo.onload = function () {
+              // window.print();
+              // window.close();
+            };
+
+            // Gibt die Gesamt-Höhe des Body's zurück
+            function getBodyHeight() {
+              return Math.max(
+                document.documentElement.clientHeight,
+                document.body.scrollHeight,
+                document.documentElement.scrollHeight,
+                document.body.offsetHeight,
+                document.documentElement.offsetHeight
+              );
+            }
+          </script>
+        </body>
+
+      </html>`);
+    //printWindow.document.close();
+  }
+  
+  verkaufsdokumentStatus_updater() {
+    this.verkaufsdokumentStatus = this.verkaufsdokumentStatus === 'lock_open' ? 'lock' : 'lock_open';
+    console.log('manuelle Statusänderung');   
+    console.log('VerkaufsdokumentStatus = ' + this.verkaufsdokumentStatus);
+  }
+
+  
+  /*
+  // Template-Helperfunktionen
+  // =========================
+  
+  
+  erscheinungsdatenAufbereiten (text: string[], count: number) {
+    let list:string = "";
+    for (let item of text) {
+      if (item != "") {
+        if (list === "") {        // Liste ist leer, daher direkt neues Element einfügen und - falls nur ein Element einzufügen ist - Routine beenden
+          list += item;
+          if (count == 1) break;
+        }
+        else list += ", " + item; // mindestens ein Element besteht bereits, daher muss ein Komma und ein Space vor dem neuen Element eingefügt werden
+      }
+    }
+    return list;
+  }
+  */
+  
+  
+  // Mainfunktionen
+  // ==============
+  
+  // abfüllen Objektauswahl
+  objektauswahldropdown(){
+    this.objektauswahlService.showObjekt('','no').subscribe(objval => {
+      this.objektdata = objval;
+      console.log('Objekt initialisiert');
+    }, err => {
+      console.error(err);
+    });
+  }
+
+  
+  //Oeffne rubrik wenn objekt belegt
+  rubrikAuswahlDropdown2(objektvalue: string, index: number){
+    // console.log("rubrikAuswahlDropDown, objektvalue: ",objektvalue);
+    // console.log("rubrikAuswahlDropDown, index: ",index);
+
+    if (objektvalue){
+        this.rubrikauswahlService.showRubrik(objektvalue, '').subscribe(rubrikval => {
+          
+          // console.log("Start innerhalb subscribe(rubrik...");
+          // console.log("rubrik: ",rubrikval);
+          
+          this.rubrikdataarray[index] = rubrikval;
+          
+          // console.log("this.rubrikdataarray[" + index + "] (nach Zuweisung): ",this.rubrikdataarray[index]);
+    }, err => {
+         console.error(err);
+       });
+    }
+    
+  }
+  
+
+  //Oeffne urubrik wenn objekt und rubrik belegt
+  urubrikAuswahlDropdown2(objektvalue: string, rubrikvalue: string, index: number){
+    // console.log("urubrikAuswahlDropDown, objektvalue: ",objektvalue);
+    // console.log("urubrikAuswahlDropDown, rubrikvalue: ",rubrikvalue);
+    // console.log("rubrikAuswahlDropDown, index: ",index);
+    if (objektvalue && rubrikvalue){ // this.rubrik
+       this.unterrubrikauswahlService.showUrubrik(objektvalue, '', rubrikvalue)
+        .subscribe(urubrikval => {
+          
+          this.urubrikdataarray[index] = urubrikval;
+          
+          // console.log("this.urubrikdataarray[" + index + "] (nach Zuweisung): ",this.urubrikdataarray[index]);
+
+        }, err => {
+            console.error(err);
+        });
+    }
+  }
+  
+  
+  // Oeffne werbeformate, wenn objekt, rubrik und urubrik belegt
+  werbeformatAuswahlDropdown2(objektvalue: string, rubrikvalue: string, urubrikvalue: string, index: number){
+    // console.log("werbeformatAuswahlDropdown objektvalue, rubrikvalue, urubrikvalue, index: ",objektvalue,rubrikvalue,urubrikvalue, index);
+    if (objektvalue && rubrikvalue && urubrikvalue){ // this.rubrik
+      this.werbeformateService.showWerbeformate(objektvalue, rubrikvalue, urubrikvalue)
+        .subscribe(werbemittel => {
+          
+          this.werbeformatdataarray[index] = werbemittel;
+          
+          // console.log("this.werbeformatdataarray[" + index + "] (nach Zuweisung): ",this.werbeformatdataarray[index]);
+        }, err => {
+          console.error(err);
+        });
+    }
+  }
+  
+  
+  // Oeffne erscheinungen wenn objekt, rubrik, urubrik belegt
+  erscheinungsAuswahlDropdown2(objektvalue: string, rubrikvalue: string, urubrikvalue: string, index: number){
+    // console.log("erscheinungsAuswahlDropdown objektvalue, rubrikvalue, urubrikvalue, index: ",objektvalue,rubrikvalue,urubrikvalue, index);
+    // console.log("objektvalue, rubrikvalue, urubrikvalue: ",objektvalue,rubrikvalue,urubrikvalue);
+    
+  if (objektvalue && rubrikvalue && urubrikvalue){
+      
+    this.aschluesselauswahlService.showAschluessel(objektvalue, rubrikvalue, urubrikvalue).subscribe(erscheinungsval => {
+      // console.log("Start innerhalb subscribe(erscheinungen/aschluessel...");
+      // console.log("erscheinungen: ",erscheinungsval);
+      
+      this.erscheinungsdataarray[index] = erscheinungsval;
+      
+      //console.log("this.erscheinungsdataarray[" + index + "] (nach Zuweisung): ",this.erscheinungsdataarray[index]);
+    }, err => {
+         console.error(err);
+       });
+    }
+    
+  }
+
+  
+  // Oeffne Platzierungen, wenn objekt, rubrik und urubrik belegt
+  platzierungsAuswahlDropdown2(objektvalue: string, rubrikvalue: string, urubrikvalue: string, index: number){
+    
+    //console.log("platzierungsAuswahlDropdown objektvalue, rubrikvalue, urubrikvalue, index: ",objektvalue,rubrikvalue,urubrikvalue, index);
+    
+    if (objektvalue && rubrikvalue && urubrikvalue) {
+      this.platzierungsauswahlService.showPlatzierungen(objektvalue, rubrikvalue, urubrikvalue)
+        .subscribe(platzierung => {
+          // this.platzierungsdata = platzierung;
+          this.platzierungsdataarray[index] = platzierung;
+          // console.log("Platzierungen: " + this.platzierungsdata);
+          // console.log("this.platzierungsdataarray[" + index + "] (nach Zuweisung): ",this.platzierungsdataarray[index]);
+        }, err => {
+          console.error(err);
+        });
+    }
+  }
+
+  
+  // Kreiere Preispositionen
+  preispositionenAuswahlDropDown2(aufdetnrvalue: string, indexI: number, indexJ: number){
+    console.log("preispositionenAuswahlDropdown2: aufdetnr = " + aufdetnrvalue);
+    console.log("preispositionenAuswahlDropdown2: indexI = " + indexI);
+    console.log("preispositionenAuswahlDropdown2: indexJ = " + indexJ);
+    if (aufdetnrvalue) {
+      if (this.preispositionendataarray[indexI][indexJ]) {
+        console.log("preispositionseintrag existiert");
+      }
+      else {
+        console.log("preispositionseintrag existiert nicht");
+      }
+      
+      this.preispositionenService.showPreispositionen(aufdetnrvalue)
+        .subscribe(preisposition => {
+          this.preispositionendataarray[indexI] [indexJ] = preisposition;
+          console.log("this.preispositionendataarray[" + indexI + "] ["+ indexJ + "] (nach Zuweisung): ",this.preispositionendataarray[indexI] [indexJ]);
+          console.log("this.preispositionendataarray[" + indexI + "] ["+ indexJ + "] (nach Zuweisung): ",JSON.stringify(this.preispositionendataarray[indexI] [indexJ]));
+          console.log("Umfang: " + this.preispositionendataarray[indexI][indexJ].length);
+          
+          // var k:number; 
+          // for(k = 1;k<this.preispositionendataarray[index].length;k++) {
+          //   this.addZusatzpreisposition(wm_control,k);
+          //   console.log(k);  
+          // }
+          
+        }, err => {
+          console.error(err);
+        });
+    }
+  }
+  
+
+  initTitel(obj: string, rub: string, urub: string) {
+    // Titel initialisierung
+    
+    // var indexI: number = 0;
+    // if (this.meinVerkaufsdokumentFormular.value.titel) {
+    //   indexI = this.meinVerkaufsdokumentFormular.value.titel.length+1;
+    // }
+    // console.log("initTitel -> indexI neu:" + indexI);
+    
+    // // Hilfsarrays initialisieren
+    // this.preispositionendataarray.splice(indexI,0,[[{}]]);
+    // this.rubrikdataarray.splice(indexI,0,[[{}]]);
+    // this.urubrikdataarray.splice(indexI,0,[[{}]]);
+    // this.werbeformatdataarray.splice(indexI,0,[[{}]]);
+    // this.platzierungsdataarray.splice(indexI,0,[[{}]]);
+    // this.erscheinungsdataarray.splice(indexI,0,[[{}]]);  
+    
+    return this._fb.group({
+      
+      // objekt: [''],
+      objekt: [obj],
+      objBezeichnung: [''],
+      // rubrik: [''],
+      rubrik: [rub],
+      rubBezeichnung: [''],
+      // unterrubrik: [''],
+      unterrubrik: [urub],
+      urubBezeichnung: [''],
+      auflage: [''],
+      zusatzinfo: [''],
+      abschlussnr: [0],
+      werbemittel: this._fb.array([
+            this.initWerbemittel(),
+      ])
+    });
+  }
+
+  addTitel(indexI: number) {
+    // Titel hinzufügen
+    
+    // Alte Initialisierung
+    // Vorberereitung Preispositionen für erstes Werbemittel dieses Titels
+    // this.preispositionendataarray.push([[{}]]);
+    // this.rubrikdataarray.push([[{}]]);
+    // this.urubrikdataarray.push([[{}]]);
+    // this.werbeformatdataarray.push([[{}]]);
+    // this.platzierungsdataarray.push([[{}]]);
+    // this.erscheinungsdataarray.push([[{}]]);
+    
+    // neue Initialisierung
+    // ====================
+    //
+    console.log("addTitel, indexI = " + indexI);
+    this.preispositionendataarray.splice(indexI,0,[[{}]]);
+    
+    console.log('addTitel, indexI, Preispositionendataarray [' + indexI + '] [0] = ' + this.preispositionendataarray[indexI] [0]); // TODO: entfernen
+    
+    this.rubrikdataarray.splice(indexI,0,[[{}]]);
+    this.urubrikdataarray.splice(indexI,0,[[{}]]);
+    this.werbeformatdataarray.splice(indexI,0,[[{}]]);
+    this.platzierungsdataarray.splice(indexI,0,[[{}]]);
+    this.erscheinungsdataarray.splice(indexI,0,[[{}]]);  
+          
+    const control = <FormArray>this.meinVerkaufsdokumentFormular.controls['titel'];
+    // control.push(this.initTitel());
+    control.insert(indexI, this.initTitel('','',''));
+    
+    // Zur Titelauswahl auffordern
+    this.openObjektAuswahlDialog(indexI);
+    
+  }
+
+  removeTitel(i: number) {
+      
+      // Titel entfernen
+      const control = <FormArray>this.meinVerkaufsdokumentFormular.controls['titel'];
+      control.removeAt(i);
+      
+      // in helper arrays Einträge des gelöschten Titels entfernen
+      console.log("RemoveTitel: Aufräumaktion gestartet");
+      this.preispositionendataarray = this.removeRow(this.preispositionendataarray, i);
+      this.rubrikdataarray = this.removeRow(this.rubrikdataarray, i);
+      this.urubrikdataarray = this.removeRow(this.urubrikdataarray, i);
+      this.werbeformatdataarray = this.removeRow(this.werbeformatdataarray, i);
+      this.platzierungsdataarray = this.removeRow(this.platzierungsdataarray, i);
+      this.erscheinungsdataarray = this.removeRow(this.erscheinungsdataarray, i);
+      console.log("RemoveTitel: Aufräumaktion beendet");
+  }
+
+  initWerbemittel() {
+    // Werbemittel initialisieren
+
+    return this._fb.group({
+      sujetnr: [''],
+      werbeformatID: [''],
+      werbeformat: [''],
+      werbeformatTyp: [''],
+      werbeformatDismenge1Label: [''],
+      werbeformatDismenge2Label: [''],
+      werbeformatDismenge1: [0],
+      werbeformatDismenge2: [0],
+      werbeformatDisanz: [0],
+      werbeformatFarbanz: ['4'],
+      werbeformatProdgroesse: [''],
+      werbeformatGewicht: [0],
+      werbeformatDismenge1Values: [],   // [["1","2"]]
+      werbeformatDismenge2Values: [],
+      
+      buchungsartErscheinung: ['A'],
+      erscheinungsausgbez: [[]],
+      // erscheinungsausgbez: [''],
+      erscheinungsaufdetnr: [''],
+      erscheinungsaschlussel: [[]], // [''],
+      erscheinungsanzahl: [1],
+      insertionsschlussAnzeige: [false],
+      insertionsschlussDatum: [''],
+      hinweis: [''],
+      platzierung: [''],
+      preisUser: [0],
+      // preisUser: [{value:0, disabled: true}],
+      preisAmasys: [0],
+      // preisAmasys: [{value:0, disabled: true}],
+      preisposdropdown: [''], // TODO
+      zusatzpreispositionen: this._fb.array([
+          //this.initZusatzpreisposition(),
+      ])
+    });
+  }
+
+  // addWerbemittel(wm_control: FormArray) {
+  //   // Werbemittel hinzufügen
+  //   wm_control.push(this.initWerbemittel());
+  // }
+
+  addWerbemittel(wm_control: FormArray, indexI: number, indexJ: number) {
+    // Zusatzpreisposition hinzufügen
+    console.log("AddWerbemittel Start");
+    console.log("wm_control:" + wm_control);
+    console.log("indexI: " + indexI);
+    console.log("indexJ: " + indexJ);
+    if (this.preispositionendataarray[indexI][indexJ]) {
+      console.log("preispositionendataarray["+ indexI + "][" + indexJ + "] existiert.");
+    }
+    else {
+      console.log("preispositionendataarray["+ indexI + "][" + indexJ + "] existiert NICHT und wird hinzugefügt.");
+      if (this.preispositionendataarray[indexI]) {
+        console.log("preispositionendataarray["+ indexI + "] existiert NICHT; ganze Zeile wird erstellt und hinzugefügt.");
+      }
+      else {
+        console.log("preispositionendataarray["+ indexI + "] existiert; nur Element wird hinzugefügt.");
+      }
+    }
+    this.preispositionendataarray[indexI].splice(indexJ,0,[{}]);
+    this.preispositionendataarray[indexI] [indexJ] = [              // Dummy ;-)
+          [{
+            // "typ": "",
+            // "bezeichnung": "",
+            // "posKey": "",
+            // "preisUser": 0,
+            // "preisAmasys": 0
+            
+            //"preisUser": "0",
+            //"preisAmasys": "0"
+          }]
+      ];
+    console.log("this.preispositionendataarray[" + indexI + "] [" + indexJ + "] = " + this.preispositionendataarray[indexI] [indexJ]);
+    wm_control.insert(indexJ, this.initWerbemittel());
+  }
+  
+  removeWerbemittel(wm_control: FormArray, indexI: number, indexJ: number) {
+      
+      // Werbemittel entfernen
+      wm_control.removeAt(indexJ);
+      
+      // in preispositionendataarray entsprechendes Element löschen
+      this.preispositionendataarray[indexI].splice(indexJ,1);
+      
+  }
+  
+  removeAlleWerbemittelEinesTitels(titelIndex:number) {
+
+    // Herausschälen der benötigten FormControls/-Arrays
+    const helper_titel = <FormArray> this.meinVerkaufsdokumentFormular.controls['titel'];
+    // console.log("titel [0]: " + helper_titel);
+    
+    const einzeltitel = <FormGroup> helper_titel.at(titelIndex);
+    // console.log("einzeltitel [" + i + "]: " + einzeltitel);
+    
+    const helper_werbemittel = <FormArray> einzeltitel.controls['werbemittel'];
+    // console.log("werbemittel von titel [" + i + "]: " + helper_werbemittel);
+    
+    console.log("Umfang an Werbemittel bei Titel [" + titelIndex + "]: " + helper_werbemittel.length);
+
+    // Hinzufügen der entsprechenden Anzahl leerer Preispositionen und Initialisierung der entsprechenden Hilfsarrays
+    var l: number;
+    for(l = helper_werbemittel.length-1;l>=0;l--) {
+      
+      // Werbemittel entfernen
+      console.log("Werbvemittel [" + l + "] wird gelöscht");
+      helper_werbemittel.removeAt(l);
+      this.preispositionendataarray[titelIndex].splice(l,1);
+    }
+   
+    // Update Offerte
+    // console.log("Offerte wird neu gerechnet - ohne Preispositionen von Titel [" + titelIndex + "] und dessen Werbemittel [" + werbemittelIndex + "]");
+    
+    // Ein einzelnes (leeres) Werbemittel hinzufügen
+    this.addWerbemittel(helper_werbemittel, titelIndex, 0);
+    this.snackBarRef = this.snackBar.open('Infolge Änderung an der Rubrifizierung mussten sämtliche Werbemittel des Titels ' + (titelIndex+1) + ' (' + einzeltitel.controls['objBezeichnung'].value + ') gelöscht werden. Bitte stellen Sie das Angebot für diesen Titel neu zusammen.');
+    
+    // this.AbgleichOfferte(this.meinVerkaufsdokumentFormular.value, false)
+  }
+  
+
+  initZusatzpreisposition() {
+    // Zusatzpreisposition initialisieren
+
+    return this._fb.group({
+      typ: [''],
+      bezeichnung: [''],
+      posKey: [''],
+      preisUser: [0],
+      preisAmasys: [0],
+      preisUserTotal: [0],
+      preisAmasysTotal: [0],
+      betragme: ['']
+    });
+  }
+  
+  initZusatzpreisposition2(bezeichnung: string, posKey: string, typ: string, preisAmasys: number) {
+    // Zusatzpreisposition initialisieren
+    
+    return this._fb.group({
+      typ: [typ],
+      bezeichnung: [bezeichnung],
+      posKey: [posKey],
+      preisUser: [0],
+      preisAmasys: [+preisAmasys],
+      preisUserTotal: [0],
+      preisAmasysTotal: [0],
+      betragme: ['']
+    });
+  }
+
+  addZusatzpreisposition(wm_control: FormArray, index: number) {
+    // Zusatzpreisposition hinzufügen
+    wm_control.insert(index, this.initZusatzpreisposition());
+  }
+  
+  addZusatzpreisposition2(wm_control: FormArray, index: number, selectedPosKey: string, preisposObject: any) { // Todo Object from preispositionendataarray[j]
+    // Zusatzpreisposition hinzufügen mit Inhalten
+    
+    if (selectedPosKey != "") {
+      console.log("preisposObject: " + JSON.stringify(preisposObject));
+      
+    	var ind = 0;
+    	do {
+    		console.log(ind);
+    	  if(preisposObject[ind].posKey === selectedPosKey)
+    		break;
+    		ind++;
+    	}
+    	while (ind < preisposObject.length)
+      console.log("Abbruch:" + ind);
+      
+      wm_control.insert(index, this.initZusatzpreisposition2(preisposObject[ind].bezeichnung,selectedPosKey,preisposObject[ind].typ,preisposObject[ind].preisAmasys));
+    }
+  }
+   
+  removeZusatzpreisposition(wm_control: FormArray, index: number) {
+      // Zusatzpreisposition entfernen
+      wm_control.removeAt(index);
+  }
+  
+  removeAlleZusatzpreispositionen(titelIndex:number, werbemittelIndex: number) {
+
+    // Herausschälen der benötigten FormControls/-Arrays
+    const helper_titel = <FormArray> this.meinVerkaufsdokumentFormular.controls['titel'];
+    // console.log("titel [0]: " + helper_titel);
+    
+    const einzeltitel = <FormGroup> helper_titel.at(titelIndex);
+    // console.log("einzeltitel [" + i + "]: " + einzeltitel);
+    
+    const helper_werbemittel = <FormArray> einzeltitel.controls['werbemittel'];
+    // console.log("werbemittel von titel [" + i + "]: " + helper_werbemittel);
+    
+    const einzelwerbemittel = <FormGroup> helper_werbemittel.at(werbemittelIndex);
+    // console.log("einzelwerbemittel [" + j + "] von titel [" + i + "]: " + einzelwerbemittel);
+    
+    const helper_preispositionen = <FormArray> einzelwerbemittel.controls['zusatzpreispositionen'];
+    
+    console.log("Umfang an Zusatzpreispositionen: " + helper_preispositionen.length);
+
+    // Hinzufügen der entsprechenden Anzahl leerer Preispositionen und Initialisierung der entsprechenden Hilfsarrays
+    var l: number;
+    for(l = helper_preispositionen.length-1;l>=0;l--) {
+      
+      // Zusatzpreispositionen entfernen
+      // console.log("Preisposition [" + l + "] wird gelöscht");
+      helper_preispositionen.removeAt(l);
+    }
+   
+    // Update Offerte
+    // console.log("Offerte wird neu gerechnet - ohne Preispositionen von Titel [" + titelIndex + "] und dessen Werbemittel [" + werbemittelIndex + "]");
+    this.AbgleichOfferte(this.meinVerkaufsdokumentFormular.value, false)
+  }
+  
+  
+  // save(model: Verkaufsdokument) {
+    // API um Verkaufsdokument abzuspeichern
+    // console.log(model);
+  // }
+  
+  // adressAutocomplete(){
+  //   // this.stateCtrl = new FormControl();
+  //   console.log("test offert");
+  //   this.gefiltereteAdressen = this.stateCtrl.valueChanges
+  //       .startWith(null)
+  //       .map(name => this.filteredAdressen(name));
+  // }
+  
+  
+  // searchAdresse(val){
+  //   console.log("val adrkunde: ",val);
+  //   if (val.length >= 3){
+  //   this.adrkundenService.getKunde(val, 'yes', 'yes')
+  //     .subscribe(kunden => { this.kundendata = kunden;
+  //                           this.firmenname = this.kundendata[0].fname;
+  //                           this.strasse = this.kundendata[0].strasse;
+  //                           this.ort = this.kundendata[0].ort;
+        
+  //     }, err => {
+  //       console.error(err);
+  //     });
+  //   }
+      
+  // }
+  
+  
+  // holeMitarbeiter(){
+  //   console.log("hole mitarbeiterdata");
+  //   this.mitarbeiterService.getMitarbeiter()
+  //   .subscribe(mitarbeiter => { this.mitarbeiterdata = mitarbeiter;
+  //                           this.mitarbeitername = this.mitarbeiterdata[0].gesname;
+  //                           this.mitarbeiterabteilung = this.mitarbeiterdata[0].abteil;
+        
+  //     }, err => {
+  //       console.error(err);
+  //     });
+      
+  // }
+  
+
+  syncOffertJSON(offertFormData, offertdaten) {
+
+    // Start Success-Block
+    console.log("offertdaten von amasys:",offertdaten);
+    
+    if (offertdaten.auftrag[0].systemfeedback==="") {
+      
+      // Formgroup-Shaper
+      console.log("AbgleichOfferte, Umfang Titel: " + offertdaten.auftrag[0].titel.length);
+      //console.log("AbgleichOfferte, Umfang Titel meinVerkaufsdokumentFormular: " + this.meinVerkaufsdokumentFormular.titel.length);
+      
+      var i:number;
+      var j:number;
+      var k:number;
+      
+      // Aufzeigen Unterschied amasys- vs. Web-Modell: Titel
+      const differenzTitel = (offertdaten.auftrag[0].titel.length - offertFormData.titel.length);
+      console.log("Differenz (Titel) zu bestehendem Web-Modell: " + differenzTitel);
+      
+      // START fehlende Titel in Datenstruktur einfügen
+      if(differenzTitel>0) {
+        
+        // Herausschälen der benötigten FormControls/-Arrays
+        const helper_titel = <FormArray> this.meinVerkaufsdokumentFormular.controls['titel'];
+        
+        // fehlende Titel-Records ergänzen
+        var l: number;
+        for(l = 0;l<differenzTitel;l++) {
+          helper_titel.push(this.initTitel('','',''));
+           
+          // Initialisierung Hilfsstrukturen
+          var indexI = l+1; // l+1 daher, weil Element mit Index 0 bereits existiert (jedes Verkaufsdokument muss mindestens einen Titel haben)
+          console.log("addTitel, indexI = " + indexI);
+          this.preispositionendataarray.splice(indexI,0,[[{}]]);
+          
+          console.log('Titel hinzufügen beim Laden, indexI, Preispositionendataarray [' + indexI + '] [0] = ' + this.preispositionendataarray[indexI] [0]); // TODO: entfernen
+          
+          this.rubrikdataarray.splice(indexI,0,[[{}]]);
+          this.urubrikdataarray.splice(indexI,0,[[{}]]);
+          this.werbeformatdataarray.splice(indexI,0,[[{}]]);
+          this.platzierungsdataarray.splice(indexI,0,[[{}]]);
+          this.erscheinungsdataarray.splice(indexI,0,[[{}]]);  
+           
+        }
+        offertFormData = this.meinVerkaufsdokumentFormular.value; // Datenstruktur dieser Funktion durch soeben erweiterte Datenstruktur aus Web-App ersetzen
+        
+      } // ENDE fehlende Titel in Datenstruktur einfügen
+      
+
+      for(i = 0;i<offertdaten.auftrag[0].titel.length;i++) {  // Start: Loop über alle Titel in den von amasys retournierten Daten
+
+        console.log('***Zugriff auf Werbemittel in amasys-Daten***'); // TODO: entfernen
+        
+        if (offertdaten.auftrag[0].titel[i].werbemittel) { // nur weiterfahren, wenn in amasys-Offerte Werbemittel vorhanden sind
+
+          // Aufzeigen Unterschied amasys- vs. Web-Modell: Werbemittel
+          const differenzWerbemittel = (offertdaten.auftrag[0].titel[i].werbemittel.length - offertFormData.titel[i].werbemittel.length);
+          console.log("Differenz (Werbemittel, Titel [" + i + "]) zu bestehendem Web-Modell: " + differenzWerbemittel);
+  
+          // Fehlende Werbemittel hinzufügen
+          // START fehlende Titel in Datenstruktur einfügen
+          if(differenzWerbemittel>0) {
+            
+            // Herausschälen der benötigten FormControls/-Arrays
+            const helper_titel = <FormArray> this.meinVerkaufsdokumentFormular.controls['titel'];
+            
+            const einzeltitel = <FormGroup> helper_titel.at(i);
+            // console.log("einzeltitel [" + i + "]: " + einzeltitel);
+            
+            const helper_werbemittel = <FormArray> einzeltitel.controls['werbemittel'];
+            // console.log("werbemittel von titel [" + i + "]: " + helper_werbemittel);
+  
+            
+            // fehlende Werbemittel-Records ergänzen
+            var l: number;
+            for(l = 0;l<differenzWerbemittel;l++) {
+              
+              this.addWerbemittel(helper_werbemittel, i, l+1);   // l+1 daher, weil Element mit Index 0 bereits existiert (jeder Titel muss mindestens ein Werbemittel haben)
+              
+              // helper_werbemittel.push(this.initWerbemittel());
+               
+            }
+            offertFormData = this.meinVerkaufsdokumentFormular.value; // Datenstruktur dieser Funktion durch soeben erweiterte Datenstruktur aus Web-App ersetzen
+            
+          } // ENDE fehlende Werbemittel in Datenstruktur einfügen
+        
+
+          for(j = 0;j<offertdaten.auftrag[0].titel[i].werbemittel.length;j++) {   // Start: Loop über alle Werbemittel eines Titels in den von amasys retournierten Daten
+  
+            console.log("AbgleichOfferte, Umfang Preispositionen, Werbemittel[" + j + "])");
+  
+            // Aufzeigen Unterschied amasys- vs. Web-Modell: Preispositionen
+            // console.log('***Zugriff auf Umfang der Preispositionen in amasys- und Web-Daten***'); // TODO: entfernen
+            // console.log('***Umfang der Preispositionen in Web-Daten***: ' + offertFormData.titel[i].werbemittel[j].zusatzpreispositionen.length); // TODO: entfernen
+            
+            // Preispositionenhandling nur dann, wenn amasys überhaupt Preispositionen zurück gibt
+            if (offertdaten.auftrag[0].titel[i].werbemittel[j].zusatzpreispositionen) {
+              
+              console.log('***Umfang der Preispositionen in amasys-Daten***: ' + offertdaten.auftrag[0].titel[i].werbemittel[j].zusatzpreispositionen.length); // TODO: entfernen
+              console.log("Differenz (Preispositionen, Titel [" + i + "], Werbemittel [" + j + "]) zu bestehendem Web-Modell: " + (offertdaten.auftrag[0].titel[i].werbemittel[j].zusatzpreispositionen.length - offertFormData.titel[i].werbemittel[j].zusatzpreispositionen.length));
+            
+            
+              // Behandeln von Ausnahmesituation, wenn von amasys gelieferte Daten-Struktur anders ist, als Struktur in Web-App
+              const differenzPreispositionen = offertdaten.auftrag[0].titel[i].werbemittel[j].zusatzpreispositionen.length - offertFormData.titel[i].werbemittel[j].zusatzpreispositionen.length;
+              if (differenzPreispositionen>0) {
+              
+                console.log("amasys liefert mehr Preispositionen zurück, als von der Web-App an amasys geschickt wurden.\nDaher wird die fehlende Anzahl Preispositionen eingefügt.");
+  
+  
+                // Herausschälen der benötigten FormControls/-Arrays
+                const helper_titel = <FormArray> this.meinVerkaufsdokumentFormular.controls['titel'];
+                // console.log("titel [0]: " + helper_titel);
+                
+                const einzeltitel = <FormGroup> helper_titel.at(i);
+                // console.log("einzeltitel [" + i + "]: " + einzeltitel);
+                
+                const helper_werbemittel = <FormArray> einzeltitel.controls['werbemittel'];
+                // console.log("werbemittel von titel [" + i + "]: " + helper_werbemittel);
+                
+                const einzelwerbemittel = <FormGroup> helper_werbemittel.at(j);
+                // console.log("einzelwerbemittel [" + j + "] von titel [" + i + "]: " + einzelwerbemittel);
+                
+                const helper_preispositionen = <FormArray> einzelwerbemittel.controls['zusatzpreispositionen'];
+                // console.log("zusatzpreispositionen von werbemittel [" + j + "] von titel [" + i + "]: " + helper_preispositionen);
+  
+                
+                // Hinzufügen der entsprechenden Anzahl leerer Preispositionen und Initialisierung der entsprechenden Hilfsarrays
+                var l: number;
+                for(l = 0;l<differenzPreispositionen;l++) {
+                   helper_preispositionen.push(this.initZusatzpreisposition());
+                }
+                
+                offertFormData = this.meinVerkaufsdokumentFormular.value; // Datenstruktur dieser Funktion durch soeben erweiterte Datenstruktur aus Web-App ersetzen
+                
+              } // Ende: Handling von abweichenden Daten-Strukturen zwischen amasys und Web 
+  
+            } // Ende wenn amasys überhaupt Preispositionen retourniert
+            // if (!offertdaten.auftrag[0].titel[i].werbemittel[j].zusatzpreispositionen) {
+            //   console.log("AbgleichOfferte, Umfang Preispositionen: Keine Preispositionen gefunden.");
+            // }
+            // else console.log("AbgleichOfferte, Umfang Preispositionen: " + offertdaten.auftrag[0].titel[i].werbemittel[j].zusatzpreispositionen.length + " (Titel[" + i + "], Werbemittel[" + j + "])");
+            
+            // Wenn erscheinungsaufdetnr vorhanden, kann das zugehörige preispositionenAuswahlDropDown erzeugt werden
+            console.log("erscheinungsaufdetnr[" + j + "] = " + offertdaten.auftrag[0].titel[i].werbemittel[j].erscheinungsaufdetnr);
+            if (offertdaten.auftrag[0].titel[i].werbemittel[j].erscheinungsaufdetnr) {
+              this.preispositionenAuswahlDropDown2(offertdaten.auftrag[0].titel[i].werbemittel[j].erscheinungsaufdetnr,i,j);
+            }
+            
+          } // Ende: Loop über alle Werbemittel eines Titels in den von amasys retournierten Daten
+      
+        } // ENDE nur weiterfahren, wenn in amasys-Offerte Werbemittel vorhanden sind
+        else console.log("AbgleichOfferte, kein Element Werbemittel in Daten aus amasys vorhanden, keine weitere Verarbeitung");
+      
+        // DropDowns der titelbezogenen Hilfs-Arrays initialisieren
+        // Rubrik
+        this.rubrikAuswahlDropdown2(offertdaten.auftrag[0].titel[i].objekt,i);
+        
+        // Urubrik
+        this.urubrikAuswahlDropdown2(offertdaten.auftrag[0].titel[i].objekt,offertdaten.auftrag[0].titel[i].rubrik,i);
+        
+        // Werbeformat
+        this.werbeformatAuswahlDropdown2(offertdaten.auftrag[0].titel[i].objekt,offertdaten.auftrag[0].titel[i].rubrik,offertdaten.auftrag[0].titel[i].unterrubrik,i);
+
+      } // Ende: Loop über alle Titel in den von amasys retournierten Daten
+    
+      // alle Checks erfolgreich durchgearbeitet, Daten-Struktur Web für Empfang Daten amasys vorbereitet
+      // => Daten von amasys zuweisen (patchen)
+      this.meinVerkaufsdokumentFormular.patchValue(offertdaten.auftrag[0]);
+    }
+    //else alert('Das Dokument kann leider nicht aktualisiert werden. Fehler: ' + offertdaten.auftrag[0].systemfeedback);
+    // else this.snackBarRef = this.snackBar.open('Das Dokument kann leider derzeit nicht aktualisiert werden. Fehler: ' + offertdaten.auftrag[0].systemfeedback, '', {duration: 2000});
+    else this.snackBarRef = this.snackBar.open('Das Dokument kann derzeit leider nicht aktualisiert werden. Fehler: ' + offertdaten.auftrag[0].systemfeedback);
+
+  }
+
+
+  AbgleichOfferte(offertFormData, flag_loading: boolean) {
+    // flag_loading:  true, wenn Offerte von amasys geladen werden soll
+    //                false, wenn Datenstruktur von Web-App mit amasys abgeglichen werden soll
+    
+    console.log("Funktion AbgleichOfferte, offertFormdata: ",offertFormData);
+    console.log("flag_loading: ",flag_loading);
+    
+    this.progressbar_visible = true;
+    if (this.snackBarRef) this.snackBarRef.dismiss();         // falls eine snackBar offen ist, diese verschwinden lassen
+    
+    
+    if (flag_loading == false) {
+      
+      this.wofa_action = "Neues Dokument erstellen";
+      
+      console.log('Amasys-Interaktion: sync'); 
+      console.log('OffertFormData aus webapp:',JSON.stringify(offertFormData)); 
+    
+      // Angebotsdaten von WebApp mittels Service offerteshoService an amasys senden
+      this.offerteshowService.readwriteOfferte(offertFormData)
+        .subscribe(offertdaten_abgleich => {
+          
+          console.log('Offertdaten aus amasys (Abgleich):',offertdaten_abgleich);  
+          this.syncOffertJSON(offertFormData, offertdaten_abgleich);
+          this.progressbar_visible = false;
+          
+          /*
+          // Start Success-Block
+          console.log("offertdaten von amasys:",offertdaten);
+          
+          if (offertdaten.auftrag[0].systemfeedback==="") {
+            
+            // Formgroup-Shaper
+            console.log("AbgleichOfferte, Umfang Titel: " + offertdaten.auftrag[0].titel.length);
+            //console.log("AbgleichOfferte, Umfang Titel meinVerkaufsdokumentFormular: " + this.meinVerkaufsdokumentFormular.titel.length);
+            
+            var i:number;
+            var j:number;
+            var k:number;
+            
+            // Aufzeigen Unterschied amasys- vs. Web-Modell: Titel
+            console.log("Differenz (Titel) zu bestehendem Web-Modell: " + (offertdaten.auftrag[0].titel.length - offertFormData.titel.length));
+    
+            for(i = 0;i<offertdaten.auftrag[0].titel.length;i++) {  // Start: Loop über alle Titel in den von amasys retournierten Daten
+    
+              console.log('***Zugriff auf Werbemittel in amasys-Daten***'); // TODO: entfernen
+              console.log("AbgleichOfferte, Umfang Werbemittel: " + offertdaten.auftrag[0].titel[i].werbemittel.length + " (Titel[" + i + "])");
+    
+              // Aufzeigen Unterschied amasys- vs. Web-Modell: Werbemittel
+              console.log("Differenz (Werbemittel, Titel [" + i + "]) zu bestehendem Web-Modell: " + (offertdaten.auftrag[0].titel[i].werbemittel.length - offertFormData.titel[i].werbemittel.length));
+    
+    
+    
+              for(j = 0;j<offertdaten.auftrag[0].titel[i].werbemittel.length;j++) {   // Start: Loop über alle Werbemittel eines Titels in den von amasys retournierten Daten
+    
+                console.log("AbgleichOfferte, Umfang Preispositionen, Werbemittel[" + j + "])");
+    
+                // Aufzeigen Unterschied amasys- vs. Web-Modell: Preispositionen
+                // console.log('***Zugriff auf Umfang der Preispositionen in amasys- und Web-Daten***'); // TODO: entfernen
+                // console.log('***Umfang der Preispositionen in Web-Daten***: ' + offertFormData.titel[i].werbemittel[j].zusatzpreispositionen.length); // TODO: entfernen
+                
+                // Preispositionenhandling nur dann, wenn amasys überhaupt Preispositionen zurück gibt
+                if (offertdaten.auftrag[0].titel[i].werbemittel[j].zusatzpreispositionen) {
+                  
+                  console.log('***Umfang der Preispositionen in amasys-Daten***: ' + offertdaten.auftrag[0].titel[i].werbemittel[j].zusatzpreispositionen.length); // TODO: entfernen
+                  console.log("Differenz (Preispositionen, Titel [" + i + "], Werbemittel [" + j + "]) zu bestehendem Web-Modell: " + (offertdaten.auftrag[0].titel[i].werbemittel[j].zusatzpreispositionen.length - offertFormData.titel[i].werbemittel[j].zusatzpreispositionen.length));
+                
+                
+                  // Behandeln von Ausnahmesituation, wenn von amasys gelieferte Daten-Struktur anders ist, als Struktur in Web-App
+                  const differenzPreispositionen =offertdaten.auftrag[0].titel[i].werbemittel[j].zusatzpreispositionen.length - offertFormData.titel[i].werbemittel[j].zusatzpreispositionen.length;
+                  if (differenzPreispositionen>0) {
+                  
+                    console.log("amasys liefert mehr Preispositionen zurück, als von der Web-App an amasys geschickt wurden.\nDaher wird die fehlende Anzahl Preispositionen eingefügt.");
+      
+      
+                    // Herausschälen der benötigten FormControls/-Arrays
+                    const helper_titel = <FormArray> this.meinVerkaufsdokumentFormular.controls['titel'];
+                    // console.log("titel [0]: " + helper_titel);
+                    
+                    const einzeltitel = <FormGroup> helper_titel.at(i);
+                    // console.log("einzeltitel [" + i + "]: " + einzeltitel);
+                    
+                    const helper_werbemittel = <FormArray> einzeltitel.controls['werbemittel'];
+                    // console.log("werbemittel von titel [" + i + "]: " + helper_werbemittel);
+                    
+                    const einzelwerbemittel = <FormGroup> helper_werbemittel.at(j);
+                    // console.log("einzelwerbemittel [" + j + "] von titel [" + i + "]: " + einzelwerbemittel);
+                    
+                    const helper_preispositionen = <FormArray> einzelwerbemittel.controls['zusatzpreispositionen'];
+                    // console.log("zusatzpreispositionen von werbemittel [" + j + "] von titel [" + i + "]: " + helper_preispositionen);
+      
+                    
+                    // Hinzufügen der entsprechenden Anzahl leerer Preispositionen und Initialisierung der entsprechenden Hilfsarrays
+                    var l: number;
+                    for(l = 0;l<differenzPreispositionen;l++) {
+                       helper_preispositionen.push(this.initZusatzpreisposition());
+                    }
+                    
+                  } // Ende: Handling von abweichenden Daten-Strukturen zwischen amasys und Web 
+    
+                } // Ende wenn amasys überhaupt Preispositionen retourniert
+                // if (!offertdaten.auftrag[0].titel[i].werbemittel[j].zusatzpreispositionen) {
+                //   console.log("AbgleichOfferte, Umfang Preispositionen: Keine Preispositionen gefunden.");
+                // }
+                // else console.log("AbgleichOfferte, Umfang Preispositionen: " + offertdaten.auftrag[0].titel[i].werbemittel[j].zusatzpreispositionen.length + " (Titel[" + i + "], Werbemittel[" + j + "])");
+                
+                // Wenn erscheinungsaufdetnr vorhanden, kann das zugehörige preispositionenAuswahlDropDown erzeugt werden
+                console.log("erscheinungsaufdetnr[" + j + "] = " + offertdaten.auftrag[0].titel[i].werbemittel[j].erscheinungsaufdetnr);
+                if (offertdaten.auftrag[0].titel[i].werbemittel[j].erscheinungsaufdetnr) {
+                  this.preispositionenAuswahlDropDown2(offertdaten.auftrag[0].titel[i].werbemittel[j].erscheinungsaufdetnr,i,j);
+                }
+                
+              } // Ende: Loop über alle Werbemittel eines Titels in den von amasys retournierten Daten
+            
+              // DropDowns der titelbezogenen Hilfs-Arrays initialisieren
+              // Rubrik
+              this.rubrikAuswahlDropdown2(offertdaten.auftrag[0].titel[i].objekt,i);
+              
+              // Urubrik
+              this.urubrikAuswahlDropdown2(offertdaten.auftrag[0].titel[i].objekt,offertdaten.auftrag[0].titel[i].rubrik,i);
+              
+              // Werbeformat
+              this.werbeformatAuswahlDropdown2(offertdaten.auftrag[0].titel[i].objekt,offertdaten.auftrag[0].titel[i].rubrik,offertdaten.auftrag[0].titel[i].unterrubrik,i);
+    
+            } // Ende: Loop über alle Titel in den von amasys retournierten Daten
+          
+            // alle Checks erfolgreich durchgearbeitet, Daten-Struktur Web für Empfang Daten amasys vorbereitet
+            // => Daten von amasys zuweisen (patchen)
+            this.meinVerkaufsdokumentFormular.patchValue(offertdaten.auftrag[0]);
+          }
+          else alert('Das Dokument kann leider nicht aktualisiert werden. Fehler: ' + offertdaten.auftrag[0].systemfeedback);
+          */
+        
+        }, // Ende Success-Block von Angebotsdaten von WebApp mittels Service offerteshoService an amasys senden 
+        
+        
+        // Start Error-Case-Block von Angebotsdaten von WebApp mittels Service offerteshoService an amasys senden
+        err => {
+          this.progressbar_visible = false;
+          this.snackBarRef = this.snackBar.open('Das Angebot konnte leider nicht mit amasys abgeglichen werden, bitte versuchen Sie es erneut. Im wiederholten Fehlerfall mit Applikationsbetreuer Kontakt aufnehmen unter Angabe der folgenden Fehlermeldung: ' + err);
+          console.error(err);
+        }); // Ende subscribe amasys-Sync
+    }  // Ende If flag_loading == false
+    
+    else {
+      // flag_loading == true --> neue Offerte muss geladen werden
+      
+      this.wofa_action = "Verkaufsdokument " + offertFormData.aufnr;
+      
+      console.log('Offerte wird neu geladen');
+      console.log("aufnr = " + offertFormData.aufnr);
+
+      // Angebotsdaten von WebApp mittels Service offerteshoService an amasys senden
+      this.getofferteService.getOfferte(offertFormData.aufnr)
+        .subscribe(offertdaten_freshload => {
+          
+          console.log('Offertdaten aus amasys (Full-Load):',offertdaten_freshload);  
+          this.syncOffertJSON(offertFormData, offertdaten_freshload);
+          this.progressbar_visible = false;
+          
+        }, // Ende Success-Block von Offerte aus amasys laden 
+        
+        
+        // Starte Error-Block von Offerte aus amasys laden
+        err => {
+          this.progressbar_visible = false;
+          this.snackBarRef = this.snackBar.open('Das Laden des Angebots aus amasys ist leider fehlgeschlagen, bitte versuchen Sie es erneut. Im wiederholten Fehlerfall mit Applikationsbetreuer Kontakt aufnehmen unter Angabe der folgenden Fehlermeldung: ' + err);
+          console.error(err);
+        }); // Ende subscribe Full-Load
+    } // Ende If flag_loading == true
+    
+  } // Ende Funktion AbgleichOfferte() 
+
+}
+
+// ----------- Dialoge --------------
+
+// Objektauswahl-Dialog
+@Component({
+  selector: 'dialog-objekt-auswahl-dialog',
+  templateUrl: 'dialog-objekt-auswahl-dialog.html'
+})
+export class DialogObjektAuswahlDialog { 
+  
+  // public objektAuswahlFormFormular: FormGroup;
+  dialogObjektCtrl:       FormControl;
+  choosenObjekt:          string;
+  dialogObjektArray:      any;
+  
+  // Material für Objekt-Autocompleter
+    // dialogSelectedObjek:  string;
+    // objektCtrl: FormControl;
+    dialogFormObjekte:    any;
+  // Ende Material für Objekt-Autocompleter
+  
+  constructor(
+    public dialogRef: MatDialogRef<DialogObjektAuswahlDialog>,
+    private objektauswahlService:ObjektauswahlService,) {
+    
+    this.createDialogObjektArray();
+    
+    this.dialogObjektCtrl = new FormControl();
+    
+    // Start Labor Objekt-Autocompleter
+    // this.objektCtrl = new FormControl();
+    this.dialogFormObjekte = this.dialogObjektCtrl.valueChanges
+        .startWith(this.dialogObjektCtrl.value)
+        .map(val => this.dialogObjektDisplayFn(val))
+        .map(obj_bezeichnung => this.dialogFilterObjekte(obj_bezeichnung));
+        
+    // Ende Labor Objekt-Autocompleter  
+    
+  }
+  
+  // Funktionen Objekt-Autocompleter
+    
+    dialogObjektDisplayFn(value: any): string {
+      
+      console.log("objektDisplayFn, val:" + value);
+      return value && typeof value === 'object' ? value.obj_bezeichnung : value;
+      
+    }
+    
+  
+    dialogFilterObjekte(val: string) {
+      
+      if (val) {
+        
+        const filterValue = val.toLowerCase();
+        
+        console.log("filterValue: " + filterValue);
+        console.log("filtered: " + JSON.stringify(this.dialogObjektArray.filter(pTitel => pTitel.obj_bezeichnung.toLowerCase().startsWith(filterValue))));
+        
+        return this.dialogObjektArray.filter(pTitel => pTitel.obj_bezeichnung.toLowerCase().startsWith(filterValue));
+        //return this.objektdata.filter((pTitel => pTitel.obj_bezeichnung.toLowerCase().startsWith(filterValue)) || (pTitel => pTitel.objekt.toLowerCase().startsWith(filterValue)));
+        //return this.objektdata.filter((pTitel => pTitel.objekt.toLowerCase().startsWith(filterValue)) || (pTitel => pTitel.obj_bezeichnung.toLowerCase().startsWith(filterValue)));
+      }
+      
+      return this.dialogObjektArray;
+    }
+    
+    // abfüllen Objektauswahl
+    createDialogObjektArray(){
+      this.objektauswahlService.showObjekt('','no').subscribe(objval => {
+        this.dialogObjektArray = objval;
+        console.log('ObjektArray für Dialog initialisiert' + JSON.stringify(this.dialogObjektArray));
+      }, err => {
+        console.error(err);
+      });
+    }
+    
+    
+    sendBackObjekt(text: string) {
+      // console.log("**************** MessageUser:" + text);
+      // console.log("**************** FormControl-Value:" + this.dialogObjektCtrl.value);
+      // console.log("Closing dialog");
+      
+      let retValue:any = JSON.stringify(this.dialogFilterObjekte(this.dialogObjektDisplayFn(text)));
+      // let retValue:any = JSON.stringify(this.dialogFilterObjekte(text));
+      // let retValue:any = JSON.parse(this.dialogFilterObjekte(text));
+      // console.log("messageUser: " + retValue);
+      // console.log("messageUser: " + JSON.stringify(this.dialogFilterObjekte(this.dialogObjektDisplayFn(text))));
+      
+      
+      // this.dialogRef.close(this.dialogObjektCtrl.value);
+      this.dialogRef.close(retValue);
+      
+      // console.log("Dialog closed");
+    }
+  
+  // Ende Funktionen Objekt-Autocompleter
+
+
+}
+

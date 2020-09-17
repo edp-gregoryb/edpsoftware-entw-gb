@@ -1,0 +1,28 @@
+
+.sidenavContainer {
+  background-color: #888;
+  color: white;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+/* alter header
+.header {
+    background-color: #f1f1f1;
+    box-shadow: 5px 2px 10px grey;
+    font-size: 15px;
+}
+
+.headerLeft {
+    margin-left: 20px;
+}
+
+.edprot {
+  color:#c5010e;
+}*/
+
+mat-icon:active {
+    background-color: #aaaaaa;
+    line-height: 20px;
+    border-radius: 20px;
+}

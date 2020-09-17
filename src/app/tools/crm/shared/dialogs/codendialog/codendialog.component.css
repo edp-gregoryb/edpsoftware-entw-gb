@@ -1,0 +1,22 @@
+.size100 {
+    width: 100%;
+}
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+tr:nth-child(even) {
+    background-color: #eee;
+}
+
+tr:nth-child(odd) {
+    background-color: rgb(190, 190, 190);
+}
+
+.highlight {
+    background-color: rgb(255, 132, 132) !important;
+}
+
+.clear {
+    clear: both;
+}

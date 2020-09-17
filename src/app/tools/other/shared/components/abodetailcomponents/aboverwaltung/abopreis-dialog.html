@@ -1,0 +1,134 @@
+<style>
+    table {
+        border: solid black 1px;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 2px 5px;
+        border: 1px solid #aaaaaa;
+    }
+
+    tr:nth-child(even) {
+        background: #dddddd
+    }
+</style>
+
+<h1 mat-dialog-title>
+    <div style="float: left" i18n>Abopreis</div>
+    <button mat-button style="float: right" matDialogClose>X</button>
+    <div style="clear: both"></div>
+</h1>
+
+<div mat-dialog-content>
+    <table>
+        <tr>
+            <th i18n>Objekt</th>
+            <th i18n>CondNr</th>
+            <th i18n>Schlüssel</th>
+            <th>%</th>
+            <th i18n>Währung</th>
+            <th i18n>Betrag</th>
+            <th i18n>Währung</th>
+            <th i18n>Betrag(intern)</th>
+        </tr>
+
+        <tr>
+            <th><span i18n>ET</span>:</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{data.preis_curr}}</td>
+            <td>{{data.preis}}</td>
+            <td>{{data.preis_intern_curr}}</td>
+            <td>{{data.preis_intern}}</td>
+        </tr>
+
+        <tr>
+            <th><span i18n>Rabatt</span>1:</th>
+            <td>{{data.rab1_preis_condnr}}</td>
+            <td>{{data.rab1_key}}</td>
+            <td>{{data.rab1_zeichen}}</td>
+            <td>{{data.rab1_preis_curr}}</td>
+            <td>{{data.rab1_preis}}</td>
+            <td>{{data.rab1_preis_intern_curr}}</td>
+            <td>{{data.rab1_preis_intern}}</td>
+        </tr>
+
+        <tr>
+            <th><span i18n>Rabatt</span>2:</th>
+            <td>{{data.rab2_preis_condnr}}</td>
+            <td>{{data.rab2_key}}</td>
+            <td>{{data.rab2_zeichen}}</td>
+            <td>{{data.rab2_preis_curr}}</td>
+            <td>{{data.rab2_preis}}</td>
+            <td>{{data.rab2_preis_intern_curr}}</td>
+            <td>{{data.rab2_preis_intern}}</td>
+        </tr>
+
+        <tr>
+            <th><span i18n>Rabatt</span>3:</th>
+            <td>{{data.rab3_preis_condnr}}</td>
+            <td>{{data.rab3_key}}</td>
+            <td>{{data.rab3_zeichen}}</td>
+            <td>{{data.rab3_preis_curr}}</td>
+            <td>{{data.rab3_preis}}</td>
+            <td>{{data.rab3_preis_intern_curr}}</td>
+            <td>{{data.rab3_preis_intern}}</td>
+        </tr>
+
+        <tr>
+            <th><span i18n>Porto</span>:</th>
+            <td>{{data.rab4_preis_condnr}}</td>
+            <td>{{data.rab4_key}}</td>
+            <td>{{data.rab4_zeichen}}</td>
+            <td>{{data.rab4_preis_curr}}</td>
+            <td>{{data.rab4_preis}}</td>
+            <td>{{data.rab4_preis_intern_curr}}</td>
+            <td>{{data.rab4_preis_intern}}</td>
+        </tr>
+
+        <tr>
+            <th><span i18n>Total vor Steuern:</span></th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{data.preis_vor_mwst_curr}}</td>
+            <td>{{data.preis_vor_mwst}}</td>
+            <td>{{data.preis_vor_mwst_intern_curr}}</td>
+            <td>{{data.preis_vor_mwst_intern}}</td>
+        </tr>
+
+        <tr>
+            <th><span i18n>MWST</span>:</th>
+            <td><span i18n>Code</span>: {{data.mwst1code}}</td>
+            <td colspan="2">{{data.mwst1code_text}}</td>
+            <td>{{data.mwst1code_curr}}</td>
+            <td>{{data.mwst1betrag}}</td>
+            <td>{{data.mwst1code_curr_intern}}</td>
+            <td>{{data.mwst1betrag_intern}}</td>
+        </tr>
+
+        <tr>
+            <th><span i18n>MWST</span>:</th>
+            <td><span i18n>Code</span>: {{data.mwst2code}}</td>
+            <td colspan="2">{{data.mwst2code_text}}</td>
+            <td>{{data.mwst2code_curr}}</td>
+            <td>{{data.mwst2betrag}}</td>
+            <td>{{data.mwst2code_curr_intern}}</td>
+            <td>{{data.mwst2betrag_intern}}</td>
+        </tr>
+
+        <tr>
+            <th><span i18n>Gesamttotal</span>:</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{data.preis_total_curr}}</td>
+            <td>{{data.preis_total}}</td>
+            <td>{{data.preis_total_curr_intern}}</td>
+            <td>{{data.preis_total_intern}}</td>
+        </tr>
+    </table>
+</div>

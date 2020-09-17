@@ -1,0 +1,6 @@
+<mat-select class="input-full-width" placeholder="Urubrik" i18n-placeholder="Unterrubrik@@urubric" [(ngModel)]="urubriktext"  (focus)="selectedurubrik()" (selectionChange)="urubrikauswahl($event)" >
+  <mat-option>leer</mat-option>
+  <mat-option class="input-full-width" *ngFor="let urubrik of urubrikdata" [value]="urubrik.urubrik">
+    {{ urubrik.urubrik_bezeichnung}}
+  </mat-option>
+</mat-select>

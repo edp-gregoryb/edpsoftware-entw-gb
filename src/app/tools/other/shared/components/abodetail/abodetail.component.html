@@ -1,0 +1,111 @@
+<div [ngStyle]="{'height.px': innerheight}" style="overflow: scroll;" (scroll)="onScroll($event)" (window:resize)="windowResize($event)" #abodetail>
+  <div class="full-size" style="margin-right: 20px" *ngIf="abodetails">
+  
+    <h2>{{abodetails.objekt_txt}}</h2>
+    <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start" style="min-height: 150px">
+      <div class="flex-item" fxFlex="33%" class="headeradresse">
+        <b><span i18n>Abonnent</span>:</b><br>
+        <div *ngIf="aboAdresse">
+          <div style="white-space: pre-line; width: 60%; float: left;">
+            {{aboAdresse}}
+          </div>
+          <mat-icon class="tool" (click)="copyToClipboard(aboAdresse)">file_copy</mat-icon>
+          <div class="clear"></div>
+        </div>
+        <hr *ngIf="aboAdresse && aboMail" style="border-color: black; margin: 10px auto">
+        <div *ngIf="aboMail">
+          <div style="float: left"><span i18n>E-Mail</span>: {{aboMail}}</div>
+          <a [href]="getMailLink('aboMail')"><mat-icon class="tool">send</mat-icon></a>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div class="flex-item" fxFlex="33%" class="headeradresse">
+        <b><span i18n>Lieferadresse</span>:</b><br>
+        <div *ngIf="liefAdresse">
+          <div style="white-space: pre-line; width: 60%; float: left;">
+            {{liefAdresse}}
+          </div>
+          <mat-icon class="tool" (click)="copyToClipboard(liefAdresse)">file_copy</mat-icon>
+          <div class="clear"></div>
+        </div>
+        <hr *ngIf="liefAdresse && liefMail" style="border-color: black; margin: 10px auto">
+        <div *ngIf="liefMail">
+          <div style="float: left"><span i18n>E-Mail</span>: {{liefMail}}</div>
+          <a [href]="getMailLink('liefMail')"><mat-icon class="tool">send</mat-icon></a>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div class="flex-item" fxFlex="33%" class="headeradresse">
+        <b><span i18n>Rechnungsadresse</span>:</b><br>
+        <div *ngIf="rechnAdresse">
+          <div style="white-space: pre-line; width: 60%; float: left;">
+            {{rechnAdresse}}
+          </div>
+          <mat-icon class="tool" (click)="copyToClipboard(rechnAdresse)">file_copy</mat-icon>
+          <div class="clear"></div>
+        </div>
+        <hr *ngIf="rechnAdresse && rechnMail" style="border-color: black; margin: 10px auto">
+        <div *ngIf="rechnMail">
+          <div style="float: left"><span i18n>E-Mail</span>: {{rechnMail}}</div>
+          <a [href]="getMailLink('rechnMail')"><mat-icon class="tool">send</mat-icon></a>
+          <div class="clear"></div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Akkordion -->
+    <mat-accordion class="accordion" multi="false">
+      <!-- Aboverwaltung -->
+      <mat-expansion-panel class="accordionPanel" [expanded]="expanded === 0" (opened)="setExpanded(0)" (closed)="accordionClosed(0)">
+        <mat-expansion-panel-header class="accordionHeader">
+          <mat-panel-title>
+            <span i18n>Aboverwaltung</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+  
+        <div class="accordionContent">
+            <app-aboverwaltung [abodetailsInput]="abodetails" [isOpen]="expanded === 0 || expanded === -1" [zwischenspeicher]="vonWo.split(':')[0] === 'verwaltung' ? {'abodetail': updatedZwischenspeicher, 'vonWo': vonWo} : null" (sendToolnutzungZuAbolist)="verwaltungTool.next($event)" (activateAutoScroll)="activateAutoScroll()"></app-aboverwaltung>
+        </div>
+      </mat-expansion-panel>
+  
+      <!-- Umleitungen -->
+      <mat-expansion-panel class="accordionPanel" [expanded]="expanded === 1" (opened)="setExpanded(1)" (closed)="accordionClosed(1)">
+        <mat-expansion-panel-header class="accordionHeader">
+          <mat-panel-title>
+            <span i18n>Umleitungen</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+  
+        <div class="accordionContent">
+            <app-aboumleitungen [abodetailsInput]="abodetails" [isOpen]="expanded === 1" [zwischenspeicher]="vonWo.split(':')[0] === 'umleitung' ? updatedZwischenspeicher : null" (activateAutoScroll)="activateAutoScroll()"></app-aboumleitungen>
+        </div>
+      </mat-expansion-panel>
+  
+      <!-- Terminauswertungen -->
+      <mat-expansion-panel class="accordionPanel" [expanded]="expanded === 2" (opened)="setExpanded(2)" (closed)="accordionClosed(2)">
+        <mat-expansion-panel-header class="accordionHeader">
+          <mat-panel-title>
+            <span i18n>Terminauswertungen</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+  
+        <div class="accordionContent">
+            <app-abotermine [abodetailsInput]="abodetails" [isOpen]="expanded === 2" [zwischenspeicher]="vonWo.split(':')[0] === 'termin' ? updatedZwischenspeicher : null" (activateAutoScroll)="activateAutoScroll()"></app-abotermine>
+        </div>
+      </mat-expansion-panel>
+  
+      <!-- Kategorien -->
+      <mat-expansion-panel class="accordionPanel" [expanded]="expanded === 3" (opened)="setExpanded(3)" (closed)="accordionClosed(3)">
+        <mat-expansion-panel-header class="accordionHeader">
+          <mat-panel-title>
+            <span i18n>Kategorien</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+  
+        <div class="accordionContent">
+          <app-abokategorien [abodetailsInput]="abodetails" [isOpen]="expanded === 3"></app-abokategorien>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

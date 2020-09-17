@@ -1,0 +1,20 @@
+<app-loading-screen></app-loading-screen>
+<mat-drawer-container class="mainContainer" autosize>
+
+    <mat-drawer #drawer class="sidenavContainer" mode="side">
+        <div style="float: right; padding-left: 5px; padding-right: 5px;">
+            <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+        </div>
+        <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [lastAppModule]="lastAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+    </mat-drawer>
+
+    <div class="appMainframe">
+        <app-defaultheader [currentAppModule]="currentAppModule" [modulename]="modulename" (changeSicht)="sichtchange($event)" (onSidenavToggle)="drawer.toggle()" #header></app-defaultheader>
+
+        <!-- MainApp -->
+<app-auftragdetail [kunde]="kundevonLink" [objekt]="objektvonLink" [aufnr]="aufnrvonLink" [sujetnr]="sujetnrvonLink" [datum]="datumvonLink" [returnlink]="returnlink"></app-auftragdetail>
+
+        <!-- Ende: MainApp -->
+
+    </div>
+</mat-drawer-container>

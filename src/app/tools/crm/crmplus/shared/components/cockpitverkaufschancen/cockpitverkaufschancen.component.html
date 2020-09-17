@@ -1,0 +1,75 @@
+<div style="position: relative;background: #eff0f0;width:698px;">
+<div style="height:34px;padding-left:16px;padding-right:16px;justify-content: space-between;display: flex;">
+    <div style="margin-top: 6px"> 
+    <span style="font-weight: bold" i18n="@@sellingChance">Verkaufschancen</span>
+    <!--<button mat-icon-button style="float:right;" (click)="showverkaufschancen()"><mat-icon >list</mat-icon></button>-->
+    </div>
+</div>
+
+<div class="example-container mat-elevation-z8">
+    <mat-table #table [dataSource]="verkaufschancensource">
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="vertreter">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.vertreter}}
+                <!--<ngu-letter-avatar avatar-shape='round' avatar-char-count='2' avatar-height="24px" avatar-width="24px" avatar-font-size="15" avatar-data='{{element.vertreter}}'></ngu-letter-avatar>-->
+            </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="datum">
+            <mat-header-cell *matHeaderCellDef i18n="@@fullTimeSpan">Laufzeit</mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.datum }} </mat-cell>
+        </ng-container>
+
+        <!-- Weight Column    | number : '1.2-2'-->
+        <ng-container matColumnDef="nettoNetto">
+            <mat-header-cell *matHeaderCellDef i18n="@@nettoNetto">netto Netto</mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.nettoNetto}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="NAME">
+            <mat-header-cell *matHeaderCellDef i18n="@@client">Kunde</mat-header-cell>
+            <mat-cell class="overflow ellipsis" *matCellDef="let element"> {{element.NAME}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="sujet">
+            <mat-header-cell *matHeaderCellDef i18n="@@sujet">Sujet</mat-header-cell>
+            <mat-cell class="gross overflow ellipsis" *matCellDef="let element"> {{element.sujet}} </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="sujetnr">
+            <mat-header-cell *matHeaderCellDef i18n="@@sujetNumber">SujetNr</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.sujetnr}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="aufnr">
+            <mat-header-cell *matHeaderCellDef i18n="Auftragsnummer@@orderNumber">Aufnr</mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.aufnr}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="objekt">
+            <mat-header-cell *matHeaderCellDef i18n="@@object">Objekt</mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.objekt}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="aufart">
+            <mat-header-cell *matHeaderCellDef i18n="Auftragsart@@aufart">Aufart</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <mat-icon> {{element.aufart}}</mat-icon>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" [matMenuTriggerFor]="appMenu">
+                <mat-menu #appMenu="matMenu">
+                      <button mat-menu-item (click)="showdetail(row)" i18n="@@sellingChanceDetail">Verkaufschancendetail</button>
+                    </mat-menu>
+
+        </mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10"></mat-paginator>
+</div>
+</div>

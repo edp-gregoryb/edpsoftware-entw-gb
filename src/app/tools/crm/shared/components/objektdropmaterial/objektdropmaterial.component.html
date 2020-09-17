@@ -1,0 +1,8 @@
+
+<mat-select class="input-full-width" placeholder="Objekt" i18n-placeholder="@@object" [(ngModel)]="objekttext" (selectionChange)="selectedObjekt($event)" >
+  <mat-option>leer</mat-option>
+  <mat-option class="input-full-width" *ngFor="let obj of objektdata" [value]="obj.objekt">
+    {{ obj.obj_bezeichnung}}
+  </mat-option>
+</mat-select>
+

@@ -1,0 +1,47 @@
+
+<div *ngIf="kundebool" style="float: right" [ngClass]="{'filterindikator': isActiveFilter}">
+
+<p-autoComplete  [(ngModel)]="text" [suggestions]="results" (completeMethod)="search($event)" (onSelect)=selectedvalue(text) (onUnselect)=unselect()
+           [minLength]="1" [multiple]="false" placeholder="Kunde" i18n-placeholder="@@client" field="fname" (click)="opsuchfeld.toggle($event)"></p-autoComplete>
+            <button style="margin-left:-40px;" (click)=unselect() mat-icon-button><mat-icon>clear</mat-icon></button>
+</div>
+<div *ngIf="!kundebool"  style="float: right">
+
+     
+</div>
+
+<p-overlayPanel #opsuchfeld>
+<!--<div style="font-size: 12pt;">-->
+<!--<p-radioButton name="groupname" label="eigene" value="eigenekunden" [(ngModel)]="selectedkunden"></p-radioButton>-->
+<!--<p-radioButton name="groupname" label="alle" value="allekunden" [(ngModel)]="selectedkunden"></p-radioButton>-->
+<!--</div>-->
+<!--<br>-->
+<!--<div style="font-size: 12pt;">-->
+<!--  <p-checkbox name="groupname" label="mit Privatadressen" binary="true" (onChange)="withprivatadressen(selectedPrivatadressen)"  [(ngModel)]="selectedPrivatadressen"></p-checkbox>-->
+<!--</div>-->
+<div style="font-size: 12pt;">
+<p-autoComplete  [(ngModel)]="objekte" [style]="{'width':'92%'}" [inputStyle]="{'width':'93%'}" delay="300" [suggestions]="objektdata" (completeMethod)="searchObjekte($event)" (onSelect)=selectedObjekt(objekte,text) (onUnselect)=unselect()
+            field="obj_bezeichnung" placeholder="Objekt" i18n-placeholder="@@object" [dropdown]="true" (onDropdownClick)="showObjekte()">
+</p-autoComplete>
+            
+
+</div>
+<br>
+<div style="font-size: 12pt;">
+<p-autoComplete *ngIf="objtrue"  [style]="{'width':'92%'}" [inputStyle]="{'width':'93%'}" delay="300"  [(ngModel)]="aschluessel" [suggestions]="aschluesseldata" (completeMethod)="searchAschluessel($event)" (onSelect)=selectedAschluessel(aschluessel,objekte,text) (onUnselect)=unselect()
+            field="aschlussel" placeholder="Ausgabe" i18n-placeholder="@@outputPlaceholder" [dropdown]="true" (onDropdownClick)="showaschluessel(objekte.objekt)"></p-autoComplete>
+</div>
+<br>
+<div style="font-size: 12pt;">
+    
+    <p-radioButton name="groupname" label="eigene" value="M" [(ngModel)]="selectedkunden"></p-radioButton>
+    <p-radioButton name="groupname" label="alle" value="A" [(ngModel)]="selectedkunden" ></p-radioButton>
+   
+  
+</div>
+<br>
+
+</p-overlayPanel>
+
+             
+           

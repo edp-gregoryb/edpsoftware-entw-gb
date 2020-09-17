@@ -1,0 +1,24 @@
+<div *ngIf="jindex === 0" >
+  <div *ngFor="let dummy of ' '.repeat(step[0][0].sreihenfolge).split('')" class="step"></div>
+</div>
+<div *ngIf="jindex > 0 && (step[0][0].sreihenfolge - article[jindex-1][0][0].sreihenfolge) > 0">
+  <div *ngFor="let dummy of ' '.repeat((step[0][0].sreihenfolge - article[jindex-1][0][0].sreihenfolge) - 1).split('')" class="step step"></div>
+</div>
+<!--ein step -->
+<div class="step step-content">
+  <!-- alle tasks -->
+  <div *ngFor="let task of step; let p = index">
+    <div *ngIf="task[0] && stepsunlocked && stepsunlocked[ausserindex]">
+      <!-- task freigeschaltet -->
+      <div *ngIf="stepsunlocked[ausserindex][jindex] === true" class="task" (click)="getElement()" [ngStyle]="{'background-color': getBackgroundColor(ausserindex, jindex, p)}" routerLink="/workflow/workflow-show/detailinfo/{{task[0].objekt}}/{{task[0].objektartikel}}/{{task[0].aufgabengruppeid}}" [queryParams]="{ aschlussel: task[0].aschlussel, elm: ausserindex}">
+        <span *ngIf="task[0].agbez" class="overflowDots">{{task[0].agbez}}</span>
+        <span *ngIf="!task[0].agbez">-</span>
+      </div>
+      <!-- task noch nicht freigeschaltet -->
+      <div *ngIf="stepsunlocked[ausserindex][jindex] === false" class="taskLocked">
+        <span *ngIf="task[0].agbez" class="overflowDots">{{task[0].agbez}}</span>
+        <span *ngIf="!task[0].agbez">-</span>
+      </div>
+    </div>
+  </div>
+</div>

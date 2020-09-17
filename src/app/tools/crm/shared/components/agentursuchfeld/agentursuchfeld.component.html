@@ -1,0 +1,75 @@
+<div>
+  <button mat-raised-button (click)=agentureditieren()  [ngClass]="{'colordiv': isActiveAgentur}">{{plusminus}} Agentur</button>
+  <button mat-icon-button (click)="deleteagentur(0)" *ngIf="isActiveAgentur"><mat-icon>delete</mat-icon></button>
+<div *ngIf="isActiveAgentur">
+ 
+  <!--<p-autoComplete  [style]="{'width':'92%'}" [inputStyle]="{'width':'93%'}" [inputStyle]="{'width':'100%'}" delay="300" placeholder="Agentur"-->
+  <!--  [(ngModel)]="agenturtext" [suggestions]="agenturdata" (onSelect)=selectedvalueagentur(agenturtext) (completeMethod)="changeAgentur($event)" field="fname"-->
+  <!--  [dropdown]="true" (onDropdownClick)="showagentur()"></p-autoComplete>-->
+
+<mat-form-field style="width:100%">
+   <input type="text"  matInput [formControl]="agenturctrl" placeholder="Agentur" i18n-placeholder="@@agency" (ngModelChange)="agenturnameChange($event)" [matAutocomplete]="auto">
+</mat-form-field>
+
+<mat-autocomplete #auto="matAutocomplete">
+   <mat-option *ngFor="let option of options" [value]="option.fname" (click)="agenturselected(option)">
+      {{ option.fname }}
+   </mat-option>
+</mat-autocomplete>
+
+
+</div>
+
+<div *ngIf="isActiveAgentur">
+<!--<label class="sizelabel" >Agentur Nr:</label>-->
+    <mat-form-field style="width:100%">
+    <input type="text" matInput [(ngModel)]="bznragentur" placeholder="Agentur Nummer" i18n-placeholder="@@agencyNumberPlaceholder"/> 
+    </mat-form-field>
+<!--<label class="sizelabel">Name:</label>-->
+    <mat-form-field style="width:100%">
+    <input type="text" matInput [(ngModel)]="fnameagentur" placeholder="Agenturname" i18n-placeholder="@@agencyNamePlaceholder"/>
+    </mat-form-field>
+<!--<label class="sizelabel">Vor-Name:</label>-->
+    <mat-form-field style="width:100%">
+    <input type="text" matInput [(ngModel)]="vnameagentur" placeholder="Vorname" i18n-placeholder="@@firstNamePlaceholder"/>
+    </mat-form-field>
+<!--<label class="sizelabel">Zusatz1:</label>-->
+    <mat-form-field style="width:100%">
+    <input type="text" matInput [(ngModel)]="zusatz1agentur" placeholder="Zusatz1" i18n-placeholder="@@addition1Placeholder"/>
+    </mat-form-field>
+<!--<label class="sizelabel">Zusatz2:</label>-->
+    <mat-form-field style="width:100%">
+    <input type="text" matInput [(ngModel)]="zusatz2agentur" placeholder="Zusatz2" i18n-placeholder="@@addition2Placeholder"/>
+    </mat-form-field>
+<!--<label class="sizelabel">Zusatz3:</label>-->
+    <mat-form-field style="width:100%">
+    <input type="text" matInput [(ngModel)]="zusatz3agentur" placeholder="Zusatz3" i18n-placeholder="@@addition3Placeholder"/>
+    </mat-form-field>
+<!--<label class="sizelabel">Strasse:</label>-->
+    <mat-form-field style="width:100%">
+    <input type="text" matInput [(ngModel)]="strasseagentur" placeholder="Strasse" i18n-placeholder="@@street"/>
+    </mat-form-field>
+<!--<label class="sizelabel">Ort:</label>-->
+    <mat-form-field style="width:100%">
+    <input type="text"  matInput [(ngModel)]="ortagentur" placeholder="Ort" i18n-placeholder="@@place"/>
+    </mat-form-field>
+
+    <div style="width:100%;border-bottom: 1px solid;border-bottom-color: #a6a6a6;margin-top: 13px;">
+        <span style="float:left;margin-top: -16px;font-size: 11px;color: gray;" i18n="@@phoneBusiness">Telefon Geschäft</span>
+        <span [innerHtml]="telgeagentur | safepipe:'html'"></span>
+    </div>
+    <div style="width:100%;border-bottom: 1px solid;border-bottom-color: #a6a6a6;margin-top: 29px;">
+        <span style="float:left;margin-top: -16px;font-size: 11px;color: gray;" i18n="@@directCall">Direktwahl</span>
+    <span style="width:100%" [innerHtml]="telgediagentur | safepipe:'html'"></span>
+    </div>
+    <div style="width:100%;border-bottom: 1px solid;border-bottom-color: #a6a6a6;margin-top: 29px;">
+        <span style="float:left;margin-top: -16px;font-size: 11px;color: gray;" i18n="@@mobile">Mobile</span>
+    <span style="width:100%" [innerHtml]="natelagentur | safepipe:'html'"></span>
+    </div>
+    <div style="width:100%;border-bottom: 1px solid;border-bottom-color: #a6a6a6;margin-top: 29px;">
+        <span style="float:left;margin-top: -16px;font-size: 11px;color: gray;" i18n="@@mail">Mail</span>
+    <span style="width:100%" [innerHtml]="emailagentur | safepipe:'html'"></span>
+    </div>
+<br>
+</div>
+</div>

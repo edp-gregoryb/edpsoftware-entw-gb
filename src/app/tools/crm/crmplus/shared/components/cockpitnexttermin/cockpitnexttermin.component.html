@@ -1,0 +1,81 @@
+<div style="position: relative;background: #eff0f0;width:698px;">
+<div style="height:34px;padding-left:16px;padding-right:16px;justify-content: space-between;display: flex;">
+    <div style="margin-top: 6px">
+    <span style="font-weight: bold;" i18n="@@nextAppointments">Nächste Termine</span>
+    </div>
+    <div >
+    <button mat-icon-button matTooltipPosition="below" matTooltip="Listen Ansicht" i18n-matTooltip="@@listViewTT" style="float:right;" (click)="showtermine()"><mat-icon style="margin-bottom: 10px">list</mat-icon></button>
+    <button mat-icon-button matTooltipPosition="below" matTooltip="Agenda Ansicht" i18n-matTooltip="@@agendaViewTT" style="float:right;" (click)="gotoAgenda()"><mat-icon style="margin-bottom: 10px">contact_phone</mat-icon></button>
+    <button mat-icon-button matTooltipPosition="below" matTooltip="Neuer Termin" i18n-matTooltip="@@newDate" style="float:right;" (click)="neuertermin()"><mat-icon style="margin-bottom: 10px">add</mat-icon></button>
+</div>
+</div>
+
+<div class="example-container mat-elevation-z8" >
+    <mat-table #table [dataSource]="nextterminesource">
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="vetreter">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.vetreter}}
+                <!--<ngu-letter-avatar avatar-shape='round' avatar-char-count='2' avatar-height="24px" avatar-width="24px" avatar-font-size="15" avatar-data='{{element.vetreter}}'></ngu-letter-avatar>-->
+            </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="termdatum">
+            <mat-header-cell *matHeaderCellDef i18n="@@appointment">Termin</mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.termdatum }} </mat-cell>
+        </ng-container>
+
+        <!-- Weight Column    | number : '1.2-2'-->
+        <ng-container matColumnDef="termzeit">
+            <mat-header-cell *matHeaderCellDef i18n="@@time">Zeit</mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.termzeit}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="NAME">
+            <mat-header-cell *matHeaderCellDef i18n="@@client">Kunde</mat-header-cell>
+            <mat-cell class="overflow ellipsis" *matCellDef="let element"> {{element.NAME}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="termrapptext">
+            <mat-header-cell *matHeaderCellDef i18n="@@description">Beschreibung</mat-header-cell>
+            <mat-cell class="gross overflow ellipsis" *matCellDef="let element"> {{element.termrapptext}} </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="termaktivic">
+            <mat-header-cell *matHeaderCellDef i18n="@@activity">Aktivität</mat-header-cell>
+            <mat-cell class="mat-column-termaktivic" *matCellDef="let element">
+                <mat-icon> {{element.termaktivic}}</mat-icon>
+            </mat-cell>
+        </ng-container>
+        
+        <!--<ng-container matColumnDef="termdetail">-->
+        <!--    <mat-header-cell *matHeaderCellDef></mat-header-cell>-->
+        <!--    <mat-cell class="mat-column-termaktivic" *matCellDef="let element">-->
+        <!--    <button mat-icon-button [matMenuTriggerFor]="appMenu">-->
+        <!--        <mat-icon>more_vert</mat-icon>-->
+        <!--        </button>-->
+        <!--        <mat-menu #appMenu="matMenu">-->
+        <!--          <button mat-menu-item (click)="gotoTermindetail(element)">Termindetail</button>-->
+                  
+        <!--        </mat-menu>-->
+        <!--     </mat-cell>-->
+        <!--</ng-container>-->
+
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" [matMenuTriggerFor]="appMenu">
+                <mat-menu #appMenu="matMenu">
+                  <button mat-menu-item (click)="gotoTermindetail(row)" i18n="@@appointmentDetail">Termindetail</button>
+                </mat-menu>
+        </mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"  [pageSize]="10"></mat-paginator>
+</div>
+
+<div>
+    
+</div>
+</div>

@@ -1,0 +1,58 @@
+<mat-drawer-container style="background-color: #DDD;" autosize (window:resize)="windowResize()">
+    <!-- Drawer -->
+    <mat-drawer #drawer class="sidenavContainer" mode="side">
+        <div style="float: right; padding-left: 5px; padding-right: 5px;">
+            <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+        </div>
+        <!-- Sidenav -->
+        <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+    </mat-drawer>
+
+    <!-- Header -->
+    <app-defaultheader [currentAppModule]="currentAppModule" [modulename]="modulename" (onSidenavToggle)="drawer.toggle()" #header></app-defaultheader>
+
+    <!-- Lade-Balken -->
+    <mat-progress-bar *ngIf="httpRequestsLoading > 0" mode="indeterminate" color="warn"></mat-progress-bar>
+
+    <!-- Header -->
+    <app-header [headerTitle]="headerTitle" [linkBack]="headerLinkBack"></app-header>
+
+    <!-- Content -->
+    <div class="wrapper" *ngIf="produkt" [ngStyle]="{'height.px': innerheight}" style="overflow: scroll;">
+        <div class="smallWrapper">
+            <!-- Titel -->
+            <h2 *ngIf="objekt">
+                {{objekt.obj_bezeichnung}}
+<!--                <mat-icon style="margin-left: 10px; cursor: pointer" routerLink="/workflow/workflow-show/newOrEditObject" [queryParams]="{newObject: 'false', objekt: produkt.objekt, aschlussel: produkt.aschlussel}">settings</mat-icon>-->
+            </h2>
+
+            <div style="width: 300px">
+                <!-- Ausgabe-Bezeichnung -->
+<!--                <div *ngIf="aschlussel">-->
+<!--                    <span style="float: left;" i18n>Ausgabe:</span>-->
+<!--                    <span style="float: right;">{{aschlussel.ausgbez}}</span>-->
+<!--                    <div class="clear"></div>-->
+<!--                </div>-->
+
+<!--                <div>-->
+<!--                    <span style="float: left;" i18n>Autoren:</span>-->
+<!--                    <div *ngFor="let autor of autoren; let i = index;">-->
+<!--                        <div style="float: right">-->
+<!--                            <div *ngIf="newObjektArtikel(i)" style="float: right;"><u>{{autor.objektartikel}}</u></div>-->
+<!--                            <div class="clear"></div>-->
+<!--                            <div style="float: right">{{autor.vname}} {{autor.fname}}</div>-->
+<!--                            <div class="clear"></div>-->
+<!--                        </div>-->
+<!--                        <div class="clear"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+            </div>
+
+            <br><br>
+            <hr style="border-color: grey">
+
+            <!-- Dokumente und Kommentare -->
+            <app-docs-and-comments *ngIf="produkt"></app-docs-and-comments>
+        </div>
+    </div>
+</mat-drawer-container>

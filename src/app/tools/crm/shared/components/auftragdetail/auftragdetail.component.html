@@ -1,0 +1,351 @@
+<mat-toolbar color="primary">
+  <span i18n="@@orderDetail">Auftragdetail</span>
+   <div style="color:red;margin-left:400px" *ngIf="keinDokuhinterlegt" i18n="@@noOrder">Kein Auftrag hinterlegt!</div>
+  <span class="example-spacer"></span>
+<button mat-icon-button mat-dialog-close  style="float:right"><mat-icon>clear</mat-icon></button>
+</mat-toolbar>
+<mat-progress-bar *ngIf="ladendoku" mode="indeterminate" color="warn"></mat-progress-bar>
+<!--<button mat-icon-button mat-dialog-close  style="float:right"><mat-icon>clear</mat-icon></button>-->
+<!--<mat-progress-bar *ngIf="ladendoku" mode="indeterminate"></mat-progress-bar>-->
+<div style="color:red;margin-left:400px" *ngIf="keinDokuhinterlegt" i18n="@@noOrder">Kein Auftrag hinterlegt!</div>
+<div style="margin-top:5px;"></div>
+<div *ngFor="let auftrag of auftragdetails" class="ui-g-12" style="background-color: #f4f4f4">
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="20%" fxFlexOrder="1"><div i18n="@@orderSujetSubject">Auftrag/Sujet/Betreff</div>:</div>
+  <div class="item item-2" fxFlex="20%" fxFlexOrder="2" style="text-decoration: underline;cursor:pointer" (click)="showauftragbest(auftrag.aufnr)">{{auftrag.aufnr}}</div>
+  <div class="item item-3" fxFlex="20%" fxFlexOrder="3">{{auftrag.sujetnr}}</div>
+  <div class="item item-4" fxFlex="40%" fxFlexOrder="4">{{auftrag.sujet}}</div><br>
+</div>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="20%" fxFlexOrder="1"><span i18n="@@clientNumberName">Kunde-Nr/Name</span>:</div>
+  <div class="item item-2" fxFlex="20%" fxFlexOrder="2">{{auftrag.kund_beznr}}</div>
+  <div class="item item-3" fxFlex="20%" fxFlexOrder="3">{{auftrag.fname}}</div>
+  <div class="item item-4" fxFlex="40%" fxFlexOrder="4"><span *ngIf="inseratejpganwesend" style="float:right;cursor:pointer" (click)="openimagejpg()"><i class="material-icons">image</i></span></div><br>
+</div>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="20%" fxFlexOrder="1"><span i18n="@@addition">Zusatz</span> 1/2:</div>
+  <div class="item item-2" fxFlex="20%" fxFlexOrder="2">{{auftrag.k_zusatz1}}</div>
+  <div class="item item-3" fxFlex="20%" fxFlexOrder="3">{{auftrag.k_zusatz2}}</div>
+  <div class="item item-4" fxFlex="40%" fxFlexOrder="4"></div><br>
+</div>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="20%" fxFlexOrder="1"><span i18n="@@address">Adresse</span>:</div>
+  <div class="item item-2" fxFlex="20%" fxFlexOrder="2">{{auftrag.k_strasse}}</div>
+  <div class="item item-3" fxFlex="20%" fxFlexOrder="3">{{auftrag.k_ort}}</div>
+  <div class="item item-4" fxFlex="40%" fxFlexOrder="4"></div><br>
+</div>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="20%" fxFlexOrder="1"><span i18n="@@agentName">Vermittler Name</span>:</div>
+  <div class="item item-2" fxFlex="20%" fxFlexOrder="2"></div>
+  <div class="item item-3" fxFlex="20%" fxFlexOrder="3"></div>
+  <div class="item item-4" fxFlex="40%" fxFlexOrder="4"></div><br>
+</div>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="20%" fxFlexOrder="1"><span i18n="@@addition">Zusatz</span> 1/2:</div>
+  <div class="item item-2" fxFlex="20%" fxFlexOrder="2"></div>
+  <div class="item item-3" fxFlex="20%" fxFlexOrder="3"></div>
+  <div class="item item-4" fxFlex="40%" fxFlexOrder="4"></div><br>
+</div>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="20%" fxFlexOrder="1"><span i18n="@@address">Adresse</span>:</div>
+  <div class="item item-2" fxFlex="20%" fxFlexOrder="2"></div>
+  <div class="item item-3" fxFlex="20%" fxFlexOrder="3"></div>
+  <div class="item item-4" fxFlex="40%" fxFlexOrder="4"></div><br>
+</div>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="20%" fxFlexOrder="1"><span i18n="@@objectCombinationmodel">Objekt/Kombivariante</span>:</div>
+  <div class="item item-2" fxFlex="20%" fxFlexOrder="2">{{auftrag.obj_bezeichnung}}</div>
+  <div class="item item-3" fxFlex="20%" fxFlexOrder="3"></div>
+  <div class="item item-4" fxFlex="40%" fxFlexOrder="4"></div><br>
+</div>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="20%" fxFlexOrder="1"><span i18n="@@fullTimeSpan">Laufzeit</span>:</div>
+  <div class="item item-2" fxFlex="20%" fxFlexOrder="2">{{auftrag.datum}}</div>
+  <div class="item item-3" fxFlex="20%" fxFlexOrder="3"></div>
+  <div class="item item-4" fxFlex="40%" fxFlexOrder="4"></div><br>
+</div>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="20%" fxFlexOrder="1"><span i18n="@@gebietsverFach">Gebietsver/Fach</span>1:</div>
+  <div class="item item-2" fxFlex="20%" fxFlexOrder="2">{{auftrag.gebvertr}}</div>
+  <div class="item item-3" fxFlex="20%" fxFlexOrder="3"></div>
+  <div class="item item-4" fxFlex="40%" fxFlexOrder="4"></div><br>
+</div>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="20%" fxFlexOrder="1"><span i18n="@@files">Dateien</span>:</div>
+  <div class="item item-1" fxFlex="40%" fxFlexOrder="2">
+    <span i18n="@@client">Kunde</span>
+    <ul style="padding-left:0px !Important" *ngFor="let fkundedat of farosdateien">
+<p><span style="text-decoration: underline;cursor:pointer" (click)="openMedia(fkundedat.dataname,'kunde')">{{fkundedat.dataname}}</span></p>
+</ul>
+</div>
+<div class="item item-1" fxFlex="40%" fxFlexOrder="2">
+  <span i18n="@@order">Auftrag</span>
+    <ul style="padding-left:0px !Important" *ngFor="let fauftragdat of farosAuftragdateien">
+  <p><span style="text-decoration: underline;cursor:pointer" (click)="openMedia(fauftragdat.dataname,'auftrag')">{{fauftragdat.dataname}}</span></p>
+</ul>
+</div>
+<br>
+</div>
+<br>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="20%" fxFlexOrder="1"><span i18n="@@priceTotal">Preis Gesamtauftrag</span>:</div>
+  <div class="item item-1" fxFlex="80%" fxFlexOrder="2">
+
+    <!--<app-material-table [title]="'Rekap-Tarife'" [showHeader]="false" [showFooter]="false" [showSumme]="true" [json]="rekapJsonData"-->
+    <!--  [columns]="rekapTarifeCols" [numberOfRows]="5" [numberOfRowsSelectable]="numberOfRowsSelectable" [rowSelect]="'single'"-->
+    <!--  [selectStyle]="'background'" [style]="'formular'" (onRowSelect)="selectrowposrek($event)"></app-material-table>-->
+    
+          <div class="example-container mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource">
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="posbez">
+              <mat-header-cell *matHeaderCellDef i18n="@@position">Position </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.posbez}} </mat-cell>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="netto">
+              <mat-header-cell *matHeaderCellDef i18n="@@amountNet">Betrag Netto </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.netto | number : '1.2-2'}} </mat-cell>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="nettoNetto">
+              <mat-header-cell *matHeaderCellDef i18n="@@amountNetNet">Betrag Netto Netto </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.nettoNetto  | number : '1.2-2'}} </mat-cell>
+            </ng-container>
+
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+      </div>
+      <div class="example-container mat-elevation-z8">
+          <mat-table #table [dataSource]="posrekabtotal">
+
+              <ng-container matColumnDef="posbez">
+                  <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> </mat-cell>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="nettoNettototal">
+                    <mat-header-cell *matHeaderCellDef><span i18n="@@totalNet">Total Netto Netto</span>: </mat-header-cell>
+                  <mat-cell *matCellDef="let element">{{element.nettoNettototal  | number : '1.2-2'}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="nettototal">
+                    <mat-header-cell *matHeaderCellDef><span i18n="@@totalNetNet">Total Netto</span>: </mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.nettototal  | number : '1.2-2'}} </mat-cell>
+                  </ng-container>
+                  <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns1;"></mat-row>
+            </mat-table>
+          </div>
+
+  </div>
+  <br>
+   <!--<ul style="padding-left:0px !Important" *ngFor="let fkundedat of farosdateien">-->
+   <!--     <a href="{{fkundedat.dataurl}}" (click)="opendok(fkundedat.dataurl)">{{fkundedat.dataname}}</a>-->
+   <!-- </ul>-->
+</div>
+<br>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="20%" fxFlexOrder="1"><span i18n="@@appearance">Erscheinungen</span>:</div>
+  <div class="item item-1" fxFlex="80%" fxFlexOrder="2">
+
+    <!--<app-material-table [title]="'Erscheinungen'" [showHeader]="false" [showFooter]="true" [showSumme]="true" [json]="erschJsonData" -->
+    <!--  [columns]="erscheinungenCols" [numberOfRows]="5" [numberOfRowsSelectable]="numberOfRowsSelectable" [rowSelect]="'single'"-->
+    <!--  [selectStyle]="'background'"  [style]="'formular'" (onRowSelect)="selectrowersch($event)"></app-material-table>-->
+
+   <div class="example-container mat-elevation-z8">
+          <mat-table #table [dataSource]="erscheiungensource">
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="erscheinung">
+                  <mat-header-cell *matHeaderCellDef i18n="@@appearance">Erscheinung</mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.erscheinung | date: 'dd.MM.yyyy'}} </mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="rubrik">
+                  <mat-header-cell *matHeaderCellDef i18n="@@rubric">Rubrik</mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.rubrik }} </mat-cell>
+                </ng-container>
+
+                <!-- Weight Column    | number : '1.2-2'-->
+                <ng-container matColumnDef="urubrik">
+                  <mat-header-cell *matHeaderCellDef i18n="typo? @@urubric">Urubrik</mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.urubrik}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="poskey">
+                    <mat-header-cell *matHeaderCellDef i18n="@@position">Position</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.poskey}} </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="preisman">
+                      <mat-header-cell *matHeaderCellDef i18n="@@price">Preis</mat-header-cell>
+                      <mat-cell *matCellDef="let element"> {{element.preisman | number : '1.2-2'}} </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="betrexkl">
+                        <mat-header-cell *matHeaderCellDef i18n="@@totalNetSlashNetA">Total</mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.betrexkl | number : '1.2-2'}} </mat-cell>
+                      </ng-container>
+
+                      <ng-container matColumnDef="komjupsatz">
+                          <mat-header-cell *matHeaderCellDef i18n="@@com1">Kom1</mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.komjupsatz | number : '1.2-2'}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="komsatz2">
+                            <mat-header-cell *matHeaderCellDef i18n="@@com2">Kom2</mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.komsatz2 | number : '1.2-2'}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="komsatz3">
+                              <mat-header-cell *matHeaderCellDef i18n="@@com3">Kom3</mat-header-cell>
+                              <mat-cell *matCellDef="let element"> {{element.komsatz3 | number : '1.2-2'}} </mat-cell>
+                            </ng-container>
+                          <ng-container matColumnDef="mengeinheit">
+                            <mat-header-cell *matHeaderCellDef i18n="@@unitOfQuantity">Mengeneinheit</mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.mengeinheit}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="menge1">
+                              <mat-header-cell *matHeaderCellDef i18n="@@quantity1">Menge1</mat-header-cell>
+                              <mat-cell *matCellDef="let element"> {{element.menge1}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="menge2">
+                                <mat-header-cell *matHeaderCellDef i18n="@@quantity2">Menge2</mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.menge2}} </mat-cell>
+                              </ng-container>
+
+                              <ng-container matColumnDef="anzahl">
+                                  <mat-header-cell *matHeaderCellDef i18n="@@nrOfEditionsA">Anzahl</mat-header-cell>
+                                  <mat-cell *matCellDef="let element"> {{element.anzahl}} </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="farbtext">
+                                    <mat-header-cell *matHeaderCellDef i18n="@@color">Farbe</mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.farbtext}} </mat-cell>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="plaztext">
+                                      <mat-header-cell *matHeaderCellDef i18n="@@placement">Platzierung</mat-header-cell>
+                                      <mat-cell *matCellDef="let element"> {{element.plaztext}} </mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="faknr">
+                                        <mat-header-cell *matHeaderCellDef i18n="@@bill">Rechnung</mat-header-cell>
+                                        <mat-cell *matCellDef="let element" style="cursor:pointer" (click)="selectrowersch(element.faknr)"> {{element.faknr}} </mat-cell>
+                                      </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns2;"></mat-row>
+              </mat-table>
+          </div>
+          <div class="example-container mat-elevation-z8">
+              <mat-table #table [dataSource]="erscheinungentotal">
+
+                  <ng-container matColumnDef="erscheinung">
+                      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                      <mat-cell *matCellDef="let element"></mat-cell>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="rubrik">
+                      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                      <mat-cell *matCellDef="let element"></mat-cell>
+                    </ng-container>
+
+                    <!-- Weight Column    | number : '1.2-2'-->
+                    <ng-container matColumnDef="urubrik">
+                      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                      <mat-cell *matCellDef="let element"></mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="poskey">
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                        <mat-cell *matCellDef="let element"></mat-cell>
+                      </ng-container>
+
+                      <ng-container matColumnDef="preisman">
+                          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                          <mat-cell *matCellDef="let element"></mat-cell>
+                        </ng-container>
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="totaltotalsumme">
+                        <mat-header-cell *matHeaderCellDef><span i18n="@@totalNetSlashNetA">Total</span>: </mat-header-cell>
+                      <mat-cell *matCellDef="let element">{{element.totaltotalsumme  | number : '1.2-2'}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="komjupsatz">
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                        <mat-cell *matCellDef="let element"></mat-cell>
+                      </ng-container>
+
+                      <ng-container matColumnDef="komsatz2">
+                          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                          <mat-cell *matCellDef="let element"></mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="komsatz3">
+                            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                            <mat-cell *matCellDef="let element"></mat-cell>
+                          </ng-container>
+                        <ng-container matColumnDef="mengeinheit">
+                          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                          <mat-cell *matCellDef="let element"></mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="menge1">
+                            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                            <mat-cell *matCellDef="let element"></mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="menge2">
+                              <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                              <mat-cell *matCellDef="let element"></mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="anzahl">
+                                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                                <mat-cell *matCellDef="let element"> </mat-cell>
+                              </ng-container>
+
+                              <ng-container matColumnDef="farbtext">
+                                  <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                                  <mat-cell *matCellDef="let element">  </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="plaztext">
+                                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> </mat-cell>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="faknr">
+                                      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                                      <mat-cell *matCellDef="let element">  </mat-cell>
+                                    </ng-container>
+
+                      <mat-header-row *matHeaderRowDef="displayedColumns3"></mat-header-row>
+                      <mat-row *matRowDef="let row; columns: displayedColumns3;"></mat-row>
+                </mat-table>
+              </div>
+  
+  </div>
+  <br>
+</div>
+<!--<pre>{{tempbase64pdf}}</pre>-->
+</div>
+
+
+
+   
+
+

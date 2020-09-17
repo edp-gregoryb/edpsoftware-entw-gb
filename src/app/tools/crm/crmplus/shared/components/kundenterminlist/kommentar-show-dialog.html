@@ -1,0 +1,15 @@
+<mat-toolbar>
+  <span i18n="@@appointmentDetail">Termindetail</span>
+   <span style="flex: 1 1 auto;"></span>
+  <span>{{data.row.rapnr}}</span>
+</mat-toolbar>
+<div mat-dialog-content>
+  <p i18n="@@promptComment">Kommentar eingeben</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.memotext">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" i18n="@@interrupt">Abbrechen</button>
+  <button mat-button [mat-dialog-close]="data.memotext" cdkFocusInitial i18n="@@ok">Ok</button>
+</div>

@@ -1,0 +1,19 @@
+<div>
+   <mat-form-field class="example-full-width">
+   <input type="text"  matInput [formControl]="formctrl" placeholder="Art" i18n-placeholder="@@artPlaceholder" [(ngModel)]="artvalue" (ngModelChange)="Artchange($event)" [matAutocomplete]="auto">
+   
+   <button mat-button *ngIf="artvalue" matSuffix mat-icon-button aria-label="Clear" (click)="artdelete(artvalue='')" >
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>
+
+<mat-autocomplete #auto="matAutocomplete">
+   <mat-option *ngFor="let art of arts" [value]="art.aufart_bezeichnung" (click)="additemforsearch(art)">
+      {{ art.aufart_bezeichnung}}
+   </mat-option>
+</mat-autocomplete>
+</div>
+
+
+
+

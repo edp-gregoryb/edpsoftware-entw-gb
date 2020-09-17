@@ -1,0 +1,24 @@
+<!-- i 18 n noch nicht eingebaut -->
+
+<div style="width: 300px;">
+    <!-- Schliess-Button -->
+    <button mat-button style="float: right" mat-dialog-close>X</button>
+
+    <!-- Hilfstexte -->
+    <div style="width: 100%;">
+        <!-- Hilfstext 0 -->
+        <div *ngIf="data.helpindex === 0">
+            <h3>Hilftext 0</h3>
+            <p>
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
+                sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </p>
+        </div>
+
+        <!-- Hilfstext 1 -->
+        <div *ngIf="data.helpindex === 1">
+            Hilftext 1
+        </div>
+    </div>
+</div>

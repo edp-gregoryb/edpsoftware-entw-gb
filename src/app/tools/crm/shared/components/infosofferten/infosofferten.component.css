@@ -1,0 +1,29 @@
+
+::ng-deep .mat-tab-label {
+       
+    min-width: 1px  !important;
+}
+
+mat-list {
+    overflow: scroll;
+/* min-height: 750px; */
+overflow-x: hidden;
+/* height: 750px; */
+margin-right: 20px;
+}
+
+::-webkit-scrollbar {
+display: none;
+}
+mat-list-item {
+
+    margin-bottom: 10px;
+    background-color: #bbbbbb;    
+}
+
+textarea {
+	    border-style: none;
+	    border-color: Transparent;
+	    overflow: auto;
+	    outline: none;
+	  }

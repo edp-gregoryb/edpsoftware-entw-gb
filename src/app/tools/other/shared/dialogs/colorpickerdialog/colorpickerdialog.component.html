@@ -1,0 +1,38 @@
+
+<!-- Content -->
+<div mat-dialog-content>
+    <!-- 'Header' -->
+    <div class="summary-info">
+        <div class="info">
+            <!-- Header-text -->
+            <div class="style" style="float: left;" i18n>Hintergrund-Farbe: </div>
+            <!-- Momentan ausgewaehlte farbe in hex und farbe selber -->
+            <div class="style-value" style="float: right">{{ color }}</div>
+            <div class="clear"></div>
+            <div class="circle" [ngStyle]="{'background': color}"></div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    
+    <!-- farb-auswahl -->
+    <div class="opened">
+        <!-- vorlage-farben -->
+        <div class="colors">
+            <div (click)="changeColor(paint)" *ngFor="let paint of defaultColors" class="circle" [ngStyle]="{'background': paint}"></div>
+            <div class="clear"></div>
+        </div>
+        <!-- manueller input -->
+        <div class="hex-code">
+            <p i18n>Hex Code</p>
+            <div class="g-input">
+                <input type="text" maxlength="7" [value]="color" (keyup)="changeColorManual(paintInput.value)" #paintInput/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Actions/Buttons -->
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close="" i18n>Abbrechen</button>
+  <button mat-button [mat-dialog-close]="color" cdkFocusInitial i18n>Annehmen</button>
+</div>

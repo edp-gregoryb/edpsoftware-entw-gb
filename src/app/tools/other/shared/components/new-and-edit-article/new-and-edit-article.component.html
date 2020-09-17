@@ -1,0 +1,166 @@
+<mat-drawer-container style="background-color: #DDD;" autosize (window:resize)="windowResize()">
+    <!-- Drawer -->
+    <mat-drawer #drawer class="sidenavContainer" mode="side">
+        <div style="float: right; padding-left: 5px; padding-right: 5px;">
+            <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+        </div>
+        <!-- Sidenav -->
+        <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+    </mat-drawer>
+
+    <!-- Header -->
+    <app-defaultheader [currentAppModule]="currentAppModule" [modulename]="modulename" (onSidenavToggle)="drawer.toggle()" #header></app-defaultheader>
+
+    <!-- Lade-Balken -->
+    <mat-progress-bar *ngIf="httpRequestsLoading > 0" mode="indeterminate" color="warn"></mat-progress-bar>
+
+    <!-- Header -->
+    <app-header [headerTitle]="headerTitle" [linkBack]="headerLinkBack" [queryparam]="queryparam"></app-header>
+
+    <!--<mat-icon (click)="showHelp()" style="cursor: pointer">help_outline</mat-icon>-->
+
+    <!-- Content -->
+    <div class="wrapper" *ngIf="article" [ngStyle]="{'height.px': innerheight}" style="overflow: scroll;">
+        <div class="smallWrapper">
+            <form #newArticleForm="ngForm">
+
+                <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+                    <!-- Objekt -->
+                    <mat-form-field fxFlex>
+                        <input matInput type="text" placeholder="Objekt" i18n-placeholder [value]="article.objekt" disabled required>
+                    </mat-form-field>
+                    <mat-icon *ngIf="article && newArticle === false" style="margin-left: 10px; cursor: pointer" routerLink="/workflow/workflow-show/articleInfo/{{article.objekt}}/{{article.aschlussel}}/{{article.objektartikel}}">info_outline</mat-icon>
+                    <br>
+
+                    <!-- Ausgabe -->
+                    <mat-form-field fxFlex>
+                        <input matInput type="text" placeholder="Ausgabe" i18n-placeholder [value]="article.aschlussel" disabled required>
+                    </mat-form-field>
+                    <br>
+                    <!-- Workflow-Typ -->
+                    <mat-form-field *ngIf="newArticle" fxFlex>
+                        <mat-select placeholder="Workflow-Typ" i18n-placeholder name="workflowType" [(ngModel)]="article.prozessid" (selectionChange)="articleTypeChanged()" required>
+                            <mat-option *ngFor="let workflow of allWorkflows" [value]="workflow.prozessid">{{workflow.bez}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field *ngIf="!newArticle" fxFlex>
+                        <input matInput type="text" placeholder="Workflow-Typ" i18n-placeholder name="workflowTypeLocked" [(ngModel)]="article.bez" disabled required>
+                    </mat-form-field>
+                    <br>
+
+
+
+
+                </div>
+                <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+                    <!-- Startdatum -->
+<!--                    <mat-form-field style="margin-bottom: 10px;" fxFlex>-->
+<!--                        <input matInput [matDatepicker]="picker" name="startdate" placeholder="Startdatum" i18n-placeholder [(ngModel)]="startDateBuffer">-->
+<!--                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>-->
+<!--                        <mat-datepicker #picker></mat-datepicker>-->
+<!--                    </mat-form-field>-->
+<!--                    <br>-->
+
+<!--                    &lt;!&ndash; Enddatum &ndash;&gt;-->
+<!--                    <mat-form-field style="margin-bottom: 10px;" fxFlex>-->
+<!--                        <input matInput [matDatepicker]="endPicker" name="enddate" placeholder="Enddatum" i18n-placeholder [(ngModel)]="endDateBuffer">-->
+<!--                        <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>-->
+<!--                        <mat-datepicker #endPicker></mat-datepicker>-->
+<!--                    </mat-form-field>-->
+<!--                    <br>-->
+
+                    <!-- Objektartikel -->
+                    <mat-form-field fxFlex>
+                        <input matInput type="text" name="objectarticle" placeholder="Titel" i18n-placeholder [disabled]="!newArticle" [(ngModel)]="article.objektartikel" pattern="^[a-zA-ZäöüÄÖÜéàèÉÀÈç,î!?0-9_-\s]*" required>
+                    </mat-form-field>
+                    <br>
+
+                    <!-- Autoren -->
+<!--                    <div *ngIf="!newArticle" fxFlex>-->
+<!--                        <mat-form-field style="width: 100%" >-->
+<!--                            <input matInput  type="text" placeholder="Autoren" i18n-placeholder name="autoren" [matAutocomplete]="auto" [formControl]="autorCtrl">-->
+<!--                            <mat-autocomplete #auto="matAutocomplete">-->
+<!--                                <mat-option>Autor auswahl!</mat-option>-->
+<!--                                <mat-option *ngFor="let autor of filteredAutoren | async" [value]="autor.vname + ' ' + autor.fname" (onSelectionChange)="submitAutor(autor.beznr)">-->
+<!--                                    {{autor.vname}} {{autor.fname}}-->
+<!--                                </mat-option>-->
+<!--                            </mat-autocomplete>-->
+<!--                        </mat-form-field>-->
+<!--                    </div>-->
+
+                </div>
+                <div class="container" fxLayout="column" fxLayout.xs="column" fxLayoutAlign="right" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+                    <div *ngIf="!newArticle" fxFlex>
+                        <mat-form-field style="width: 100%" >
+<!--                            <input matInput  type="text" placeholder="Autoren" i18n-placeholder name="autoren" [matAutocomplete]="auto" [formControl]="autorCtrl">-->
+<!--                            <mat-autocomplete #auto="matAutocomplete" >-->
+<!--&lt;!&ndash;                                <mat-option>Autorenauswahl!</mat-option>&ndash;&gt;-->
+<!--                                <mat-option *ngFor="let autor of filteredAutoren | async" [value]="autor.vname + ' ' + autor.fname" (onSelectionChange)="submitAutor(autor.beznr)">-->
+<!--                                    {{autor.vname}} {{autor.fname}}-->
+<!--                                </mat-option>-->
+<!--                            </mat-autocomplete>-->
+                            <mat-label>Autoren</mat-label>
+                            <mat-select  name="autor">
+                                <mat-option *ngFor="let autor of autorenAuswahl" [value]="autor.vname + ' ' + autor.fname" (onSelectionChange)="submitAutor(autor.beznr)" >
+                                {{autor.vname}} {{autor.fname}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+
+                    <div *ngFor="let autor of tempAutoren; let i = index" style="width: 400px;">
+                        <span style="float: left;">Autor: {{autor.vname}} {{autor.fname}}</span>
+                        <mat-icon style="float: right; cursor: pointer" (click)="deleteAutor(i)">delete</mat-icon>
+                        <br><br>
+                        <div class="clear"></div>
+                    </div>
+
+                </div>
+
+                    <div *ngIf="!newArticle">
+                        <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+                            <!-- titel -->
+                            <mat-form-field fxFlex>
+                                <input matInput type="text" name="artikeltitel" placeholder="Artikeltitel" i18n-placeholder  [(ngModel)]="article.titel"  >
+                            </mat-form-field>
+                        </div>
+                        <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+                        <!-- untertitel -->
+                        <mat-form-field fxFlex>
+                            <input matInput type="text" name="untertitel" placeholder="Untertitel" i18n-placeholder  [(ngModel)]="article.untertitel" >
+                        </mat-form-field>
+                        </div>
+                        <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+                            <!-- seitenzahl -->
+                            <mat-form-field fxFlex>
+                                <input matInput type="text" name="seitenzahl" placeholder="Seitenzahl" i18n-placeholder  [(ngModel)]="article.seitenzahl" >
+                            </mat-form-field>
+                        <!-- permalinkid -->
+                        <mat-form-field fxFlex>
+                            <input matInput type="text" name="permalinkid" placeholder="PermalinkID" i18n-placeholder (click)="pidVorschlag()" (keydown.tab)="pidVorschlag()" [(ngModel)]="article.permalinkid" >
+                        </mat-form-field>
+
+
+                        <!-- doi_nummer -->
+                        <mat-form-field fxFlex>
+                            <input matInput type="text" name="doi_nummer" placeholder="DOI-Nummer" i18n-placeholder  [(ngModel)]="article.doi_nummer" >
+                        </mat-form-field>
+                        </div>
+                    </div>
+
+
+                <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+                <!-- Artikel Speichern -->
+                    <div fxFlex>
+                        <div style="float: right;">
+                            <button  mat-button type="button" *ngIf="!newArticle" (click)="deleteArticle()" i18n>Artikel löschen</button>
+                            <button   mat-raised-button color="warn" type="button" [disabled]="newArticleForm.invalid" (click)="saveArticle()" i18n>Artikel speichern</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</mat-drawer-container>

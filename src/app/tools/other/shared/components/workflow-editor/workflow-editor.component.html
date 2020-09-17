@@ -1,0 +1,114 @@
+<mat-drawer-container style="background-color: #DDD;" autosize (window:resize)="windowResize()">
+    <!-- Drawer -->
+    <mat-drawer #drawer class="sidenavContainer" mode="side">
+        <div style="float: right; padding-left: 5px; padding-right: 5px;">
+            <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+        </div>
+        <!-- Sidenav -->
+        <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+    </mat-drawer>
+
+    <!-- Header -->
+    <app-defaultheader [currentAppModule]="currentAppModule" [modulename]="modulename" (onSidenavToggle)="drawer.toggle()" #header></app-defaultheader>
+
+    <!-- Lade-Balken -->
+    <mat-progress-bar *ngIf="httpRequestsLoading > 0" mode="indeterminate" color="warn"></mat-progress-bar>
+
+    <!-- Header -->
+    <app-header [headerTitle]="headerTitle" [linkBack]="headerLinkBack"></app-header>
+
+    <!-- Content -->
+    <div class="wrapper" [ngStyle]="{'height.px': innerheight}" style="overflow: scroll;">
+        <div class="smallWrapper">
+            <!-- Neuen Workflow -->
+            <button *ngIf="!workflowVorhanden" mat-button class="button" (click)="newWorkflow()" i18n>Workflow erstellen/bearbeiten</button>
+
+            <!-- Workflow speichern oder verwerfen -->
+            <form *ngIf="workflowVorhanden" #newWorkflowForm="ngForm">
+                <!-- Titel -->
+                <mat-form-field>
+                    <input matInput type="text" name="titel" placeholder="Titel" i18n-placeholder [(ngModel)]="workflow.bez" style="cursor: text;" required>
+                </mat-form-field>
+
+                <!-- Speichern -->
+                <button mat-button class="button" style="margin-left: 20px;" [disabled]="newWorkflowForm.invalid || (titleAlreadyUsed() && editWorkflow === false)" (click)="saveWorkflow()" i18n>Workflow speichern</button>
+                <!-- Verwerfen -->
+                <button mat-button class="button" style="margin-left: 20px;" (click)="cancleWorkflow()" i18n>Workflow verwerfen</button>
+                <!-- Loeschen -->
+                <button *ngIf="editWorkflow" mat-button class="button" style="margin-left: 20px; border: solid red 1px; background-color: rgba(255, 127, 0, 0.5)" (click)="deleteWorkflow()" i18n>Workflow löschen</button>
+            </form>
+
+            <!-- Workflow an sich -->
+            <div class="scrollContainer">
+                <div *ngIf="workflowVorhanden" [ngStyle]="{'width.px': minwidth}">
+                    <!-- cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="onDropStep($event)" -->
+                    <!-- Alle steps -->
+                    <div *ngFor="let step of steps; let i = index" class="step">
+                        <!-- cdkDrag -->
+                        <!-- Platzhalter / Leer -->
+                        <div *ngIf="step === undefined">
+                            <mat-icon class="move editButton" (click)="stepMove(i, -1)">arrow_left</mat-icon>
+                            <mat-icon class="move editButton" (click)="stepMove(i, 1)">arrow_right</mat-icon>
+                            <span (click)="deleteStep(i)" style="color: red; cursor: pointer" class="editButton">X</span>
+                        </div>
+
+                        <!-- Ein Step -->
+                        <div *ngIf="step !== undefined">
+                            <!-- cdkDropList (cdkDropListDropped)="onDropTask($event, i)" -->
+                            <div style="border-bottom: solid black 1px;">
+                                <input matInput style="width: 200px; float: left; text-align: left" [(ngModel)]="step.bez" value="{{step.bez}}">
+                                <div style="float: right; white-space: nowrap">
+                                    <mat-icon class="move editButton" (click)="stepMove(i, -1)">arrow_left</mat-icon>
+                                    <mat-icon class="move editButton" (click)="stepMove(i, 1)">arrow_right</mat-icon>
+                                    <span (click)="deleteStep(i)" style="color: red; cursor: pointer" class="editButton">X</span>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+
+                            <!-- Tasks eines Steps -->
+                            <div *ngFor="let task of tasks[i]; let j = index" class="task">
+                                <!-- cdkDrag -->
+                                <input matInput style="float: left; width: 200px" [(ngModel)]="task.bez" value="{{task.bez}}">
+                                <div style="float: right; white-space: nowrap;">
+                                    <mat-icon class="move editButton" (click)="taskMove(i, j, 1)">arrow_drop_down</mat-icon>
+                                    <mat-icon class="move editButton" (click)="taskMove(i, j, -1)">arrow_drop_up</mat-icon>
+                                    <span (click)="deleteTask(i, j)" style="color: red; cursor: pointer" class="editButton">X</span>
+                                </div>
+                                <div class="clear" style="padding-bottom: 5px;"></div>
+                                <!-- Todos eines Tasks -->
+                                <div>
+                                    <!-- cdkDropList (cdkDropListDropped)="onDropTodo($event, i, j)" -->
+                                    <div *ngFor="let todo of todos[i][j]; let p = index" class="todo">
+                                        <!-- cdkDrag -->
+                                        <span style="float: left">- </span><input matInput style="float: left; width: 180px;" [(ngModel)]="todo.bez" value="{{todo.bez}}">
+                                        <div style="float: right; white-space: nowrap;">
+                                            <mat-icon class="move editButton" (click)="todoMove(i, j, p, 1)">arrow_drop_down</mat-icon>
+                                            <mat-icon class="move editButton" (click)="todoMove(i, j, p, -1)">arrow_drop_up</mat-icon>
+                                            <span (click)="deleteTodo(i, j, p)" style="color: red; cursor: pointer" class="editButton">X</span>
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                                <!-- Neues Todo -->
+                                <div class="todo">
+                                    <button mat-button class="button" (click)="addTodo({ bez: 'Todo'}, i, j)" i18n>Todo +</button>
+                                </div>
+                            </div>
+                            <!-- Neuer Task -->
+                            <div class="task">
+                                <button mat-button class="button" (click)="addTask({ bez: 'Task'}, i)" i18n>Task +</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Neuer Step -->
+                    <div class="step">
+                        <button mat-button class="button" (click)="addStep({ bez: 'Schritt'})" style="margin-right: 5px;" i18n>Schritt +</button>
+                        <button mat-button class="button" (click)="addEmpty()" i18n>Leer +</button>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-drawer-container>

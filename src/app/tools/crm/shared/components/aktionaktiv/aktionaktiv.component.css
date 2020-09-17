@@ -1,0 +1,10 @@
+.angezeigt {
+    /*background-color:#00e500;*/
+    
+    animation: pulse .5s infinite;
+
+}
+
+@keyframes pulse { 
+  50% { background-color: #ffa366; }
+}

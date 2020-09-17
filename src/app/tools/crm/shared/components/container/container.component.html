@@ -1,0 +1,23 @@
+<!--<div   class="header" *ngIf="currentSectionName!=null">
+    <h2 style="float: right; margin-right: 40px;">{{currentSectionName}}</h2>
+</div>-->
+<div id="containerlist"  >
+<ul class="searchul">
+    <li *ngIf="kundenshow" class="search">
+        <button style="width: 100%" mat-icon-button color="primary" (click)="addTermin()"><mat-icon style="color: black">add</mat-icon></button>
+    </li>
+    <div *ngFor="let section of sections; let i = index" [id]="i" >
+        <li  (click)="onclick( $event, 'onSubmit',section,'',i)" class="search" [ngClass]="{'angezeigt': section.isAngezeigt}">
+            <sectioncontainer [content]="section" [scroll]="scroll" (sectionPosition)="sectionPosition($event)"></sectioncontainer>
+        </li>
+        <div *ngIf="sections[i+1] !== undefined">
+            <li *ngIf="sections[i].termdatum !== sections[i+1].termdatum" class="date">
+                {{section.termdatum}}, {{anzTermine(i)}} <span *ngIf="anzTermine(i) === 1">Termin</span><span *ngIf="anzTermine(i) !== 1">Termine</span>
+            </li>
+        </div>
+        <li *ngIf="sections[i+1] === undefined" class="date">
+            {{section.termdatum}}, {{anzTermine(i)}} <span *ngIf="anzTermine(i) === 1">Termin</span><span *ngIf="anzTermine(i) !== 1">Termine</span>
+        </li>
+    </div>
+</ul>
+</div>

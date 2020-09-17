@@ -1,0 +1,56 @@
+<!--<button mat-icon-button mat-dialog-close  style="float:right"><mat-icon>clear</mat-icon></button>-->
+<div><h1><span i18n="@@agencySelection">Agentur Auswahl</span>:</h1>
+</div>
+     
+  
+          <mat-form-field class="input-full-width">
+           <input type="text" matInput [formControl]="myControl" placeholder="Agenturname" i18n-placeholder="@@agencyNamePlaceholder"(keyup)="getAgenturInput(myControl.value)"  [matAutocomplete]="auto">
+          </mat-form-field>
+
+          <mat-autocomplete #auto="matAutocomplete">
+           <mat-option *ngFor="let agentur of agenturdata" [value]="agentur.anzeigename" (click)="neueAgentur(agentur)">
+            {{ agentur.anzeigename }}
+           </mat-option>
+          </mat-autocomplete>
+   
+    <!-- <br>     -->
+    <!-- <label class="sizelabel">Beznr:</label><span *ngIf="!agentureditieren"  ng-if="termine.agenturbeznr" >{{termine.agenturbeznr}}</span>-->
+    <!-- <span *ngIf="agentureditieren" >{{bznragentur}}</span><br>-->
+    <!-- <label class="sizelabel">Name:</label><div *ngIf="!agentureditieren"><span  ng-if="termine.anrede">{{termine.agenturanrede}}</span> <span  ng-if="termine.vname" >{{termine.agenturvorname}}</span> <span  ng-if="termine.fname" >{{termine.agenturname}}</span></div>-->
+    <!-- <span *ngIf="agentureditieren">{{fnameagentur}}<br></span>-->
+
+    <!-- <label  class="sizelabel">Zusatz1:</label><span *ngIf="!agentureditieren" style="width:70%" ng-if="termine.zusatz1">{{termine.agenturzusatz1}}</span>-->
+    <!-- <span *ngIf="agentureditieren" >{{zusatz1}}</span><br>-->
+           
+    <!-- <label class="sizelabel">Zusatz2:</label><span *ngIf="!agentureditieren" style="width:70%" ng-if="termine.zusatz2">{{termine.agenturzusatz2}}</span>-->
+    <!-- <span *ngIf="agentureditieren">{{zusatz2}}</span><br>-->
+     
+    <!--<label class="sizelabel">Firma:</label><span *ngIf="!agentureditieren" style="width:70%" ng-if="termine.agenturfnamefirma">{{termine.agenturfnamefirma}}</span>-->
+    <!--<span *ngIf="agentureditieren">{{fnamefirma}}</span><br>-->
+     
+    <!-- <label class="sizelabel">Firmazusatz1:</label><span *ngIf="!agentureditieren" style="width:70%" ng-if="termine.agenturzusatz1firma">{{termine.agenturzusatz1firma}}</span>-->
+    <!-- <span *ngIf="agentureditieren">{{zusatz1firma}}</span><br>-->
+     
+    <!-- <label  class="sizelabel">Firmazusatz2:</label><span *ngIf="!agentureditieren" style="width:70%" ng-if="termine.agenturzusatz2firma">{{termine.agenturzusatz2firma}}</span>-->
+    <!-- <span *ngIf="agentureditieren">{{zusatz2firma}}</span><br>-->
+    <!-- <table width="100%">-->
+    <!-- <tr >-->
+    <!--             <td width="20%"><label style="margin-left:-2px" class="sizelabel">Strasse:</label></td>-->
+    <!--             <td><span *ngIf="!agentureditieren" style="margin-left:-2px" >{{termine.agenturstrasse}}</span>-->
+    <!--            <span style="margin-left:-2px" *ngIf="agentureditieren" >{{strasseagentur}}</span>-->
+    <!--             </td>-->
+    <!--             <td>-->
+    <!--             </td>-->
+    <!--         </tr>-->
+    <!--          <tr >-->
+    <!--             <td width="20%"><label style="margin-left:-2px" class="sizelabel">Ort:</label></td>-->
+    <!--              <td>-->
+    <!--             <span *ngIf="!agentureditieren" style="margin-left:-2px">{{termine.agenturort}} </span> -->
+    <!--            <span  *ngIf="agentureditieren">{{agenturort}}</span>-->
+    <!--            </td>-->
+    <!--          </tr>-->
+    <!--    </table>-->
+
+       <button style="float:right" color="primary" mat-dialog-close mat-fab  (click)="agenturUebernehmen()"><mat-icon>check</mat-icon></button>
+
+         

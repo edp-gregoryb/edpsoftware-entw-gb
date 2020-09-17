@@ -1,0 +1,102 @@
+
+<form fxLayout="column" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+<div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+
+
+  <mat-form-field class="size100" fxFlex>
+    <input matInput formControlName="beznr" [readonly]="true" placeholder="Mitarbeiter-Nummer">
+  </mat-form-field>
+
+
+    <mat-form-field class="size100" fxFlex>
+      <input matInput formControlName="beznrfirma" [readonly]="true" placeholder="Firma-Nummer">
+    </mat-form-field>
+
+</div>
+
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+  <mat-form-field class="size100" fxFlex>
+    <mat-label>Anrede</mat-label>
+    <mat-select formControlName="anrkey">
+      <mat-option value="02">Frau</mat-option>
+      <mat-option value="01">Herr</mat-option>
+    </mat-select>
+  </mat-form-field>
+  </div>
+
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+  <mat-form-field class="size100" fxFlex>
+    <input id="vname" matInput formControlName="vname" placeholder="Vorname" required>
+  </mat-form-field>
+
+  <mat-form-field class="size100" fxFlex>
+    <input matInput formControlName="fname" placeholder="Nachname" required>
+  </mat-form-field>
+  </div>
+
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+    <mat-form-field class="example-full-width" fxFlex>
+      <input matInput formControlName="gname" placeholder="Zusatz 1">
+    </mat-form-field>
+  <mat-form-field class="example-full-width" fxFlex>
+    <input matInput formControlName="gname2" placeholder="Zusatz 2">
+  </mat-form-field>
+  </div>
+
+  <!--<div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+    <!--<mat-form-field class="example-full-width" fxFlex>-->
+      <!--<input matInput formControlName="plz" placeholder="PLZ">-->
+    <!--</mat-form-field>-->
+    <!--<mat-form-field class="example-full-width" fxFlex>-->
+      <!--<input matInput formControlName="ort" placeholder="Ort">-->
+    <!--</mat-form-field>-->
+  <!--</div>-->
+
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+  <mat-form-field class="example-full-width" fxFlex>
+    <input matInput formControlName="telge" placeholder="Telefon" required>
+  </mat-form-field>
+
+
+  <mat-form-field class="example-full-width" fxFlex>
+    <input matInput formControlName="telgedi" placeholder="Telefon-Geschäft">
+  </mat-form-field>
+  </div>
+
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+  <mat-form-field class="example-full-width" fxFlex>
+    <input matInput formControlName="natel" placeholder="Mobile">
+  </mat-form-field>
+
+
+  <mat-form-field class="example-full-width" fxFlex>
+    <input matInput formControlName="telpriv" placeholder="Telefon-privat">
+  </mat-form-field>
+  </div>
+
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+  <mat-form-field class="example-full-width" fxFlex>
+    <input matInput formControlName="email" placeholder="Email" required>
+  </mat-form-field>
+
+
+  <mat-form-field class="example-full-width" fxFlex>
+    <input matInput formControlName="email2" placeholder="Email2">
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width" fxFlex>
+    <input matInput formControlName="email3" placeholder="Email3">
+  </mat-form-field>
+  </div>
+
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+  <mat-form-field class="example-full-width" fxFlex>
+    <input matInput formControlName="web" placeholder="Webseite">
+  </mat-form-field>
+
+</div>
+  <!--<div class="container" fxLayout="row" fxLayout.xs="row" fxLayoutAlign="right" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+  <button  mat-raised-button color="primary" [disabled]="!registerForm.valid"  (click)="updateZustandiger()">Speichern</button>
+  <!--</div>-->
+<!--  [mat-dialog-close]=""-->
+  </form>

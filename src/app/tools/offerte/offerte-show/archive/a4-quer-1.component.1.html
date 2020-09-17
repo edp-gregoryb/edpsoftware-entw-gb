@@ -1,0 +1,299 @@
+<div id="druckvorschau_alignment_spacer" style="height: 0px;">&nbsp;</div>
+                  
+    <div class="druckvorschau_vorlage2 style" id="druckvorschau">
+      
+        <style type="text/css">
+            #header, .header {
+              padding-bottom: 50px;
+            }
+        
+            #footer, .footer {
+              /*display: table-footer-group;
+              position: absolute;
+              bottom: 0px;*/
+              width: 100%;
+              text-align: left;
+              font-size: 9px;
+            }
+        
+            #footer > small, .footer > small,
+            #footer > small > b, .footer > small > b,
+            #footer > small > span, .footer > small > span {
+              padding: 0px;
+            }
+        
+            #footer > small, .footer > small {
+              font-size: inherit;
+            }
+        
+            .page-number {
+              float: right;
+            }
+        
+            p {
+              position: relative;
+              display: block;
+              page-break-inside: avoid;
+              margin-top: 0px;
+              margin-bottom: 0px;
+              padding-bottom: 40px;
+            }
+        
+            pre {
+              position: relative;
+              display: block;
+              page-break-inside: avoid;
+              font-family: inherit;
+              margin-top: 0px;
+              margin-bottom: 0px;
+              padding-bottom: 40px;
+              white-space: pre-wrap;
+            }
+        
+            small {
+              font-size: 13px;
+              position: relative;
+              display: block;
+              margin: 0px;
+              padding: 0px;
+            }
+        
+            table {
+              font-size: inherit;
+            }
+        
+            td {
+              vertical-align: top;
+              width: 150px;
+              padding: 0px;
+            }
+        
+            td.right {
+              width: auto;
+            }
+        
+            td > pre {
+              padding-bottom: 0px;
+            }
+        
+            img#logo {
+              position: relative;
+              display: block;
+              /*height: 1.5cm;*/
+              height: 60px;
+              margin-top: 0px;
+              /*margin-bottom: 29mm;*/
+              margin-bottom: 100px;
+            }
+        
+            span#adressblock {
+              display: block;
+              padding-top: 50px;
+            }
+        
+            b#bezeichnung {
+              font-size: 14px;
+            }
+        
+            pre#einleitungstext {
+              padding-bottom: 8mm;
+            }
+        
+            div.werbeformatblock {
+              position: relative;
+              display: block;
+              margin-top: 0px;
+              margin-bottom: 0px;
+              padding-bottom: 40px;
+            }
+            
+              
+            .infotable {
+              float: left;
+              width: 30%;
+              line-height: 50%;
+            }
+            
+              
+            .infotable2 {
+              width: 30%;
+              line-height: 50%;
+            }
+            
+            .style {
+              font-family: "Arial Narrow", Arial, sans-serif;
+              font-size: 6pt;
+            }
+            
+            .th {
+              text-align: left;
+            }
+            
+            .td {
+              text-align: right;
+            }
+              
+            .table {
+              border: 1px solid black;
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 4mm;
+            }
+            
+            .table th {
+              background-color: #D8D8D8;
+            }
+            
+            img#logo {
+                margin-bottom: 2mm;
+                width: 100%;
+                height: auto;
+            }
+            
+            
+            .logo {
+              margin-bottom: 2mm;
+              /* background-image: url("../../../../../assets/edp-logo_.png"); */
+              width: 100%;
+              height: auto;
+            }
+            
+            
+            .text_right {
+              text-align: right;
+              vertical-align: bottom;
+            }
+
+            
+          </style>
+      
+    
+        <div id="header">
+          
+          <img id="logo" style="margin-bottom: 2mm;width: 100%;height: auto;" src="{{'../../assets/' + templatedata.instanz + '/logo.png'}}"/>
+        </div>
+        
+        <div>
+          <small>
+            
+            <table class="print-element infotable">
+                <tr>
+                  <td>Kunden-Nr.:</td><td>{{verkaufsdokument.controls.kundBeznr.value}}<br></td>
+                </tr>
+              
+                <tr>
+                  <td>Kunde:</td><td>{{verkaufsdokument.controls.bestadr1.value}}<br></td>
+                </tr>
+                <tr>
+                  <td>Ort:</td><td>{{verkaufsdokument.controls.bestadr5.value}}<br></td>
+                </tr>
+                <tr>
+                  <td>Agentur:</td><td>{{verkaufsdokument.controls.bestadr2.value}}<br></td>
+                </tr>
+            </table>
+            
+            <table class="print-element infotable2">
+                <tr>
+                  <td>Ihr Kontakt:</td><td>{{verkaufsdokument.controls.verfasser1.value}}<br></td>
+                </tr>
+                <tr>
+                  <td>E-Mail:</td><td><br></td>
+                </tr>
+                <tr>
+                  <td>Telefon:</td><td><br></td>
+                </tr>
+                <tr>
+                  <td>Datum:</td><td>{{verkaufsdokument.controls.ausstelldatum.value   | date :  "dd.MM.yyyy"}}<br></td>
+                </tr>
+            </table>
+            
+            
+            
+            <table class="print-element table" >
+                <tr class="th" >
+                    <th><b>Zeitungen</b></th>
+                    <th class="text_right" >Auflage</th>
+                    <th class="text_right" >Kosten pro Erscheinung</th>
+                    <th class="text_right" >Anzahl Ersch.</th>
+                    <th class="text_right" >Total Brutto</th>
+                    <th class="text_right" >Abschlussrabatt in %</th>
+                    <th class="text_right" >Abschlussrabatt in CHF</th>
+                    <th class="text_right" >Spezialrabatt in %</th>
+                    <th class="text_right" >Spezialrabatt in CHF</th>
+                    <th class="text_right" >BK in CHF</th>
+                    <th class="text_right" >Total Netto/Netto</th>
+                </tr>
+                <tr>
+                  
+                  <!-- <span *ngFor="let zusatzpreisposition of verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls; let k=index"> -->
+                  <span *ngFor="let titel of verkaufsdokument.controls.titel.controls; let i=index">
+                    <span *ngFor="let werbemittel of verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls; let j=index">
+                      <td *ngIf="verkaufsdokument.controls.titel.controls[i].controls.objBezeichnung.value != ''">{{verkaufsdokument.controls.titel.controls[i].controls.objBezeichnung.value}}<br>{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformat.value}}</td>
+                      <td class="text_right" *ngIf="verkaufsdokument.controls.titel.controls[i].controls.auflage.value != ''">{{verkaufsdokument.controls.titel.controls[i].controls.auflage.value}} Ex.</td>
+                      <td class="text_right" *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value != ''">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value  | number : '1.2-2'}}</td>
+                      <td class="text_right" *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsanzahl.value != ''">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsanzahl.value}}</td>
+                      <td class="text_right" *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value != ''">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value  | number : '1.2-2'}}</td>
+                      <td class="text_right" *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value != ''">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value}}</td>
+                      <td class="text_right" *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value != ''">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value}}</td>
+                      <td class="text_right" *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value != ''">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value}}</td>
+                      <td class="text_right" *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value != ''">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value}}</td>
+                      <td class="text_right" *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value != ''">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value}}</td>
+                      <td class="text_right" *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value != ''">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value}}</td>
+                     </span>
+                    <br>
+                    <br>
+                  </span>
+                </tr>
+                <tr class="th">
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>&nbsp;</th>
+                </tr>
+                
+            </table>
+            
+            
+              
+            
+             
+              <pre id="fusstext" class="print-element">Daten-, Tarif- und Grössenänderungen vorbehalten. Die Preise verstehen sich in CHF exkl. 8& MwSt. Es gelten die allgemeinen Geschäftbedingungen.</pre>
+            <!--<pre class="pre-reset">{{verkaufsdokument.controls.indivEinleitungstext.value}}</pre>-->
+              <span class="print-element">
+                <br><br>
+              </span>
+        
+             <!-- <div [ngSwitch]="value">
+              <div *ngSwitchCase="1">1. Template - <b>{{value}}</b> </div>
+              <div *ngSwitchCase="2">2. Template - <b>{{value}}</b> </div>
+              <div *ngSwitchCase="3">3. Template - <b>{{value}}</b> </div>
+              <div *ngSwitchDefault>Default Template</div>
+            </div> -->
+            
+           
+            <div id="dokumentSchluss" class="print-element">
+                <pre>{{verkaufsdokument.controls.indivSchlusssatz.value}}</pre>
+                <p>
+                    <br><br>
+                    Freundliche Grüsse<br><br>
+                    <b>{{str_company}}</b>
+                    <br><br><br>
+                    {{verkaufsdokument.controls.verfasser1.value}}<br>
+                    {{verkaufsdokument.controls.verfasser1funktion.value}}
+                </p>
+            </div>
+          </small>
+        </div>
+        <!-- Footer -->
+        <div id="footer">
+            <small><b>{{str_company}}</b>{{str_footer}}<span class="page-number"></span></small>
+        </div>
+    
+    </div> <!-- Ende Druckvorschau-DIV Template 1 -->

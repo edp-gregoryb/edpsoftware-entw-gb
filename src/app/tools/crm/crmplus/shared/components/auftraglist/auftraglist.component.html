@@ -1,0 +1,86 @@
+ <mat-progress-bar *ngIf="searchauftrag" mode="indeterminate" color="warn"></mat-progress-bar>
+<div class="example-container mat-elevation-z8">
+     <div class="example-header">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter"i18n-placeholder="@@filterPlaceholder">
+    </mat-form-field>
+         <mat-icon (click)="exportCSV()" style="margin-left: 10px; cursor: pointer;float: right;margin-top: 16px;">save_alt</mat-icon>
+  </div>
+    <mat-table #table [dataSource]="timelinessource" matSort>
+
+        <ng-container matColumnDef="vertreter">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.vertreter}}" *matHeaderCellDef mat-sort-header i18n="@@initials">Initialen</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.vertreter}}" *matCellDef="let element">{{element.vertreter}}</mat-cell>
+            <!--<ngu-letter-avatar avatar-shape='round' avatar-char-count='2' avatar-height="24px" avatar-width="24px" avatar-font-size="15" avatar-data='{{element.vertreter}}' ></ngu-letter-avatar></mat-cell>-->
+        </ng-container>
+
+        <ng-container matColumnDef="aufnr">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.aufnr}}" *matHeaderCellDef mat-sort-header i18n="@@orderNumber">Aufnr</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.aufnr}}" *matCellDef="let element"> {{element.aufnr }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="sujetnr">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.sujetnr}}" *matHeaderCellDef mat-sort-header i18n="@@sujetNumber">Sujetnr</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.sujetnr}}" *matCellDef="let element"> {{element.sujetnr }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="ndatum" >
+            <mat-header-cell showCoulmn showInput="{{spalteshow.ndatum}}" *matHeaderCellDef i18n="@@entrance">Eingang</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.ndatum}}" *matCellDef="let element"> {{element.ndatum }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="datum">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.datum}}" *matHeaderCellDef i18n="@@appearance">Erscheinung</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.datum}}" *matCellDef="let element"> {{element.datum }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="NAME">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.NAME}}" *matHeaderCellDef mat-sort-header i18n="@@client">Kunde</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.NAME}}" *matCellDef="let element"> {{element.NAME}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="sujet">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.sujet}}" *matHeaderCellDef i18n="@@sujet">Sujet</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.sujet}}" *matCellDef="let element" > {{element.sujet}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="objekt">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.objekt}}" *matHeaderCellDef mat-sort-header i18n="@@object">Objekt</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.objekt}}" *matCellDef="let element"> {{element.objekt}}</mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="rubrik">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.rubrik}}" *matHeaderCellDef mat-sort-header i18n="@@rubric">Rubrik</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.rubrik}}" *matCellDef="let element"> {{element.rubrik}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="brutto">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.brutto}}" *matHeaderCellDef mat-sort-header i18n="@@brutto">Brutto</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.brutto}}" *matCellDef="let element"> {{element.brutto}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nettoNetto">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.nettoNetto}}" *matHeaderCellDef mat-sort-header i18n="@@nettoNetto">netto Netto</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.nettoNetto}}" *matCellDef="let element"> {{element.nettoNetto}} </mat-cell>
+        </ng-container>   
+ 
+        <ng-container matColumnDef="aufart">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.aufart}}" *matHeaderCellDef i18n="@@aufart">Aufart</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.aufart}}" *matCellDef="let element"> <mat-icon> {{element.aufart}}</mat-icon></mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="memotext">
+            <mat-header-cell showCoulmn showInput="{{spalteshow.memotext}}" *matHeaderCellDef i18n="@@comment">Kommentar</mat-header-cell>
+            <mat-cell showCoulmn showInput="{{spalteshow.memotext}}" *matCellDef="let element">{{element.memotext}}</mat-cell>
+        </ng-container>
+                
+        <!--<ng-container *ngFor="let col of columns" matColumnDef= {{col.columnDef}}>-->
+        <!--    <mat-header-cell *matHeaderCellDef>{{col.header}}</mat-header-cell>-->
+        <!--    <mat-cell *matCellDef="let row"> <div [innerHTML]="col.cell(row)  | safe: 'html'"></div></mat-cell>-->
+        <!--</ng-container>-->
+     
+    <mat-header-row *matHeaderRowDef="displayedColumns" ></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showdetail(row)"></mat-row>
+</mat-table>
+<mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+</div>

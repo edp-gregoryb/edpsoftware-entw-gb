@@ -1,0 +1,15 @@
+<div>
+   <mat-form-field class="example-full-width">
+   <input type="text"  matInput [formControl]="formctrl" [(ngModel)]="vermittlervalue" placeholder="Vermittler" i18n-placeholder="@@agent" (ngModelChange)="Vermittler($event)" [matAutocomplete]="auto">
+    
+    <button mat-button *ngIf="vermittlervalue" matSuffix mat-icon-button aria-label="Clear" (click)="deletevermittler(vermittlervalue='')" >
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>
+
+<mat-autocomplete #auto="matAutocomplete">
+   <mat-option *ngFor="let vermitt of vermittler" [value]="vermitt.anzeigename" (click)="additemforsearch(vermitt)">
+      {{ vermitt.anzeigename}}
+   </mat-option>
+</mat-autocomplete>
+</div>

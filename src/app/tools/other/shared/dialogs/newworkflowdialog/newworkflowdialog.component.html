@@ -1,0 +1,32 @@
+<!-- Titel  -->
+<h1 mat-dialog-title i18n>Einstellungen</h1>
+
+<!-- Content -->
+<div mat-dialog-content>
+  <!-- Text -->
+  <p i18n>Auf was wollen sie den neuen Workflow basieren?</p>
+  <!-- Form dazu -->
+  <form #newWorkflowForm="ngForm">
+    <!-- Vorlage auswaehlen -->
+    <mat-form-field>
+      <mat-select placeholder="Vorlage" i18n-placeholder name="vorlage" [(ngModel)]="data[0].vorlage" required>
+        <mat-option value="-1" i18n>Leere Vorlage</mat-option>
+        <mat-option *ngFor="let wf of data[1]" value="{{wf.prozessid}}">{{wf.bez}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+    <div *ngIf="data[0].vorlage && data[0].vorlage !== '-1'">
+      <mat-slide-toggle [(ngModel)]="data[0].edit" name="editOrNew" i18n>Neuer Workflow / Workflow editieren</mat-slide-toggle>
+    </div>
+    
+    <br>
+    <!-- Dialog schliessen / Abbrechen -->
+    <button mat-button [mat-dialog-close]="" i18n>Abbrechen</button>
+    <!-- Dialog schliessen / Workflow erstellen -->
+    <button mat-button [mat-dialog-close]="data[0]" [disabled]="newWorkflowForm.invalid" i18n>
+      Erstellen/Editieren
+      <!--<span *ngIf="!data[0].edit || data[0].vorlage === -1">Erstellen</span>
+      <span *ngIf="data[0].edit && data[0].vorlage !== -1">Editieren</span>-->
+    </button>
+  </form>
+</div>

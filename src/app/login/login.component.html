@@ -1,0 +1,66 @@
+<mat-progress-bar  style="position:fixed;top:0;width:100%;z-index:100;" *ngIf="progressbar_visible" color="warn" mode="query"></mat-progress-bar>
+<div class="container">
+  <div></div>
+  <div class="two">
+  	<div>
+      <mat-toolbar color="primary">
+	      <img src="../../assets/edp_rot.gif" style="width: 105px; padding-left:16px;margin-top:20px;">
+      		<mat-toolbar-row>
+      			<h1 i18n="@@login">Anmeldung</h1>
+      		</mat-toolbar-row>
+      </mat-toolbar>			
+	  </div>
+		<form>
+      <div style="background-color:white;">
+<!--        <div><img src="./assets/rel100.jpg" style="width: 94%;margin:0 16px 0 16px" /></div>-->
+        <div><img src="./assets/rel100.jpg" style="width: 100%;margin:0 0 0 0" /></div>
+		    <div class="anzeigefelder">
+          <mat-icon class="eingabe-icons-width">business</mat-icon>
+          <mat-form-field class="eingabe-full-width">
+            <input matInput type="text" placeholder="Instanz [z.B.: 'VERLAG-prod' oder iURL]" i18n-placeholder="@@instancePlaceholder" id="Instanz" [(ngModel)]="model.instanz" name="instanz" required>
+          </mat-form-field>
+        </div>
+        
+        <div class="anzeigefelder">
+          <mat-icon class="eingabe-icons-width">group_work</mat-icon>
+      	  <mat-form-field class="eingabe-full-width">
+            <input matInput type="text" placeholder="Mandant [z.B. '5' oder leer für Default]" i18n-placeholder="@@mandatorPlaceholder" [(ngModel)]="model.mandant" name="mandant" id="Mandant">
+          </mat-form-field>
+
+<!--            <mat-form-field class="eingabe-full-width-30">-->
+<!--                <mat-label>Sprach auswahl</mat-label>-->
+<!--                <mat-select [(value)]="selected" (selectionChange)="navigateTo($event)">-->
+<!--                    <mat-option *ngFor="let lang of languangelist" [value]="lang.code">-->
+<!--                        {{lang.label}}-->
+<!--                    </mat-option>-->
+<!--                </mat-select>-->
+<!--            </mat-form-field>-->
+        </div>
+        
+        <div class="anzeigefelder">
+          <mat-icon class="eingabe-icons-width">person</mat-icon>
+          <mat-form-field class="eingabe-full-width">
+            <input matInput type="text" placeholder="Benutzername" i18n-placeholder="@@usernamePlaceholder" id="Benutzername" [(ngModel)]="model.username" autocapitalize="none" name="username" required>
+          </mat-form-field>
+        </div>
+        
+        <div class="anzeigefelder">
+          <mat-icon class="eingabe-icons-width">vpn_key</mat-icon>
+          <mat-form-field class="eingabe-full-width">
+            <input matInput type="password" placeholder="Passwort" i18n-placeholder="@@passwordPlaceholder" id="Passwort" [(ngModel)]="model.password" autocapitalize="none" name="password" required>
+          </mat-form-field>
+        </div>
+        
+        <hr style="margin:0 8px 8px 8px">
+       
+        <div class="loginaction">
+            <span *ngIf="(error !== '')" class="errormsg">{{error}}</span><span *ngIf="(successmsg !== '')" class="successmsg">{{successmsg}}</span>
+            <button style="float: right;margin-right: 16px;" mat-raised-button (click)="login()" (keyup.enter)="login()" color="warn" i18n="@@logon">Anmelden</button>
+        </div>
+        <!-- <div><small style="float:right;">Fingerprint: {{browserFingerprint}}</small></div> -->
+       <br>
+      </div>
+    </form>
+  </div>
+  <div></div>
+</div>

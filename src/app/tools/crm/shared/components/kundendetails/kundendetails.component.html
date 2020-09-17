@@ -1,0 +1,24 @@
+
+<div class="demo" id="scroll" style="height: 100%;" #scrollItems>
+    <div style="margin-bottom:6px;"></div>
+    <div *ngIf="isAngezeigt" class="sticky">
+        <input style="width:80%;font-size: 18px; background-color: white; border: 0px solid;cursor: text;text-indent:4px;" type="text" [(ngModel)]="val0" (ngModelChange)="searchItems($event)" />
+        <button style="float: right;margin-top: -6px;" mat-icon-button matTooltip="Springe auf den Markierten Eintrag zurück" i18n-matTooltip="@@goback" matTooltipPosition="below" (click)=goBack()><mat-icon>explore</mat-icon></button>
+    </div>
+    <div style="margin-bottom:14px;"></div>
+    <div class="neuerkunde" *ngIf="addKundeicon">
+        <button style="width: 100%" mat-icon-button color="primary" (click)="addKunde()"><mat-icon style="color: black">add</mat-icon></button>
+    </div>
+    <div  *ngFor="let kund of kunden; let i = index"><!--          class="search"-->
+      <mat-card style="text-align: left;margin: 0px 0px 10px 0px" (click)="showdetails($event, 'onSubmit',kund,i)" [ngClass]="{'angezeigt': kund.isAngezeigt}">
+<!--          margin: 10px 10px 10px 10px;-->
+          <div style="margin: 10px 10px 10px 10px;">
+        <div style="font-size:large;font-weight: bold">{{kund.bfname}}</div>
+<!--            <div >{{kund.vname}} {{kund.fname}}</div>-->
+        <div >{{kund.bstrasse}}</div>
+        <div>{{kund.bort}}</div>
+        <div *ngIf="kund.btelge"><span i18n="@@phone">Telefon</span>: {{kund.btelge}}</div>
+          </div>
+      </mat-card>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+<!-- Alle Abos im Card-system dargestellt -->
+<div [ngStyle]="{'height.px': innerheight}" style="overflow: scroll;" (scroll)="onScroll($event)" (window:resize)="windowResize($event)" #abolist>
+  <div style="margin-bottom:14px;"></div>
+  <div *ngFor="let abo of abodaten; let i = index">
+    <mat-card class="card" (click)="showAboDetails(abo, i, $event)" [ngClass]="{'angezeigt': currentAboIndex === i, 'angezeigt_new': (editingAbo === true && i === abodaten.length - 1)}">
+      <div style="font-size:large;font-weight: bold">{{abo.objekt_txt}}</div>
+      <div style="width: 100%"><span i18n>Aboart</span>:          <span style="float: right">{{abo.artverk_txt}}</span></div>
+      <div style="width: 100%"><span i18n>Laufzeit</span>:        <span style="float: right">{{abo.gueltigbis | date:'dd.MM.yyyy'}}</span></div>
+      <div style="width: 100%"><span i18n>Nächste Faktura</span>: <span style="float: right">{{abo.tt_abokontr[0]['termin-neu'] | date:'dd.MM.yyyy'}}</span></div>
+      <div style="width: 100%"><span i18n>Status</span>:          <span style="float: right">{{abo.stat_txt}}</span></div>
+    </mat-card>
+  </div>
+  
+  <!-- button um neues abo hinzuzufuegen -->
+  <mat-card class="card" (click)="verwaltungTool({ tool: 'newAbo', value: ''})">
+    <mat-icon>add</mat-icon>
+  </mat-card>
+</div>

@@ -1,0 +1,135 @@
+<!-- Prototype Dashboard -->
+
+<!--<div class="app-content" style="display: none;">-->
+<!--    <h4>Kürzliche Dokumente</h4>-->
+<!--    <div class="flex-container"-->
+<!--      fxLayout="row" fxLayout.xs="column"-->
+<!--      fxLayoutAlign="start stretch" fxLayoutAlign.xs="start start">-->
+<!--          <div class="flex-item" fxFlex="50%"> <!-- Spalte 1 Start -->
+<!--            <span style="float:right;" matTooltip="Neues Dokument erstellen..." matTooltipPosition="left"><button mat-fab><mat-icon>add</mat-icon></button></span>-->
+<!--            <mat-list>-->
+<!--              <h3 md-subheader>Offerten/Angebote</h3>-->
+<!--              <mat-list-item style="background-color:lightblue;">-->
+<!--                  <mat-icon mat-list-avatar>lock_open</mat-icon>-->
+<!--                  <h4 mat-line>Angebot Wanderwoche 13/17</h4>-->
+<!--                  <p mat-line>Seitenteil 1/2Seite, CHF 3000.-</p>-->
+<!--                  <span matTooltip="in Auftrag umwandeln...">-->
+<!--                    <button mat-icon-button>-->
+<!--                      <mat-icon>add_shopping_cart</mat-icon>-->
+<!--                    </button>-->
+<!--                  </span>-->
+<!--                  <span matTooltip="kopieren...">-->
+<!--                    <button mat-icon-button>-->
+<!--                      <mat-icon>content_copy</mat-icon>-->
+<!--                    </button>-->
+<!--                  </span>-->
+<!--                  <span matTooltip="löschen...">-->
+<!--                    <button mat-icon-button>-->
+<!--                        <mat-icon>clear</mat-icon>-->
+<!--                    </button>-->
+<!--                  </span>-->
+<!--              </mat-list-item>-->
+<!--              <mat-list-item>-->
+<!--                  <mat-icon mat-list-avatar>lock_open</mat-icon>-->
+<!--                  <h4 mat-line>Angebot Summer Special im 'Schweizerischer Süsswarenspezialist' (Juli 2017)</h4>-->
+<!--                  <p mat-line>MM: 56*128, CHF 54.90</p>-->
+<!--                  <span matTooltip="in Auftrag umwandeln...">-->
+<!--                    <button mat-icon-button>-->
+<!--                      <mat-icon>add_shopping_cart</mat-icon>-->
+<!--                    </button>-->
+<!--                  </span>-->
+<!--                  <span matTooltip="kopieren...">-->
+<!--                    <button mat-icon-button>-->
+<!--                      <mat-icon>content_copy</mat-icon>-->
+<!--                    </button>-->
+<!--                  </span>-->
+<!--                  <span matTooltip="löschen...">-->
+<!--                    <button mat-icon-button>-->
+<!--                        <mat-icon>clear</mat-icon>-->
+<!--                    </button>-->
+<!--                  </span>-->
+<!--              </mat-list-item>-->
+<!--              <mat-list-item>-->
+<!--                  <mat-icon mat-list-avatar>lock_open</mat-icon>-->
+<!--                  <h4 mat-line>Angebot im Lustigen Musikanten 4/17</h4>-->
+<!--                  <p mat-line>Seitenteil: 1/4Seite</p>-->
+<!--                  <span matTooltip="in Auftrag umwandeln...">-->
+<!--                    <button mat-icon-button>-->
+<!--                      <mat-icon>add_shopping_cart</mat-icon>-->
+<!--                    </button>-->
+<!--                  </span>-->
+<!--                  <span matTooltip="kopieren...">-->
+<!--                    <button mat-icon-button>-->
+<!--                      <mat-icon>content_copy</mat-icon>-->
+<!--                    </button>-->
+<!--                  </span>-->
+<!--                  <span matTooltip="löschen...">-->
+<!--                    <button mat-icon-button>-->
+<!--                        <mat-icon>clear</mat-icon>-->
+<!--                    </button>-->
+<!--                  </span>-->
+<!--              </mat-list-item>-->
+<!--              <small><a href="" style="text-align: right;">weitere...</a></small>-->
+<!--              <br><br>-->
+<!--              <md-divider></md-divider>-->
+<!--              <h3 md-subheader>Aufträge</h3>-->
+<!--              <mat-list-item>-->
+<!--                  <mat-icon mat-list-avatar>lock</mat-icon>-->
+<!--                  <h4 mat-line>Auftrag Architektur 3/17</h4>-->
+<!--                  <p mat-line>MM: 127*600, CHF 545.-</p>-->
+<!--                  <span matTooltip="kopieren...">-->
+<!--                    <button mat-icon-button>-->
+<!--                      <mat-icon>content_copy</mat-icon>-->
+<!--                    </button>-->
+<!--                  </span>-->
+<!--                  <span matTooltip="löschen...">-->
+<!--                    <button mat-icon-button>-->
+<!--                        <mat-icon>clear</mat-icon>-->
+<!--                    </button>-->
+<!--                  </span>-->
+<!--              </mat-list-item>-->
+<!--              <small><a href="" style="text-align: right;">weitere...</a></small>-->
+<!--              <br><br>-->
+<!--            </mat-list>-->
+<!--          </div> <!-- Spalte 1 Ende -->
+<!--          <div class="flex-item" fxFlex="50%"> <!-- Spalte 2 Start -->
+<!--            <div style="border: 1px solid grey;-->
+<!--                        box-shadow: 10px 11px 5px 1px rgba(189,189,189,0.51);-->
+<!--                        width: 70%;-->
+<!--                        margin: 0 auto;-->
+<!--                        padding: 10px;">-->
+<!--              <small>-->
+<!--                Firma<br>-->
+<!--                Mustermann AG<br>-->
+<!--                Frau Katja Mustermann-->
+<!--                Perspektivenweg 33<br>-->
+<!--                1234 Specimen<br>-->
+<!--                <br><br>-->
+<!--                Kriens, 26. Januar 2017-->
+<!--                <br><br><br>-->
+<!--                <b>Angebot Wanderwoche 13/17</b><br>-->
+<!--                <br>-->
+<!--                Sehr geehrte Frau Mustermann<br><br>-->
+<!--                Wir beziehen uns auf das interessante Telefongespräch mit Ihnen und unserem Herr Rodgau vom 15. Januar 2017. Gerne unterbreiten wir Ihnen folgendes Angebot:<br><br>-->
+<!--                <table>-->
+<!--                  <tr><td>Titel:</td><td>Wanderwoche</td></tr>-->
+<!--                  <tr><td>Auflage:</td><td>400'000</td></tr>-->
+<!--                  <tr><td>Ihre Werbung:</td><td>Seitenteil 1/2Seite</td></tr>-->
+<!--                  <tr><td>Erscheinung:</td><td>Ausgabe 13/17 (KW13)</td></tr>-->
+<!--                  <tr><td>Insertionsschluss: </td><td>12. April 2017, 10:00</td></tr>-->
+<!--                  <tr><td>Preis:</td><td>CHF 3000.00 exkl. MWST</td></tr>-->
+<!--                  <tr><td>Rabatt</td><td>Nettopreis, kein Rabatt möglich</td></tr>-->
+<!--                  <tr><td>Spezielles:</td><td>Obwohl zuerst kein Platz mehr in dieser Ausgabe, haben wir es geschafft :-)</td></tr>-->
+<!--                </table>-->
+<!--                <br><br>-->
+<!--                Wir freuen uns auf eine spannende Zusammenarbeit. Sollten noch Fragen auftauchen, sind wir gerne für Sie da.<br><br>-->
+<!--                Freundliche Grüsse<br>-->
+<!--                <br>-->
+<!--                Mega-Dispo AG<br><br>-->
+<!--                Frank-Xaver Rodgau<br>-->
+<!--                Anzeigenleitung-->
+<!--              </small>-->
+<!--            </div>-->
+<!--          </div><!-- Spalte 2 Ende -->
+<!--    </div>-->
+<!--</div>-->

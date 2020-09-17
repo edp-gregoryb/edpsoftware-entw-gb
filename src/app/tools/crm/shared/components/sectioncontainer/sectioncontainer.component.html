@@ -1,0 +1,41 @@
+
+<!-- <h2>
+        {{content.termdatum}}
+        </h2>
+        <hr > -->
+
+        <!-- <img src="{{content.img}}"/> -->
+        <div class="sectionheight"  style="margin: 10px 10px 10px 10px;display: block;">
+          <!-- <ul class="search"   (mouseover)='over(content.NAME)' [ngClass]="{ 'angezeigt': content.isAngezeigt}" >
+            <li style="margin: 10px 10px 10px 10px;display: block;" (click)="onclick( $event, 'onSubmit',content,'',i)">  -->
+  
+                   <mat-icon class="md-24" style="float: right;"  [innerHTML]="content.termaktivic | showIcon: 'html'" ></mat-icon>
+            
+                <div style="font-size:large;font-weight: bold">{{content.NAME}}  </div>
+                 
+                  <div>{{content.termkontaktpers}} </div>
+                 <div>
+                  <span>{{content.objekt}}<span *ngIf="content.rubrik" > ,</span> </span> <span>{{content.rubrik}} <span *ngIf="content.urubrik" > ,</span> </span> <span>{{content.urubrik}} <span *ngIf="content.aschluessel" > ,</span> </span>
+                   <span >{{content.ausgbez}} </span>
+                   </div>
+                <div>
+                  <span>{{content.termdatum }} <span *ngIf="content.termzeit" > --</span> </span>
+                  <span >{{content.termzeit}}</span>
+                </div>
+                <div>
+                  <span>{{content.termaktivid}} <span *ngIf="content.termrapptext" > ,</span> </span>
+                  <span>{{content.termrapptext | ellipsis: 200}}</span>
+                  
+        
+                </div>
+        
+                
+                <div style="text-align: right;">
+                   <small>{{content.vertr_name}}</small>
+                 
+                </div>
+        
+           
+              <!-- </li>
+         </ul> -->
+        </div>

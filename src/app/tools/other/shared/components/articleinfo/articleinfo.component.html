@@ -1,0 +1,79 @@
+<mat-drawer-container style="background-color: #DDD;" autosize (window:resize)="windowResize()">
+    <!-- Drawer -->
+    <mat-drawer #drawer class="sidenavContainer" mode="side">
+        <div style="float: right; padding-left: 5px; padding-right: 5px;">
+            <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+        </div>
+        <!-- Sidenav -->
+        <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+    </mat-drawer>
+
+    <!-- Header -->
+    <app-defaultheader [currentAppModule]="currentAppModule" [modulename]="modulename" (onSidenavToggle)="drawer.toggle()" #header></app-defaultheader>
+
+    <!-- Lade-Balken -->
+    <mat-progress-bar *ngIf="httpRequestsLoading > 0" mode="indeterminate" color="warn"></mat-progress-bar>
+
+    <!-- Workflow-Header -->
+    <app-header [headerTitle]="headerTitle" [linkBack]="headerLinkBack" [queryparam]="queryparam"></app-header>
+
+    <!-- Content -->
+    <div class="wrapper" *ngIf="article" [ngStyle]="{'height.px': innerheight}" style="overflow: scroll;">
+        <div class="smallWrapper">
+            <!-- Titel -->
+            <h2>
+                {{article.objektartikel}}
+                <mat-icon style="margin-left: 10px; cursor: pointer" routerLink="/workflow/workflow-show/newOrEditArticle" [queryParams]="{ newArticle: 'false', objId: article.objekt, aschlusselId: article.aschlussel, objektartikel: article.objektartikel }">settings</mat-icon>
+            </h2>
+            <div style="width: 600px">
+                <!-- Objekt-Bezeichnung -->
+                <div *ngIf="objektbez">
+                    <span style="float: left;" i18n>Objekt:</span>
+                    <span style="float: right;">{{objektbez}}</span>
+                    <div class="clear"></div>
+                </div>
+
+                <!-- Ausgabe-Bezeichnung -->
+                <div *ngIf="aschlusselbez">
+                    <span style="float: left;" i18n>Ausgabe:</span>
+                    <span style="float: right;">{{aschlusselbez}}</span>
+                    <div class="clear"></div>
+                </div>
+
+                <!-- Prozess-Bezeichnung -->
+                <div *ngIf="article">
+                    <span style="float: left;" i18n>Workflow:</span>
+                    <span style="float: right;">{{article.bez}}</span>
+                    <div class="clear"></div>
+                </div>
+
+                <!-- Startdatum -->
+                <div *ngIf="startdatum">
+                    <span style="float: left;" i18n>Start:</span>
+                    <span style="float: right;">{{ startdatum | date: 'dd.MM.yyyy' }}</span>
+                    <div class="clear"></div>
+                </div>
+
+                <!-- Enddatum -->
+                <div *ngIf="enddatum">
+                    <span style="float: left;" i18n>Ende:</span>
+                    <span style="float: right;">{{ enddatum | date: 'dd.MM.yyyy'}}</span>
+                    <div class="clear"></div>
+                </div>
+
+                <!-- Verantwortlicher -->
+                <div *ngIf="verantwortlicher">
+                    <span style="float: left;" i18n>Verantwortlicher:</span>
+                    <span style="float: right;">{{ verantwortlicher.vname }} {{ verantwortlicher.NAME }}</span>
+                    <div class="clear"></div>
+                </div>
+            </div>
+
+            <br><br>
+            <hr style="border-color: grey">
+
+            <!-- Dokumente und Kommentare -->
+            <app-docs-and-comments *ngIf="article"></app-docs-and-comments>
+        </div>
+    </div>
+</mat-drawer-container>

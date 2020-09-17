@@ -1,0 +1,49 @@
+.item-2, .item-3, .item-4{
+    border-bottom: 1px solid #cccccc;
+}
+
+.container {
+    margin-bottom: 5px;
+}
+.example-spacer {
+  flex: 1 1 auto;
+}
+.example-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
+
+.example-header {
+  min-height: 64px;
+  padding: 8px 24px 0;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+}
+
+.mat-cell {
+  font-size: 10px;
+}
+
+.mat-cell, .mat-header-cell {
+  flex: 1;
+  overflow: hidden;
+  word-wrap: normal;
+}
+.mat-row:hover, .example-selected-row {
+  background: #f5f5f5;
+}
+.gridfontunderline {
+  font-size: small;
+  text-align:left;
+  text-decoration: underline;
+  cursor: pointer;
+}

@@ -1,0 +1,83 @@
+<table style="width:100%">
+     <tr>
+       <td style="width:80%"><input style="width:95%;font-size: 18px;height:24" type="text"  [(ngModel)]="autraegesuche" (ngModelChange)="searchauftraege($event)" /></td>
+       <td style="width:10%"><app-infosverknuepfung [termindataChanged]="termindataChanged" (verknuepfungEinAusSchalter)="verknuepfungEinAus($event)"></app-infosverknuepfung></td>
+       <td style="width:10%"><button mat-icon-button placeholder="Kundenkarte" matTooltip="Kundenkarte" (click)="openKundenkarte()"><mat-icon >details</mat-icon></button></td>
+     </tr>
+    </table>
+    <mat-progress-bar *ngIf="verknuepfungicon" mode="indeterminate" color="warn"></mat-progress-bar>
+    <div *ngIf="kundenkarte">
+        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="start">
+            <div fxFlex="100%" style="margin: 0 20px 0 20px">
+  
+      <mat-form-field class="container-width">
+        <mat-select placeholder="Kundenkarte" name="selectedkarte" [(ngModel)]="selectedkarte">
+          <mat-option  *ngFor="let karte of listkundenkarten" [value]="karte" >
+            {{karte.formularname}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+   
+     </div>
+     </div>
+      <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="start">
+        <div fxFlex="100%" style="margin: 0 20px 0 20px">
+            <mat-form-field>
+                <input matInput [matDatepicker]="picker" [(ngModel)]="pickervalue" placeholder="von Datum" (dateInput)="getStartDate($event)">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field style="float:right;">
+                <input matInput [matDatepicker]="picker1" [(ngModel)]="picker1value" placeholder="bis Datum" (dateInput)="getEndtDate($event)">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+        </div>
+        </div>
+        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="start">
+        <div fxFlex="100%" style="margin: 0 20px 0 20px">
+          <mat-form-field>
+              <input matInput [matDatepicker]="picker2" [(ngModel)]="picker2value" placeholder="von Datum" (dateInput)="getAbschlussStartDate($event)">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field style="float:right;">
+              <input matInput [matDatepicker]="picker3" [(ngModel)]="picker3value" placeholder="bis Datum" (dateInput)="getAbschlussEndtDate($event)">
+              <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+              <mat-datepicker #picker3></mat-datepicker>
+          </mat-form-field>
+      </div>
+      </div> 
+      <mat-progress-bar *ngIf="ladekundenkarte" mode="indeterminate" color="warn"></mat-progress-bar>
+      <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="start">
+          <div fxFlex="50%" style="margin: 0 20px 0 20px">
+      <button mat-raised-button (click)="kundenkarteabrechen()">Zurück</button>
+      </div>
+      <div fxFlex="50%" style="margin: 0 20px 0 20px">
+          <button mat-raised-button (click)="kundenkarteabearbeiten(karte)">OK</button>
+        </div>
+      </div>
+      
+     
+      
+    </div>
+<div  #matList>
+    <mat-list [ngStyle]="{'height.px': innerheight}">
+        <div class="w3-panel w3-card" *ngFor="let auftr of timelinehist" (click)="openAuftragModal(auftr)">
+            <h4>{{auftr.sujet}}</h4>
+            <div>{{auftr.aufnr}}{{auftr.sujetnr}}</div>
+            <div>{{auftr.datum}} </div>
+            <div>
+                <span>{{auftr.objekt}} -- {{auftr.rubrik}} -- {{auftr.urubrik}}</span>
+            </div>
+            <div>{{auftr.groesse}}</div> 
+            <div>
+                <span i18n="@@brutto">Brutto</span> : <span>{{auftr.brutto | currency:"CHF"}}</span>&nbsp;&nbsp;
+                <span i18n="@@netto">Netto</span> : <span>{{auftr.netto | currency:"CHF"}}</span>&nbsp;&nbsp;
+                <span i18n="@@nettonetto">NettoNetto</span> : <span>{{auftr.nettoNetto | currency:"CHF"}}</span>
+                <!--Brutto: <span>{{auftr.brutto | currency:"CHF"}}</span>&nbsp;&nbsp;&nbsp;Netto: <span>{{auftr.netto | currency:"CHF"}}</span>&nbsp;&nbsp;&nbsp;NN: <span>{{auftr.nettoNetto | currency:"CHF"}}</span>-->
+            </div>
+        </div>
+    </mat-list>
+</div>
+

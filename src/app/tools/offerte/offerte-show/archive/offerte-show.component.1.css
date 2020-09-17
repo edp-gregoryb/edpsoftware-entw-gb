@@ -1,0 +1,338 @@
+.mat-option.mat-active {
+    background: rgba(0, 0, 0, 0.25)!important;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.mat-input-placeholder {
+    color: rgba(0, 0, 0, 0.6)!important;
+}
+
+.mat-select-trigger {
+    color: rgba(0, 0, 0, 0.6)!important;
+}
+
+mat-toolbar.mat-primary {
+    background: #7d7b82;
+    color: rgb(255,255,255);
+    box-shadow: 0px 2px 10px grey;
+}
+
+.sidenav_logo {
+    margin-top: -13px;
+    font-size: 43px;
+}
+
+.sidenav_beschriftung {
+  color: grey;
+}
+
+.sidenav_modul_code {
+  width:55px;
+  float:left;
+  font-weight: bold;
+  display:inline-block;
+}
+
+.sidenav_modul_code.active {
+  color: blueviolet;
+}
+
+a.sidenav_favoriten_link {
+  color: white;
+}
+
+a.sidenav_favoriten_link:link {
+    color: white;
+}
+
+a.sidenav_favoriten_link:visited {
+    color: white;
+}
+
+a.sidenav_favoriten_link:hover {
+    color: blueviolet;
+    text-decoration: none;
+}
+
+.modul_access {
+  color: white !important; 
+  background-color: rgb(100,100,100);
+  /*border-left: none;
+  border-right: none;
+  border-top: none;
+  border-bottom: 1px solid white;*/
+  border: none;
+  height: 2em;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+/*.druckvorschau {*/
+/*  background-color: white;*/
+/*  border: 1px solid grey;*/
+/*  line-height: normal;*/
+/*  box-shadow: 5px 5px 20px 5px rgba(189,189,189,0.51);*/
+/*  width: 625px;*/
+/*  margin: 20px auto 20px auto;*/
+/*  padding-top: 20px;*/
+/*  padding-left: 40px;*/
+/*  padding-right: 30px;*/
+/*  padding-bottom: 20px;*/
+/*}*/
+
+td {
+  vertical-align: top;
+}
+
+.angebotsspalte1 {
+  width: 150px;
+  padding: 0;
+}
+
+.preis {
+  background-color: rgba(255,100,100,0.25);
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.pre-reset {
+  font-family: inherit !important;
+  border: inherit !important;
+  padding: inherit !important;
+  margin: inherit !important;
+  background-color: inherit !important;
+}
+
+.hauptaktion {
+  margin-left: 20px;
+}
+
+.pull-right {
+    float: right!important;
+}
+
+.spalte1 {
+  /*padding-left: 10px;*/
+  /*padding-right: 10px;*/
+  background-color: rgb(230, 230, 230);
+}
+
+.spalte2 {
+  padding-left: 10px;
+}
+
+.readonly {
+  background-color: rgb(245, 245, 245);
+  padding-left: 5px;
+}
+
+mat-sidenav {
+    background-color: rgb(60,60,60);
+    color: white;
+}
+
+.input-half-width {
+  width: 49%;
+}
+
+.input-almost-full-width {
+  width: 70%;
+}
+
+.input-full-width {
+  width: 100%;
+}
+
+.subpanel1 {
+  background-color: #f5f5f5;
+  border-left: 2px solid grey;
+  padding: 15px;
+}
+
+.subpanel1-body {
+  background-color: #f5f5f5;
+  border-left: 2px solid grey;
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-bottom: 80px;
+  padding-right: 15px;
+}
+
+.panel-indented-1 {
+  margin-left: 40px;
+  background-color: rgb(245, 245, 245);
+}
+
+.panel-indented-2 {
+  margin-left: 80px;
+}
+
+.app-content {
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
+}
+
+.app-content mat-card {
+  margin: 20px;
+}
+
+.app-sidenav {
+  padding: 10px;
+  min-width: 250px;
+}
+
+.app-content mat-checkbox {
+  margin: 10px;
+}
+
+.app-toolbar-filler {
+  flex: 1 1 auto;
+}
+
+.app-toolbar-menu {
+  padding: 0 14px 0 14px;
+  color: white;
+}
+
+.app-icon-button {
+  box-shadow: none;
+  user-select: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  filter: none;
+  font-weight: normal;
+  height: auto;
+  line-height: inherit;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+  text-align: left;
+  text-decoration: none;
+}
+
+.app-action {
+  display: inline-block;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+.app-spinner {
+  height: 30px;
+  width: 30px;
+  display: inline-block;
+}
+
+.app-input-icon {
+  font-size: 16px;
+}
+
+.app-list {
+  border: 1px solid rgba(0,0,0,0.12);
+  width: 350px;
+  margin: 20px;
+}
+
+.app-progress {
+  margin: 20px;
+}
+
+.angebotsblock {
+  margin-bottom: 20px;
+}
+
+#previewfooter {
+    font-size: 11px;
+  }
+
+img#logo {
+    height: 1.2cm;
+    margin-bottom: 29mm;
+}
+
+/*@page {*/
+/*  size: A4 portrait;*/
+/*  margin: 27mm 16mm 27mm 16mm;*/
+/*  counter-increment: page;*/
+/*  @bottom-right {*/
+/*    content: "Page " counter(page);*/
+/*    content: "Page " counter(page) " of " counter(pages);*/
+/*  }*/
+/*}*/
+
+/*@page {*/
+/*    size: A4 portrait;*/
+/*    margin: 137mm 156mm 137mm 156mm;*/
+/*    counter-increment: page;*/
+/*    @bottom-right {*/
+/*      content: "Page " counter(page);*/
+/*      content: "Page " counter(page) " of " counter(pages);*/
+/*    }*/
+/*  }*/
+
+#footer {
+    font-size: 9px;
+}
+
+#footer > small {
+    font-size: inherit;
+}
+
+@media print {
+  
+  @page {
+    size: A4 portrait;
+    margin: 137mm 156mm 137mm 156mm;
+    counter-increment: page;
+    /*@bottom-right {*/
+    /*  content: "Page " counter(page);*/
+    /*  content: "Page " counter(page) " of " counter(pages);*/
+    /*}*/
+  }
+  
+  /* Titelbalken ausblenden */
+  mat-toolbar.mat-primary.mat-toolbar {
+    display: none!important;
+  }
+
+  /* Spalte 1 ausblenden */
+  .flex-item.spalte1 {
+    display: none;
+  }
+  
+  /* Templateauswahl ausblenden */
+  .mat-tab-header {
+    display: none!important;
+  }
+  
+  #previewfooter {
+    display:none;
+  }
+
+  md-content {
+      overflow: visible;
+  }
+
+  .spalte2 {
+    width: 100%;
+  }
+  
+  .druckvorschau {
+    
+    border: none;
+    box-shadow: none;
+    background-color: white;
+    page-break-after: always;
+      
+      
+      /*overflow: visible;*/
+      /*top: 0px;*/
+      /*left: 0px;*/
+      /*padding-right: 2cm;*/
+      /*width: 19cm;*/
+      /*height: 29.7cm;*/
+      /*font-size: 12pt;*/
+  }
+
+} 

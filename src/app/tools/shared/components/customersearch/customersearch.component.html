@@ -1,0 +1,10 @@
+<mat-form-field class="example-full-width" appearance="legacy" [ngStyle]="{'font-size.px': size}">
+    <mat-label i18n="@@insertClient">Kunde eingeben und mit Enter bestätigen</mat-label>
+    <input  type="text"  matInput [formControl]="formctrl" placeholder="Kunde" i18n-placeholder="@@client" value="" (ngModelChange)="Kunden($event)"  (keydown.enter)="entertrue($event)">
+    <!--  <section style="float:right; margin-top:8px">-->
+    <!--         <mat-slide-toggle [color]="color" [checked]="checkedKunde" [disabled]="disabled" (change)="changecheckedKunde()"  >-->
+    <!--           P/A-->
+    <!--        </mat-slide-toggle>-->
+    <!--</section>-->
+    <mat-icon style="cursor:pointer" (click)="clicktrue($event)">search</mat-icon>
+</mat-form-field>

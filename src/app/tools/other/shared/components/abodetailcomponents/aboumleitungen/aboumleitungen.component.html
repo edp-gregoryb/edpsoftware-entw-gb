@@ -1,0 +1,219 @@
+<div class="toolBar">
+  <button mat-icon-button [disabled]="selectedRowIndex < 1" (click)="skipUmleitung(-1)" (window:keydown.control.arrowup)="execFunction('skipUmleitung',-1)"><mat-icon matTooltipPosition="above" matTooltip="First (CTRL + cursorup)" i18n-matTooltip>skip_previous</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex < 1" (click)="changeUmleitung(-1)" (window:keydown.alt.arrowup)="execFunction('changeUmleitung',-1)"><mat-icon matTooltipPosition="above" matTooltip="Previous (ALT + cursorup)" i18n-matTooltip>arrow_left</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === aboumleitungensource.data.length - 1 || selectedRowIndex === -1" (click)="changeUmleitung(1)" (window:keydown.alt.arrowdown)="execFunction('changeUmleitung',1)"><mat-icon matTooltipPosition="above" matTooltip="Next (ALT + cursordown)" i18n-matTooltip>arrow_right</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === aboumleitungensource.data.length - 1 || selectedRowIndex === -1" (click)="skipUmleitung(1)" (window:keydown.control.arrowdown)="execFunction('skipUmleitung',1)"><mat-icon matTooltipPosition="above" matTooltip="Last (CTRL + cursordown)" i18n-matTooltip>skip_next</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === -1" (click)="resetProgress()" (window:keydown.F2)="execFunction('resetProgress')"><mat-icon matTooltipPosition="above" matTooltip="Reset (F2)" i18n-matTooltip>refresh</mat-icon></button>
+  <button mat-icon-button [disabled]="editingNew" (click)="newUmleitung()" (window:keydown.F9)="execFunction('newUmleitung')"><mat-icon matTooltipPosition="above" matTooltip="Neu (F9)" i18n-matTooltip>edit</mat-icon></button>
+  <button mat-icon-button [disabled]="editingNew || selectedRowIndex === -1" (click)="copyUmleitung()" (window:keydown.shift.F9)="execFunction('copyUmleitung')"><mat-icon matTooltipPosition="above" matTooltip="Kopieren (SHIFT + F9)" i18n-matTooltip>file_copy</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === -1" (click)="saveUmleitung()" (window:keydown.f7)="execFunction('saveUmleitung')"><mat-icon matTooltipPosition="above" matTooltip="Speichern (F7)" i18n-matTooltip>save</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === -1 || umldetails.r_rowid !== ''" (click)="cancleUmleitung()" (window:keydown.f4)="execFunction('cancleUmleitung')"><mat-icon matTooltipPosition="above" matTooltip="Abbrechen (F4)" i18n-matTooltip>power_settings_new</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === -1 || umldetails.r_rowid === ''" (click)="deleteUmleitung()" (window:keydown.f8)="execFunction('deleteUmleitung')"><mat-icon matTooltipPosition="above" matTooltip="Löschen (F8)" i18n-matTooltip>clear</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === -1 || umldetails.r_rowid === ''" (click)="showErstellInfo()" (window:keydown.F10)="execFunction('showErstellInfo')"><mat-icon matTooltipPosition="above" matTooltip="Information (F10)" i18n-matTooltip>info</mat-icon></button>
+</div>
+
+<div style="float: right; margin-top: 10px;" *ngIf="umldetails && selectedRowIndex != -1">
+  <mat-checkbox i18n>interne Mutation</mat-checkbox>
+</div>
+<div class="clear"></div>
+  
+<div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+  <!-- Tabelle -->
+  <div class="flex-item" fxFlex="50%">
+    <div class="mat-elevation-z2" style="margin-right: 10px;">
+      <mat-table [dataSource]="aboumleitungensource" matSort>
+
+        <ng-container matColumnDef="gueltigab">
+          <mat-header-cell *matHeaderCellDef mat-sort-header i18n>GültigAb</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.gueltigab | date:'dd.MM.yyyy'}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="gueltigbis">
+          <mat-header-cell *matHeaderCellDef mat-sort-header i18n>GültigBis</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.gueltigbis | date:'dd.MM.yyyy'}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="grund">
+          <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Grund</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.grund}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="objekt_txt">
+          <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Objekt</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.objekt_txt}}</mat-cell>
+        </ng-container>
+        
+        <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+        <mat-row  *matRowDef="let row; columns: columnsToDisplay;"
+                  [ngClass]="{'highlight': shouldBeHighlighted(row), 'highlight_new': row.r_rowid === ''}"
+                  (click)="highlight(row)">
+        </mat-row>
+      </mat-table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"  [pageSize]="5"></mat-paginator>
+    </div>
+  </div>
+
+  <!-- Editor-Maske -->
+  <div class="flex-item" fxFlex="50%">
+    <div *ngIf="umldetails && selectedRowIndex != -1" class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+      <!-- Spalte 1 -->
+      <div class="flex-item" fxFlex="50%">
+        <div class="field">
+          <span class="formFieldText"><span i18n>Vorgnr</span>:</span>
+          <mat-form-field class="numberInput">
+            <input matInput placeholder="" type="number" [(ngModel)]="umldetails.vorgnr" disabled>
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <div class="formFieldText"><span i18n>Grund</span>:</div>
+          <div class="formFieldCODN">
+            <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ABUMLUNT', 'grund', 'grund')" id="grund" value="{{umldetails.grund}}">
+            <div (click)="openInModule('CODN', 'grund', 'ABUMLUNT')" class="CodnText">
+              {{umldetails.grund_txt}}&nbsp;
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+
+        <div class="field">
+          <span class="formFieldText"><span i18n>GültigAb</span>:</span>
+          <mat-form-field class="dateInput">
+            <input matInput [matDatepicker]="picker" placeholder="" [(ngModel)]="umldetails.gueltigab">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        
+        <div class="field">
+          <div class="formFieldText"><span i18n>Adresse</span>:</div>
+          <div class="formFieldCODN">
+            <input type="text" class="CodnInput" (keyup.enter)="searchADRW('lbeznr', 'lbeznruml')" id="lbeznruml" value="{{umldetails.lbeznr}}">
+            <div (click)="openInModule('ADRW', 'lbeznr')" class="CodnText">
+              {{umldetails.lbeznr_txt}}&nbsp;
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+
+        <div class="field">
+          <span class="formFieldText"><span i18n>Objekt</span>:</span>
+          <mat-form-field class="formField">
+            <mat-select placeholder="" [(ngModel)]="umldetails.artnr" (ngModelChange)="loadAusgabe()">
+              <mat-option value=""></mat-option>
+              <mat-option *ngFor="let obj of objektAuswahl" [value]="obj.objekt">{{obj['obj-bezeichnung']}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <div class="formFieldText"><span i18n>Versandart</span>:</div>
+          <div class="formFieldCODN">
+            <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ABOVSART', 'vart', 'versandart')" id="versandart" value="{{umldetails.vart}}">
+            <div (click)="openInModule('CODN', 'vart', 'ABOVSART')" class="CodnText">
+              {{umldetails.vart_txt}}&nbsp;
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+
+        <div class="field">
+          <div class="formFieldText"><span i18n>Fakt.&nbsp;Code</span>:</div>
+          <div class="formFieldCODN">
+            <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ABFAKTCD', 'faktcd', 'faktcd')" id="faktcd" value="{{umldetails.faktcd}}">
+            <div (click)="openInModule('CODN', 'faktcd', 'ABFAKTCD')" class="CodnText">
+              {{umldetails.faktcd_txt}}&nbsp;
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+
+        <div class="field">
+          <div class="formFieldText"><span i18n>Status</span>:</div>
+          <div class="formFieldCODN">
+            <input type="text" class="CodnInput" (keyup.enter)="searchCODN('AWABSTAT', 'stat', 'statusUml')" id="statusUml" value="{{umldetails.stat}}">
+            <div (click)="openInModule('CODN', 'stat', 'AWABSTAT')" class="CodnText">
+              {{umldetails.stat_txt}}&nbsp;
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+      </div>
+
+      <!-- Spalte 2 -->
+      <div class="flex-item" fxFlex="50%">
+        <div class="field">
+          <span class="formFieldText"><span i18n>Posnr</span>:</span>
+          <mat-form-field class="numberInput">
+            <input matInput placeholder="" type="number" [(ngModel)]="umldetails.posnr" disabled>
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <span class="formFieldText"><span i18n>Firma</span>:</span>
+          <mat-form-field class="numberInput">
+            <input matInput placeholder="" type="number" [(ngModel)]="umldetails.firma">
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <span class="formFieldText"><span i18n>GültigBis</span>:</span>
+          <mat-form-field class="dateInput">
+            <input matInput [matDatepicker]="picker2" placeholder="" [(ngModel)]="umldetails.gueltigbis">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
+        
+        <div class="field">
+          <span class="formFieldText"><span i18n>Abw.&nbsp;Menge</span>:</span>
+          <mat-form-field class="numberInput">
+            <input matInput placeholder="" type="number" [(ngModel)]="umldetails.menge">
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <span class="formFieldText"><span i18n>Ausgabe</span>:</span> <!-- AWTE -->
+          <mat-form-field class="formField">
+            <mat-select placeholder="" [(ngModel)]="umldetails.teilausg">
+              <mat-option value=""></mat-option>
+              <mat-option *ngFor="let ausg of ausgAuswahl" [value]="ausg.artnr">{{ausg.bez}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <span class="formFieldText"><span i18n>PalID</span>:</span> <!-- ASPA -->
+          <mat-form-field class="formField">
+            <mat-select placeholder="" [(ngModel)]="umldetails.palettierID">
+              <mat-option value=""></mat-option>
+              <mat-option *ngFor="let palett of palettierIdAuswahl" [value]="palett.palettierID">{{palett.bezeichnung}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <span class="formFieldText"><span i18n>Leitweg</span>:</span>
+          <mat-form-field class="formField">
+            <mat-select placeholder="" [(ngModel)]="umldetails.leitweg" (ngModelChange)="getVTRNR(umldetails.leitweg)">
+              <mat-select-trigger>{{ausgewaehlterLeitweg}}</mat-select-trigger>
+              <mat-option value=""></mat-option>
+              <mat-option *ngFor="let leitweg of leitwegAuswahl" [value]="leitweg.r_rowid">[{{leitweg.vtrnr}}]&nbsp;{{leitweg.strasse}}&nbsp;{{leitweg.hnrn}}{{leitweg.hnra}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <div class="formFieldText"><span i18n>Status</span>:</div>
+          <div class="formFieldCODN">
+            <input type="text" class="CodnInput" (keyup.enter)="searchCODN('AWABSTAT', 'stat', 'statusUml')" id="statusUml" value="{{umldetails.stat}}">
+            <div (click)="openInModule('CODN', 'stat', 'AWABSTAT')" class="CodnText">
+              {{umldetails.stat_txt}}&nbsp;
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

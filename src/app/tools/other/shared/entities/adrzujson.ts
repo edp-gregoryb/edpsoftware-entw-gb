@@ -1,0 +1,57 @@
+
+export interface Adrzujson {
+  abkname?: string;
+  adrtitel?: string;
+  adrtyp?: string;
+  altenr?: string;
+  anlass?: string;
+  anrkey?: string;
+  anrtext?: string;
+  anrtitel?: string;
+  anrtitel2?: string;
+  bereich?: string;
+  beznr?: string;
+  beznrfirma?: string;
+  bundesland?: string;
+  doublettespeichern?: boolean;
+  email?: string;
+  email2?: string;
+  email3?: string;
+  fehlercode?: string;
+  fehlertext?: string;
+  fname?: string;
+  fnamefirma?: string;
+  ftitel?: string;
+  gname?: string;
+  gname2?: string;
+  gname2firma?: string;
+  gnamefirma?: string;
+  haupttelnr?: string;
+  kfrei?: string;
+  land?: string;
+  natel?: string;
+  nr?: string;
+  ort?: string;
+  pbundesland?: string;
+  pland?: string;
+  plz?: string;
+  plzzu?: string;
+  port?: string;
+  postf?: string;
+  pplz?: string;
+  pplzzu?: string;
+  sprache?: string;
+  standort?: string;
+  stat?: string;
+  strasse?: string;
+  telge?: string;
+  telgedi?: string;
+  telpriv?: string;
+  telueber?: string;
+  termid?: string;
+  timestamp?: string;
+  vname?: string;
+  web?: string;
+  xdatum?: string;
+
+}

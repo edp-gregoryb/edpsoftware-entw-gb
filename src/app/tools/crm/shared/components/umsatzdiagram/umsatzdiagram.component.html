@@ -1,0 +1,4 @@
+
+<div [hidden]="!visibleJaNein">
+    <p-chart #chart type="bar" [width]="width" [height]="height" [data]="data" [options]="options" (onDataSelect)="update($event)"></p-chart>
+</div>

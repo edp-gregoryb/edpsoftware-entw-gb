@@ -1,0 +1,13 @@
+
+      <ngx-charts-bar-vertical-2d *ngIf="loaded"
+      [view]="view"
+      [results]="balkendiagrammumsatz"
+      [gradient]="gradient"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="showLegend"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [barPadding]="barPadding"
+      (select)="onSelect($event)">
+    </ngx-charts-bar-vertical-2d>

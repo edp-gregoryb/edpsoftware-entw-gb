@@ -1,0 +1,79 @@
+mat-list {
+
+    overflow: scroll;
+    min-height: 80%;
+    overflow-x: hidden;
+    height: 80%;
+    margin-right: 20px;
+    
+}
+
+::-webkit-scrollbar { 
+    display: none; 
+}
+
+.important {
+    font-size: 20pt;
+    margin-bottom: 20px;
+}
+.aktiviSelect{
+     display: flex;
+  flex-flow: row wrap;
+}
+
+.mat-button, .mat-raised-button{
+    line-height: 23px !Important;
+    padding: 0 8px !Important;
+   }
+
+::ng-deep .mat-checkbox-inner-container {
+    display: inline-block;
+    height: 16px !Important;
+    line-height: 0;
+    margin: auto;
+    margin-right: 8px;
+    order: 0;
+    position: relative;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 16px !Important;
+    flex-shrink: 0;
+}
+.input-full-width {
+  width: 100%;
+}
+
+/*/deep/ .mat-input-infix {*/
+/*    padding: .0em 0;*/
+/*    border-top: .0em solid transparent;*/
+/*}*/
+
+.sizelabel{
+    display: inline-block;
+    width: 20%;
+}
+
+[hidden] {
+   display: none;
+}
+
+.border-side {
+  /*border-right: solid 1px grey;*/
+
+}
+.example-full-width {
+    width: 100%;
+}
+
+#notizTextarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 50px;
+    max-height: 300px;
+}
+
+textarea {
+    max-height: 300px;
+    caret-color: black;
+}
+

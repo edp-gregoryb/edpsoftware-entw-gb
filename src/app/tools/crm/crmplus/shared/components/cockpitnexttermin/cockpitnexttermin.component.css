@@ -1,0 +1,62 @@
+.mat-paginator {
+    display: block;
+    height: 43px;
+}
+.mat-paginator-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 40px;
+    padding: 0 8px;
+    flex-wrap: wrap-reverse;
+    margin-top: -25px;
+}
+
+.mat-row {
+    min-height: 30px;
+}
+
+ .mat-column-vetreter {
+    max-width: 50px;
+}
+
+ .mat-column-termdatum {
+    max-width: 80px;
+}
+
+ .mat-column-termzeit {
+    max-width: 50px;
+}
+
+ .mat-column-NAME {
+    max-width: 250px;
+}
+
+ .mat-column-termrapptext {
+    max-width: 250px;
+}
+
+ .mat-column-termaktivic {
+    max-width: 50px;
+}
+
+.mat-header-row {
+    min-width: 100%;
+    min-height: 35px;
+}
+
+.overflow {
+  /*  width: 10em;*/
+  /*outline: 1px solid #000;*/
+  /*margin: 0 0 2em 0;*/
+  
+  /**
+   * Required properties to achieve text-overflow
+   */
+      white-space: nowrap;
+    overflow: hidden;
+}
+
+.ellipsis { 
+ text-overflow: ellipsis;
+ }

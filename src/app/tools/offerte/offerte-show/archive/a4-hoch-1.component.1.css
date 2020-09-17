@@ -1,0 +1,127 @@
+.druckvorschau_vorlage1 {
+  background-color: white;
+  border: 1px solid grey;
+  line-height: normal;
+  box-shadow: 5px 5px 20px 5px rgba(189,189,189,0.51);
+  width: 625px;
+  margin: 20px auto 20px auto;
+  padding-top: 20px;
+  padding-left: 40px;
+  padding-right: 30px;
+  padding-bottom: 20px;
+}
+
+td {
+  vertical-align: top;
+}
+
+.angebotsspalte1 {
+  width: 150px;
+  padding: 0;
+}
+
+.preis {
+  background-color: rgba(255,100,100,0.25);
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.pre-reset {
+  font-family: inherit !important;
+  border: inherit !important;
+  padding: inherit !important;
+  margin: inherit !important;
+  background-color: inherit !important;
+}
+
+.hauptaktion {
+  margin-left: 20px;
+}
+
+.pull-right {
+    float: right!important;
+}
+
+.angebotsblock {
+  margin-bottom: 20px;
+}
+
+#previewfooter {
+    font-size: 11px;
+  }
+
+img#logo {
+    height: 1.2cm;
+    margin-bottom: 29mm;
+}
+
+
+#footer {
+  font-size: 9px;
+}
+
+#footer > small {
+  font-size: inherit;
+}
+
+
+
+/* Print */
+
+@media print {
+  
+  @page {
+    size: A4 portrait;
+    margin: 137mm 156mm 137mm 156mm;
+    counter-increment: page;
+    /*@bottom-right {*/
+    /*  content: "Page " counter(page);*/
+    /*  content: "Page " counter(page) " of " counter(pages);*/
+    /*}*/
+  }
+  
+  /* Titelbalken ausblenden */
+  mat-toolbar.mat-primary.mat-toolbar {
+    display: none!important;
+  }
+
+  /* Spalte 1 ausblenden */
+  .flex-item.spalte1 {
+    display: none;
+  }
+  
+  /* Templateauswahl ausblenden */
+  .mat-tab-header {
+    display: none!important;
+  }
+  
+  #previewfooter {
+    display:none;
+  }
+
+  md-content {
+      overflow: visible;
+  }
+
+  .spalte2 {
+    width: 100%;
+  }
+  
+  .druckvorschau {
+    
+    border: none;
+    box-shadow: none;
+    background-color: white;
+    page-break-after: always;
+      
+      
+      /*overflow: visible;*/
+      /*top: 0px;*/
+      /*left: 0px;*/
+      /*padding-right: 2cm;*/
+      /*width: 19cm;*/
+      /*height: 29.7cm;*/
+      /*font-size: 12pt;*/
+  }
+
+}

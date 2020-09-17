@@ -1,0 +1,103 @@
+<mat-drawer-container style="background-color: #DDD;" autosize (window:resize)="windowResize()">
+  <!-- Drawer -->
+  <mat-drawer #drawer class="sidenavContainer" mode="side">
+    <div style="float: right; padding-left: 5px; padding-right: 5px;">
+      <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+    </div>
+    <!-- Sidenav -->
+    <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+  </mat-drawer>
+
+  <!-- Header -->
+  <app-defaultheader [currentAppModule]="currentAppModule" [modulename]="modulename" (onSidenavToggle)="drawer.toggle()" #header></app-defaultheader>
+
+  <!-- Lade-Balken -->
+  <mat-progress-bar *ngIf="httpRequestsLoading > 0" mode="indeterminate" color="warn"></mat-progress-bar>
+
+  <!-- Header -->
+  <app-header [headerTitle]="headerTitle" [linkBack]="headerLinkBack"></app-header>
+
+  <!-- Content -->
+  <div class="wrapper" *ngIf="allObjects" [ngStyle]="{'height.px': innerheight}" style="overflow: scroll;">
+    <form #newObjectForm="ngForm">
+<!--      <p style="color:red">Erstellung einer neuen Produkt-/Workflow-Kombination. Bitte</p>-->
+<!--      <p style="color:red ">bestehendes Objekt auswählen oder ein neues Objekt ab Vorlage erstellen.</p>-->
+      <div style="margin-top: 40px"></div>
+    <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+
+      <div *ngIf="bestehendesObjekt" class="item item-2" fxFlex="100%" fxFlexOrder="1" >
+        <p>Bestehendes Objekt</p>
+        <!-- Objekt-Auswahl -->
+        <mat-form-field style="width: 400px">
+<!--          [disabled]="!newObject"-->
+          <mat-select placeholder="Objekt" i18n-placeholder name="object" (selectionChange)="objectChange()" [(ngModel)]="product.objekt" required>
+            <mat-option *ngFor="let obj of allObjects" [value]="obj.objekt">{{obj.obj_bezeichnung}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+<!--        <mat-icon *ngIf="product && newObject === false" style="margin-left: 10px; cursor: pointer" routerLink="/workflow/workflow-show/productInfo/{{product.objekt}}/{{product.aschlussel}}">info_outline</mat-icon>-->
+        <!--<br>-->
+      </div>
+      <div *ngIf="!bestehendesObjekt" class="item item-3" fxFlex="100%" fxFlexOrder="1" >
+        <p>Neues Objekt</p>
+        <!-- Objekt-Neu Muster -->
+        <mat-form-field style="width: 400px">
+<!--          [disabled]="!newObject"-->
+          <mat-select placeholder="Objektvorlage" i18n-placeholder name="object" (selectionChange)="objectNeuChange($event)"[(ngModel)]="product.objekt" >
+            <mat-option *ngFor="let obj of allNeuObjects" [value]="obj.objekt" >{{obj.obj_bezeichnung}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!--<mat-icon *ngIf="product && newObject === false" style="margin-left: 10px; cursor: pointer" routerLink="/workflow/workflow-show/productInfo/{{product.objekt}}/{{product.aschlussel}}">info_outline</mat-icon>-->
+        <br>
+        <mat-form-field style="width: 400px">
+          <input matInput placeholder="Objekt ID" value="" [(ngModel)]="neuesobjauswahl" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+        <br>
+        <mat-form-field style="width: 400px">
+          <input matInput placeholder="Objekt Bezeichnung" #input maxlength="50" value="" [(ngModel)]="neuesobjbezeichnung" [ngModelOptions]="{standalone: true}">
+          <mat-hint align="end">{{input.value?.length || 0}}/50</mat-hint>
+        </mat-form-field>
+        <br>
+        <button mat-button type="button"  (click)="objektErstellen()" style="cursor: pointer; border: solid grey 1px;" i18n>Neues Objekt erstellen</button>
+        <br><br>
+        <div *ngIf="fehlertextAnzeige">
+        <div>{{titelFehlertext}}</div>
+        <div style="font-style:italic;">{{fehlertext}}</div>
+        </div>
+      </div>
+<!--      <div class="item item-1" fxFlex="40%" fxFlexOrder="3">-->
+
+<!--      </div>-->
+<!--      <div class="item item-4" fxFlex="0%" fxFlexOrder="4">-->
+<!--      </div>-->
+
+    <!--<div class="smallWrapper">-->
+
+    </div>
+      <div style="margin-top: 40px"></div>
+      <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+
+        <div class="item item-2" fxFlex="33%" fxFlexOrder="1">
+          <p style="color: red">Wählen Sie eine Ausgabe, um das Produkt zeitlich einzuordnen</p>
+          <!-- Ausgabe-Auswahl -->
+          <mat-form-field style="width: 400px">
+<!--            [disabled]="!newObject"-->
+            <mat-select placeholder="Ausgabe" i18n-placeholder name="aschlussel" [(ngModel)]="product.aschlussel" (selectionChange)="aschlusselChange()"  required>
+              <mat-option *ngFor="let ausg of allAschlussel" [value]="ausg.aschlussel">{{ausg.ausgbez}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <br>
+
+          <!-- Buttons -->
+          <button mat-button type="button" [disabled]="newObjectForm.invalid" (click)="saveProduct()" style="cursor: pointer; border: solid grey 1px;" i18n>Produkt speichern</button>
+          <br><br>
+          <button mat-button type="button" *ngIf="!newObject" (click)="deleteProduct()" style="cursor: pointer; border: solid red 1px; background-color: rgba(255, 127, 0, 0.5)" i18n>Produkt löschen</button>
+        </div>
+        <div class="item item-1" fxFlex="33%" fxFlexOrder="2">
+        </div>
+        <div class="item item-3" fxFlex="33%" fxFlexOrder="3">
+        </div>
+      </div>
+      </form>
+    </div>
+  <!--</div>-->
+</mat-drawer-container>

@@ -1,0 +1,38 @@
+<div>
+   <mat-form-field class="full-width">
+   <input type="text"  matInput [formControl]="formctrl" [(ngModel)]="dynvalue" placeholder="{{dynName.bez}}" (ngModelChange)="getdyn($event)" [matAutocomplete]="auto">
+   <button mat-button *ngIf="dynvalue" matSuffix mat-icon-button aria-label="Clear" (click)="dynvalue=''" >
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>
+
+<mat-autocomplete #auto="matAutocomplete">
+   <mat-option *ngFor="let dyn of dyndata" [value]="dyn.feld2" (click)="additemforsearch(dyn)">
+      {{ dyn.feld2}}
+   </mat-option>
+</mat-autocomplete>
+</div>
+<form [formGroup]="filter">
+<div formArrayName="itemforsearch">
+    
+    <div *ngFor="let _itemforsearch of filter.get('itemforsearch')?.controls; let i = index" >
+
+            <div [formGroupName]="i"  class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+                <div >
+                    <div >
+                        <!--<div class="item item-1" fxFlex="20%" fxFlexOrder="1">{{nameforplaceh}}:</div>-->
+                        <!--<div class="item item-2" fxFlex="20%" fxFlexOrder="2"><input matInput class="example-full-width" formControlName="feld1"></div>-->
+                        <!--<div class="item item-3" fxFlex="20%" fxFlexOrder="3"><input matInput class="example-full-width" formControlName="feld2"></div>-->
+                        <!--<div class="item item-3" fxFlex="20%" fxFlexOrder="4"><input matInput class="example-full-width" formControlName="keyn"></div>-->
+                        <!--<div class="item item-4" fxFlex="20%" fxFlexOrder="5"><button mat-icon-button (click)="deleteitemforsearch(i)" ><mat-icon style="margin-bottom:15px">delete</mat-icon></button>-->
+                        <div style="float:left"><input matInput formControlName="feld1" /></div>
+                        <div style="float:left; width:100px"><input matInput  formControlName="feld2" /></div>
+                        <div style="float:left; width:100px"><input matInput  formControlName="keyn" /></div>
+                        <div style="float:right; margin-top:-10px"><button mat-icon-button (click)="deleteitemforsearch(i)" ><mat-icon>delete</mat-icon></button></div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</form>

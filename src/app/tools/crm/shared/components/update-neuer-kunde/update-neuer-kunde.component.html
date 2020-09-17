@@ -1,0 +1,478 @@
+<mat-drawer-container class="mainContainer" autosize (window:resize)="windowResize($event)">
+
+  <mat-drawer #drawer class="sidenavContainer" mode="side">
+    <div style="float: right; padding-left: 5px; padding-right: 5px;">
+      <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+    </div>
+    <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [lastAppModule]="lastAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+  </mat-drawer>
+<div class="appMainframe">
+<!--  <app-defaultheader [currentAppModule]="currentAppModule" [modulename]="modulename" (changeSicht)="sichtchange($event)" (onSidenavToggle)="drawer.toggle()" (customerforsearch)="kundenliste($event)" (loading)="currentlyLoading($event)" #header></app-defaultheader>-->
+  <app-defaultheader [currentAppModule]="currentAppModule" [modulename]="modulename" #header></app-defaultheader>
+  <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+    <div class="flex-item" fxFlex="100%" [ngStyle]="{'height.px': innerheightwindow}" style="overflow: scroll;">
+  <form [formGroup]="adressForm" (ngSubmit)="onSubmit()">
+
+  <mat-accordion class="accordion" multi="true" displayMode="flat">
+    <!-- Allgemeines -->
+    <mat-expansion-panel class="accordionPanel" [expanded]="expanded.includes(0)">
+      <mat-expansion-panel-header class="accordionHeader" >
+        <mat-panel-title>
+          <b i18n>Name / Adresse</b>
+        </mat-panel-title>
+<!--        <mat-panel-description>-->
+<!--         -->
+<!--        </mat-panel-description>-->
+      </mat-expansion-panel-header>
+
+      <!-- Allgemeines -->
+      <div class="accordionContent" >
+        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+          <!-- Spalte 1 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Anrede -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Anrede</span>:</div>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="text" formControlName="Anrkey" tabindex="1">
+              </mat-form-field>
+              <button mat-icon-button (click)="showCoden('anrede', 'Anrkey')"><mat-icon>arrow_drop_down_circle</mat-icon></button>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="text" formControlName="anrkey_txt">
+              </mat-form-field>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Name -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Name</span>:</div>
+              <mat-form-field class="formField">
+                <input matInput placeholder="" type="text" formControlName="fname" tabindex="2">
+              </mat-form-field>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Vorname -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Vorname</span>:</span>
+              <mat-form-field class="formField">
+                <input matInput placeholder="" type="text" formControlName="vname" tabindex="3">
+              </mat-form-field>
+            </div>
+
+            <!-- Zusatz1 -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Zusatz 1</span>:</span>
+              <mat-form-field class="formField">
+                <input matInput placeholder="" type="text" formControlName="gname" tabindex="4">
+              </mat-form-field>
+            </div>
+
+            <!-- Zusatz2 -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Zusatz 2</span>:</span>
+              <mat-form-field class="formField">
+                <input matInput placeholder="" type="text" formControlName="gname2" tabindex="5">
+              </mat-form-field>
+            </div>
+
+            <!-- Strasse -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Strasse</span>:</span>
+              <mat-form-field class="formField">
+                <input matInput placeholder="" type="text" formControlName="strasse" tabindex="6">
+              </mat-form-field>
+            </div>
+
+            <!-- PLZ -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>PLZ</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" formControlName="plz" tabindex="8">
+              </mat-form-field>
+
+            <span><span i18n>  Zus</span>:</span>
+            <mat-form-field class="numberInput">
+              <input matInput placeholder="" type="number" formControlName="plzzu" tabindex="9">
+            </mat-form-field>
+            </div>
+          </div>
+
+
+          <!-- Spalte 2 -->
+          <div class="flex-item" fxFlex="36%">
+
+            <!-- BezNr -->
+            <div class="field">
+              <span class="formFieldText"><span i18n="@@BezNr">BezNr</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" formControlName="beznr" tabindex="11">
+              </mat-form-field>
+            </div>
+
+            <!-- Adresstyp -->
+            <div class="field">
+              <span class="formFieldText"><span i18n="@@BAdresstyp">Adresstyp</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" formControlName="adrtyp" tabindex="12">
+              </mat-form-field>
+              <button mat-icon-button (click)="showCoden('adrtyp', 'adrtyp')"><mat-icon>arrow_drop_down_circle</mat-icon></button>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="text" formControlName="adrtyp_txt">
+              </mat-form-field>
+            </div>
+
+            <!-- Kanton -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Kanton</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="text" formControlName="bundesland" tabindex="13">
+              </mat-form-field>
+              <button mat-icon-button (click)="showCoden('bland', 'bundesland')"><mat-icon>arrow_drop_down_circle</mat-icon></button>
+            </div>
+
+            <!-- Land -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Land</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="text" formControlName="land" tabindex="14">
+              </mat-form-field>
+              <button mat-icon-button (click)="showCoden('land', 'land')"><mat-icon>arrow_drop_down_circle</mat-icon></button>
+            </div>
+            <!-- Boten Info -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Boten Info</span>:</span>
+
+            </div>
+            <!-- Nr -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Nr</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" formControlName="nr" tabindex="7">
+              </mat-form-field>
+            </div>
+            <!-- Ort -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Ort</span>:</span>
+              <mat-form-field class="formField">
+                <input matInput placeholder="" type="text" formControlName="ort" tabindex="10">
+              </mat-form-field>
+              <button mat-icon-button (click)="showPlzOrt()"><mat-icon>arrow_drop_down_circle</mat-icon></button>
+            </div>
+          </div>
+
+          <!-- Spalte 3 -->
+          <div class="flex-item" fxFlex="30%">
+
+            <!-- leeres Feld -->
+            <div style="height: 54px;"></div>
+            <!-- Postfach -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Postfach</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" formControlName="postf" tabindex="15">
+              </mat-form-field>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" formControlName="pdruck">
+              </mat-form-field>
+            </div>
+            <div class="field">
+              <span class="formFieldText"><span i18n>PLZ</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" formControlName="pplz" tabindex="16">
+              </mat-form-field>
+              <span><span i18n>Zus</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" formControlName="pplzzu">
+              </mat-form-field>
+<!--              <button mat-icon-button (click)="showCoden('adrtyp')"><mat-icon>arrow_drop_down_circle</mat-icon></button>-->
+            </div>
+            <div class="field">
+              <span class="formFieldText"><span i18n>Ort</span>:</span>
+              <mat-form-field class="formField">
+                <input matInput placeholder="" type="text" formControlName="port" tabindex="17">
+              </mat-form-field>
+            </div>
+            <!-- Kanton -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Kanton</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="text" formControlName="pbundesland" tabindex="18">
+              </mat-form-field>
+              <button mat-icon-button (click)="showCoden('bland', 'pbundesland')"><mat-icon>arrow_drop_down_circle</mat-icon></button>
+            </div>
+
+            <!-- Land -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Land</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="text" formControlName="pland" tabindex="19">
+              </mat-form-field>
+              <button mat-icon-button (click)="showCoden('land', 'pland')"><mat-icon>arrow_drop_down_circle</mat-icon></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Lieferdaten -->
+    <mat-expansion-panel class="accordionPanel" [expanded]="expanded.includes(1)" >
+      <mat-expansion-panel-header class="accordionHeader">
+        <mat-panel-title>
+          <b i18n>Telefon / Fax</b>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+        <!-- Spalte 1 -->
+        <div class="flex-item" fxFlex="33%">
+          <!-- Anrede -->
+          <div class="field">
+            <div class="formFieldText"><span i18n>Geschäft</span>:</div>
+            <mat-form-field class="phoneInput">
+              <input matInput placeholder="" type="text" formControlName="telge" tabindex="20">
+            </mat-form-field>
+            <div class="clear"></div>
+          </div>
+          <!-- Ges.dir -->
+          <div class="field">
+            <div class="formFieldText"><span i18n>Ges.dir</span>:</div>
+            <mat-form-field class="phoneInput">
+              <input matInput placeholder="" type="text" formControlName="telgedi" tabindex="21">
+            </mat-form-field>
+            <div class="clear"></div>
+          </div>
+          <!-- Privat -->
+          <div class="field">
+            <div class="formFieldText"><span i18n>Privat</span>:</div>
+            <mat-form-field class="phoneInput">
+              <input matInput placeholder="" type="text" formControlName="telpriv" tabindex="22">
+            </mat-form-field>
+            <div class="clear"></div>
+          </div>
+        </div>
+        <!-- Spalte 2 -->
+        <div class="flex-item" fxFlex="33%">
+          <!-- Anrede -->
+          <div class="field">
+            <div class="formFieldText"><span i18n>Natel</span>:</div>
+            <mat-form-field class="phoneInput">
+              <input matInput placeholder="" type="text" formControlName="natel" tabindex="23">
+            </mat-form-field>
+            <div class="clear"></div>
+          </div>
+          <!-- Ges.dir -->
+          <div class="field">
+            <div class="formFieldText"><span i18n>Übermittlung</span>:</div>
+            <mat-form-field class="phoneInput">
+              <input matInput placeholder="" type="text" formControlName="teleueber" tabindex="24">
+            </mat-form-field>
+            <div class="clear"></div>
+          </div>
+          <!-- Privat -->
+          <div class="field">
+            <div class="formFieldText"><span i18n>Hauptnr</span>:</div>
+            <mat-form-field class="phoneInput">
+              <input matInput placeholder="" type="text" formControlName="haupttelnr" tabindex="25">
+            </mat-form-field>
+            <div class="clear"></div>
+          </div>
+        </div>
+        <!-- Spalte 3 -->
+        <div class="flex-item" fxFlex="33%">
+          <!-- Anrede -->
+          <div class="field">
+            <div class="formFieldText"><span i18n>Fax Geschäft</span>:</div>
+            <mat-form-field class="phoneInput">
+              <input matInput placeholder="" type="text" formControlName="faxge" tabindex="26">
+            </mat-form-field>
+            <div class="clear"></div>
+          </div>
+          <!-- Ges.dir -->
+          <div class="field">
+            <div class="formFieldText"><span i18n>Fax Ges.dir</span>:</div>
+            <mat-form-field class="phoneInput">
+              <input matInput placeholder="" type="text" formControlName="faxgedi" tabindex="27">
+            </mat-form-field>
+            <div class="clear"></div>
+          </div>
+          <!-- Privat -->
+          <div class="field">
+            <div class="formFieldText"><span i18n>Fax Privat</span>:</div>
+            <mat-form-field class="phoneInput">
+              <input matInput placeholder="" type="text" formControlName="faxpriv" tabindex="28">
+            </mat-form-field>
+            <div class="clear"></div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- Lieferdaten -->
+    <mat-expansion-panel class="accordionPanel" [expanded]="expanded.includes(1)" >
+      <mat-expansion-panel-header class="accordionHeader">
+        <mat-panel-title>
+          <b i18n>Detail</b>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+        <!-- Spalte 1 -->
+        <div class="flex-item" fxFlex="33%">
+          <!-- Anrede -->
+          <div class="field">
+            <div class="formFieldTextlang"><span i18n>Freier Suchbegriff</span>:</div>
+            <mat-form-field class="formField">
+              <input matInput placeholder="" type="text" formControlName="kfrei" tabindex="29">
+            </mat-form-field>
+            <div class="clear"></div>
+          </div>
+          <div class="field">
+            <div class="formFieldTextlang"><span i18n>Kurzname</span>:</div>
+            <mat-form-field class="formField">
+              <input matInput placeholder="" type="text" formControlName="abkname" tabindex="30">
+            </mat-form-field>
+            <div class="clear"></div>
+          </div>
+          <div class="field">
+            <span class="formFieldTextlang"><span i18n>Basis BezNr</span>:</span>
+            <mat-form-field class="numberInput">
+              <input matInput placeholder="" type="text" formControlName="bbeznr" tabindex="31">
+            </mat-form-field>
+          </div>
+          <div class="field">
+            <span class="formFieldTextlang"><span i18n>AlteNr</span>:</span>
+            <mat-form-field class="numberInput">
+              <input matInput placeholder="" type="text" formControlName="alte_nr" tabindex="32">
+            </mat-form-field>
+          </div>
+          <div class="field">
+            <span class="formFieldTextlang"><span i18n>AnzBesch</span>:</span>
+            <mat-form-field class="numberInput">
+              <input matInput placeholder="" type="text" formControlName="anzbesch" tabindex="33">
+            </mat-form-field>
+          </div>
+          <div class="field">
+            <span class="formFieldTextlang"><span i18n>Sprache</span>:</span>
+            <mat-form-field class="numberInput">
+              <input matInput placeholder="" type="text" formControlName="sprache" tabindex="34">
+            </mat-form-field>
+            <button mat-icon-button (click)="showCoden('sprache', 'sprache')"><mat-icon>arrow_drop_down_circle</mat-icon></button>
+          </div>
+        </div>
+        <!-- Spalte 2 -->
+        <div class="flex-item" fxFlex="33%">
+          <!-- Anrede -->
+          <div class="field">
+            <div class="formFieldTextlang"><span i18n>Email</span>:</div>
+            <mat-form-field class="formField">
+              <input matInput placeholder="" type="text" formControlName="Email" tabindex="35">
+            </mat-form-field>
+            <div class="clear"></div>
+          </div>
+          <div class="field">
+            <div class="formFieldTextlang"><span i18n>Email2</span>:</div>
+            <mat-form-field class="formField">
+              <input matInput placeholder="" type="text" formControlName="Email2" tabindex="36">
+            </mat-form-field>
+            <div class="clear"></div>
+          </div>
+          <div class="field">
+            <span class="formFieldTextlang"><span i18n>Email3</span>:</span>
+            <mat-form-field class="formField">
+              <input matInput placeholder="" type="text" formControlName="Email3" tabindex="37">
+            </mat-form-field>
+          </div>
+          <div class="field">
+            <span class="formFieldTextlang"><span i18n>Web</span>:</span>
+            <mat-form-field class="formField">
+              <input matInput placeholder="" type="text" formControlName="web" tabindex="38">
+            </mat-form-field>
+          </div>
+          <div class="field">
+            <span class="formFieldTextlang"><span i18n>Titel vor Name</span>:</span>
+            <mat-form-field class="numberInput">
+              <input matInput placeholder="" type="text" formControlName="adrtitel" tabindex="39">
+            </mat-form-field>
+            <button mat-icon-button (click)="showCoden('titel', 'adrtitel')"><mat-icon>arrow_drop_down_circle</mat-icon></button>
+<!--            <mat-form-field class="numberInput">-->
+<!--              <input matInput placeholder="" type="text" formControlName="adrtyp_txt">-->
+<!--            </mat-form-field>-->
+          </div>
+          <div class="field">
+            <span class="formFieldTextlang"><span i18n>Titel nach Name</span>:</span>
+            <mat-form-field class="numberInput">
+              <input matInput placeholder="" type="text" formControlName="anrtitel" tabindex="40">
+            </mat-form-field>
+            <button mat-icon-button (click)="showCoden('titel', 'anrtitel')"><mat-icon>arrow_drop_down_circle</mat-icon></button>
+          </div>
+        </div>
+        <!-- Spalte 3 -->
+        <div class="flex-item" fxFlex="33%">
+          <!-- Anrede -->
+          <div class="field">
+            <span class="formFieldTextlang"><span i18n>Titel nach Name</span>:</span>
+            <mat-form-field class="numberInput">
+              <input matInput placeholder="" type="text" formControlName="anrtitel2" tabindex="41">
+            </mat-form-field>
+            <button mat-icon-button (click)="showCoden('anrtitel', 'anrtitel2')"><mat-icon>arrow_drop_down_circle</mat-icon></button>
+          </div>
+          <div class="field">
+            <div class="formFieldTextlang"><span i18n>Standort</span>:</div>
+            <mat-form-field class="formField">
+              <input matInput placeholder="" type="text" formControlName="standort" tabindex="42">
+            </mat-form-field>
+            <div class="clear"></div>
+          </div>
+          <div class="field">
+            <span class="formFieldTextlang"><span i18n>Funktion</span>:</span>
+            <mat-form-field class="formField">
+              <input matInput placeholder="" type="text" formControlName="ftitel" tabindex="43">
+            </mat-form-field>
+            <button mat-icon-button (click)="showCoden('funktion', 'ftitel')"><mat-icon>arrow_drop_down_circle</mat-icon></button>
+          </div>
+          <div class="field">
+            <span class="formFieldTextlang"><span i18n>Abteilung</span>:</span>
+            <mat-form-field class="formField">
+              <input matInput placeholder="" type="text" formControlName="bereich" tabindex="44">
+            </mat-form-field>
+            <button mat-icon-button (click)="showCoden('abteilun', 'bereich')"><mat-icon>arrow_drop_down_circle</mat-icon></button>
+          </div>
+          <div class="field">
+            <span class="formFieldTextlang"><span i18n>Anlass</span>:</span>
+            <mat-form-field class="formField">
+              <input matInput placeholder="" type="text" formControlName="anlass" tabindex="45">
+            </mat-form-field>
+            <button mat-icon-button (click)="showCoden('anlass', 'anlass')"><mat-icon>arrow_drop_down_circle</mat-icon></button>
+          </div>
+          <div class="field">
+            <span class="formFieldText"><span i18n>Nächste</span>:</span>
+            <mat-form-field class="dateInput">
+              <input matInput [matDatepicker]="picker5" placeholder="" formControlName="xdatum" tabindex="46">
+              <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+              <mat-datepicker #picker5></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="field">
+            <span class="formFieldText"><span i18n>gültig ab</span>:</span>
+            <mat-form-field class="dateInput">
+              <input matInput [matDatepicker]="picker6" placeholder="" formControlName="gueltigab" tabindex="47">
+              <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+              <mat-datepicker #picker6></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <mat-action-row>
+      <button mat-raised-button color="primary" (click)="abbrechenAdresse()" i18n tabindex="49">Abbrechen</button>
+      <button mat-raised-button color="primary" (click)="saveAdresse($event)" i18n tabindex="48">Speichern</button>
+<!--      <button mat-icon-button (click)="saveAdresse($event)"><mat-icon>save</mat-icon></button>-->
+    </mat-action-row>
+  </mat-accordion>
+
+
+
+  </form>
+    </div>
+  </div>
+</div>
+
+</mat-drawer-container>

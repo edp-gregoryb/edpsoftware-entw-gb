@@ -1,0 +1,9 @@
+<div stye="clear: both">
+    {{data.art}} <span *ngIf="data.val">"{{data.val}}"</span>&nbsp;<span i18n>wird unwiderruflich gelöscht.</span>
+    <br>
+    <span *ngIf="data.val">"{{data.val}}"</span>&nbsp;<span i18n>trotzdem löschen?</span>
+</div>
+<div mat-dialog-actions style="float: right">
+    <button mat-button mat-dialog-close="0" cdkFocusInitial i18n>Nein</button>
+    <button mat-button mat-dialog-close="1" i18n>Ja</button>
+</div>

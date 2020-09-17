@@ -1,0 +1,150 @@
+
+
+  <!--<mat-tab-group>-->
+  <form fxLayout="column" [formGroup]="objektForm" (ngSubmit)="onSubmit()" xmlns="http://www.w3.org/1999/html">
+      <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+          <mat-form-field class="size100" fxFlex>
+              <input matInput formControlName="objbezeichnung" #input maxlength="50" value="" placeholder="Objekt Bezeichnung">
+              <mat-hint align="end">{{input.value?.length || 0}}/50</mat-hint>
+          </mat-form-field>
+
+      </div>
+
+      <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+          <mat-form-field class="size100" fxFlex>
+              <input matInput formControlName="herausgeber" placeholder="Herausgeber">
+          </mat-form-field>
+
+      </div>
+
+      <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+
+          <mat-form-field class="size100" fxFlex>
+              <input matInput formControlName="publikation" placeholder="Publikation">
+          </mat-form-field>
+          <mat-form-field >
+          <input matInput type="date" formControlName="publikationsdatum" placeholder="Publikationsdatum"  value="" fxFlex>
+          </mat-form-field>
+
+
+
+      </div>
+
+      <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+          <mat-form-field class="size100" fxFlex>
+              <input matInput formControlName="jahrgang" placeholder="Jahrgang">
+          </mat-form-field>
+          <mat-form-field class="size100" fxFlex>
+              <input matInput formControlName="jahr" placeholder="Jahr">
+          </mat-form-field>
+      </div>
+
+
+      <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+          <mat-form-field class="size100" fxFlex>
+              <input matInput formControlName="ausgabe" placeholder="Ausgabe">
+          </mat-form-field>
+          <mat-form-field class="size100" fxFlex>
+              <input matInput formControlName="seitenzahl" placeholder="Seitenzahl">
+          </mat-form-field>
+
+
+      </div>
+      <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+
+          <mat-form-field class="size100" fxFlex>
+              <input matInput formControlName="permalinkid" placeholder="PermalinkID" (click)="pidVorschlag()"  (keydown.tab)="pidVorschlag()" [(ngModel)]="_permalinkid">
+          </mat-form-field>
+<!--          (keydown.tab)="pidVorschlag()"-->
+
+          <mat-form-field class="size100" fxFlex>
+              <input matInput formControlName="doi_nummer" placeholder="DOI-Nummer">
+          </mat-form-field>
+
+
+          <section class="example-section">
+              <label class="example-margin">OpenAccess:</label>
+              <mat-checkbox (change)="changeOpenaccess($event)" formControlName="openaccess"></mat-checkbox>
+          </section>
+
+
+      </div>
+      <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+          <mat-form-field class="size100" fxFlex>
+              <input matInput formControlName="erschort" placeholder="Erscheinungsort">
+          </mat-form-field>
+          <mat-form-field class="size100" fxFlex>
+              <input matInput formControlName="auflage" placeholder="Auflage">
+          </mat-form-field>
+          <mat-form-field class="size100" fxFlex>
+              <input matInput formControlName="reihe" placeholder="Reihe">
+          </mat-form-field>
+
+
+      </div>
+
+<!--      <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+<!--        <mat-form-field class="example-full-width" fxFlex>-->
+
+<!--            <mat-label>Objektart</mat-label>-->
+<!--            <mat-select  formControlName="objart">-->
+<!--                <mat-option *ngFor="let coden of suchresult3" [value]="coden.code_wert" (change)="changeCodenObjektart(coden.code_wert)">-->
+<!--                    {{coden.code_text}}-->
+<!--                </mat-option>-->
+<!--            </mat-select>-->
+<!--        </mat-form-field>-->
+
+<!--      </div>-->
+
+
+
+
+
+
+
+<!--      <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+
+<!--      </div>-->
+
+<!--      <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+
+
+<!--      </div>-->
+<!--      <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+
+
+
+
+<!--      </div>-->
+
+<!--      <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+
+
+<!--      </div>-->
+<!--      <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+
+
+<!--      </div>-->
+<!--      <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+<!--          <mat-form-field class="example-full-width" fxFlex>-->
+<!--              <textarea matInput formControlName="zusatztext2" placeholder="Klappentext" maxRows="10" matTextareaAutosize="false"> </textarea>-->
+<!--          </mat-form-field>-->
+
+<!--      </div>-->
+
+    </form>
+<!--  [mat-dialog-close]=""-->
+<!--      <button  mat-raised-button color="primary"  (click)="updateObjForm()">Speichern</button>-->
+
+
+
+
+
+
+
+
+
+
+
+
+

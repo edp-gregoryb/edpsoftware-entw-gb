@@ -1,0 +1,124 @@
+<button style="float: right;"  mat-icon-button (click)="onNoClick()"> <mat-icon>close</mat-icon></button>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+    <div class="item item-1" fxFlex="100%" fxFlexOrder="1">
+<p>Produktdetails</p>
+<section class="example-section">
+    <label class="example-margin">Basisprodukt ({{objektvorschlag}}):</label>
+    <mat-radio-group
+        [(ngModel)]="publisharten">
+        <mat-radio-button class="example-margin" value="after" *ngFor="let pub of publish"
+                          [value]="pub" (click)="changePublish(pub)">{{pub}}</mat-radio-button>
+<!--        <mat-radio-button class="example-margin" value="before">nur digital</mat-radio-button>-->
+<!--        <mat-radio-button class="example-margin" value="before">physisch und digital</mat-radio-button>-->
+    </mat-radio-group>
+</section>
+        <div *ngIf="basisiproduktauswahl">
+            <div *ngIf="!digital">
+                
+                <!-- 20.02.2020 RPS: nachfolgend: row mit Objekt Name ausgeblendet, todo: finaler Entscheid, ob so passabel oder weitere Anpassung nötig  -->
+                <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+                    <mat-form-field fxFlex>
+                        <input style="text-align: left;width: 200px" matInput [readonly]="true" [(ngModel)]="objektvorschlag" placeholder="Objektname">
+                    </mat-form-field>
+                </div>
+                
+
+                <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+                    <section class="example-section">
+
+                        <mat-checkbox  class="example-margin"  [(ngModel)]="checkeddigital" (change)="digiZus(digitalobjekt, digitalobjektbezeich)">digitales Zusatzprodukt erstellen</mat-checkbox>
+
+                        <!--<mat-checkbox class="example-margin" [(ngModel)]="indeterminate">Texte wie Basis</mat-checkbox>-->
+                    </section>
+                </div>
+
+                <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+                    <mat-form-field fxFlex>
+                        <input style="text-align: left;width: 200px" matInput [(ngModel)]="digitalobjekt" placeholder="digitales Objekt">
+                    </mat-form-field>
+                    <mat-form-field fxFlex>
+                        <input style="text-align: left;width: 400px" matInput [(ngModel)]="digitalobjektbezeich" placeholder="Objektbezeichnung">
+                    </mat-form-field>
+
+                </div>
+
+                <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+                    <mat-form-field fxFlex>
+                        <input style="text-align: left;width: 200px" matInput [(ngModel)]="isbn" placeholder="Abweichende Digital-ISBN">
+                    </mat-form-field>
+                    <mat-form-field fxFlex>
+                        <input style="text-align: left;width: 400px" matInput [(ngModel)]="issn" placeholder="Abweichende Digital-ISSN">
+                    </mat-form-field>
+
+                </div>
+
+            </div>
+            <div *ngIf="digital"><button style="float: right" color="warn" mat-raised-button (click)="finishWf()">Speichern</button></div>
+        </div>
+        <div *ngIf="physischdigital">
+            <div class="container" style="margin-left: 10px;" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+            <span >Digitale Version: </span><span>{{physischdigitalValue}}</span>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+
+            <mat-form-field *ngIf="digizusaerstellt" style="width: 400px">
+                <input matInput style="text-align: left;width: 400px; color: red" [(ngModel)]="digizusaerstellt">
+            </mat-form-field>
+        <div *ngIf="!digital"><button style="float: right" color="warn" mat-raised-button (click)="creatZusatzrprod()">Speichern</button></div>
+<!--<label>Sprache des Produkts</label>-->
+
+<!--<mat-form-field style="margin-left: 40px">-->
+    <!--<mat-select>-->
+        <!--<mat-option value="de">Deutsch</mat-option>-->
+        <!--<mat-option value="fr">Französisch</mat-option>-->
+        <!--<mat-option value="it">Italienisch</mat-option>-->
+    <!--</mat-select>-->
+<!--</mat-form-field>-->
+<!--<mat-divider></mat-divider>-->
+
+<!--<section class="example-section">-->
+    <!--<label  class="example-margin">Ausgabesprachen:</label>-->
+    <!--<mat-checkbox class="example-margin" [(ngModel)]="checked">de</mat-checkbox>-->
+    <!--<mat-checkbox class="example-margin" [(ngModel)]="indeterminate">fr</mat-checkbox>-->
+    <!--<mat-checkbox class="example-margin" [(ngModel)]="indeterminate">it</mat-checkbox>-->
+<!--</section>-->
+<!--<mat-divider></mat-divider>-->
+<!--<br>-->
+<!--<label>Kommerzialisiertungablauf</label>-->
+<!--<br><br>-->
+
+<!--<mat-radio-group [(ngModel)]="labelPosition">-->
+    <!--<label class="example-margin">Bei Publikation:</label>-->
+    <!--<mat-radio-button class="example-margin" value="after">kostenpflichtig</mat-radio-button>-->
+    <!--<mat-radio-button class="example-margin" value="before">gratis</mat-radio-button>-->
+<!--</mat-radio-group>-->
+
+<!--<section class="example-section">-->
+    <!--<label  class="example-margin">IP-Access:</label>-->
+    <!--<mat-checkbox class="example-margin" [(ngModel)]="checked">Web</mat-checkbox>-->
+    <!--<mat-checkbox class="example-margin" [(ngModel)]="indeterminate">PDF</mat-checkbox>-->
+<!--</section>-->
+
+<!--<section class="example-section">-->
+    <!--<label  class="example-margin">openacces:</label>-->
+    <!--<mat-checkbox class="example-margin" [(ngModel)]="checked">ja</mat-checkbox>-->
+    <!--<mat-form-field style="margin-left: 40px">-->
+        <!--<mat-select>-->
+            <!--<mat-option value="1">1 Monat</mat-option>-->
+            <!--<mat-option value="2">2 Monat</mat-option>-->
+            <!--<mat-option value="3">3 Monat</mat-option>-->
+            <!--<mat-option value="4">4 Monat</mat-option>-->
+            <!--<mat-option value="5">5 Monat</mat-option>-->
+            <!--<mat-option value="6">6 Monat</mat-option>-->
+            <!--<mat-option value="7">7 Monat</mat-option>-->
+            <!--<mat-option value="8">8 Monat</mat-option>-->
+            <!--<mat-option value="9">9 Monat</mat-option>-->
+            <!--<mat-option value="10">10 Monat</mat-option>-->
+            <!--<mat-option value="11">11 Monat</mat-option>-->
+            <!--<mat-option value="12">12 Monat</mat-option>-->
+        <!--</mat-select>-->
+    <!--</mat-form-field>-->
+<!--</section>-->
+    </div>
+</div>

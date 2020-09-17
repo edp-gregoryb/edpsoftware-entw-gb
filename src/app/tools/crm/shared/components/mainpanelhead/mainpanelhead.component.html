@@ -1,0 +1,456 @@
+<div *ngIf="showContent">
+    <div *ngIf="!canEdit">
+     <div *ngIf="!neuertermin">
+      <div *ngIf="!termingeloescht">
+       <div>
+        <ul *ngFor="let termine of termindetaillist" style=" padding-left: 10px;">
+           <div class="container" fxLayout>
+            <div  fxFlex="50%" fxFlexOrder="1" >
+    
+                <span style="font-weight: bold;"><span i18n="@@client">Kunde</span>:</span> {{termine.beznr}}<span>
+                    <button mat-icon-button matTooltip="Kunde editieren" i18n-matTooltip="@@editClientTT" matTooltipPosition="below" (click)=editieren()><mat-icon>mode_edit</mat-icon></button>
+                    <button mat-icon-button matTooltip="Kunde löschen" i18n-matTooltip="@@deleteClientTT" matTooltipPosition="below" (click)=showDeleteDialog()><mat-icon>delete</mat-icon></button>
+                    <button mat-icon-button matTooltip="Karte anzeigen" i18n-matTooltip="@@showMap" matTooltipPosition="below" (click)=showLocation()><mat-icon>directions</mat-icon></button>
+                    <button mat-icon-button matTooltip="Mail an Innendienst" i18n-matTooltip="@@mailToOfficeDuty" matTooltipPosition="below" [matMenuTriggerFor]="menuinnendienst" (click)=getMailid($event)><mat-icon>alternate_email</mat-icon></button>
+                    <!--<button mat-icon-button matTooltip="Zuständiger" i18n-matTooltip="@@responsible" matTooltipPosition="below" (click)=showZustandiger()><mat-icon>face</mat-icon></button>-->
+                    <app-openstreetmap [strasse]="strasse" [ort]="ort" *ngIf="showloc"></app-openstreetmap>
+                    <!--<app-map [strasse]="strasse" [ort]="ort"  *ngIf="showloc"></app-map>-->
+                </span>
+                <div >
+                <div>
+                    <span style="font-weight: bold;font-size: 18px;" >{{termine.NAME}}</span>
+                </div>
+                <div>
+                    <span *ngIf="termine.termkontaktpers">{{termine.termkontaktpers}}</span>
+                </div>
+                <div>
+                    <span *ngIf="termine.zusatz1">{{termine.zusatz1}}</span>
+                </div>
+                <div>
+                    <span *ngIf="termine.zusatz2">{{termine.zusatz2}}</span>
+                </div>
+                <div>
+                    <span *ngIf="termine.strasse">{{termine.strasse}}</span>
+                </div>
+                <div>
+                    <span *ngIf="termine.ort">{{termine.ort}}</span>
+                </div>
+                    <div>
+                        <span *ngIf="termine.gebvertrname">{{termine.gebvertrname}}</span>
+                        <span *ngIf="termine.quali"> / {{termine.quali}}</span>
+                    </div>
+                    <div>
+                        <mat-chip-list aria-label="gesperrt">
+                        <mat-chip color="warn" selected *ngIf="termine.bsperrtext">{{termine.bsperrtext}}</mat-chip>
+                        </mat-chip-list>
+                    </div>
+
+<!--                <div>-->
+<!--                    <span *ngIf="termine.rapdatum">{{termine.termdatum  | date}}</span><span *ngIf="termine.rapzeit"> {{termine.termzeit}}</span>-->
+<!--                    &lt;!&ndash; <span ><mat-icon>access_time</mat-icon></span> &ndash;&gt;-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <span *ngIf="termine.rubrik">{{termine.rubrik}}<span *ngIf="termine.urubrik || termine.aschlussel"> </span></span>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <span *ngIf="termine.urubrik">{{termine.urubrik}}</span>-->
+<!--                </div>-->
+                <div>
+                    <button class="background" [matMenuTriggerFor]="opemail" (click)="telefonwahlKunde(termine)" mat-icon-button matTooltip="Kunden Mail" i18n-matTooltip="@@clientMailTT" matTooltipPosition="above" aria-label="Open basic menu"><mat-icon>contact_mail</mat-icon> </button>
+                    <!-- <button class="background" (click)="telefonwahlKunde(termine)" [matMenuTriggerFor]="opentel" mat-icon-button matTooltip="Kunden Telefon" matTooltipPosition="above" aria-label="Open basic menu"><mat-icon>call</mat-icon> </button> -->
+                    <button class="background" mat-icon-button matTooltip="Postpone Termin" i18n-matTooltip="@@postponeDateTT" matTooltipPosition="above" aria-label="Open basic menu" [matMenuTriggerFor]="oppostpone"><mat-icon>access_time</mat-icon></button>
+                </div>
+                <div>
+                    <span *ngIf="termine.ausgbez">{{termine.ausgbez}}</span>
+                </div>
+            </div>
+            </div>
+            <div  fxFlex="50%" fxFlexOrder="2" >
+                <span style="font-weight: bold"><span i18n="@@agency">Agentur</span>:</span><span *ngIf="agenturanwesend"><span *ngIf="termine.agenturbeznr"> {{termine.agenturbeznr}}</span></span>
+                <span *ngIf="!agenturanwesend"><span *ngIf="agenturneu"> {{agenturneu.bznragentur}}</span></span>
+                <span>
+                <span *ngIf="addagenturbool"><button   mat-icon-button matTooltip="Agentur editieren" i18n-matTooltip="@@editAgencyTT" matTooltipPosition="below" (click)="editAgentur()"><mat-icon>add</mat-icon></button></span> 
+                <button  [hidden]="!agenturanzeigen" mat-icon-button matTooltip="Agentur löschen" i18n-matTooltip="@@deleteAgencyTT" matTooltipPosition="below" (click)="deleteAgentur()"><mat-icon>delete</mat-icon></button>
+                <button  [hidden]="!agenturanwesend" mat-icon-button matTooltip="Bestehende Agentur löschen" i18n-matTooltip="@@delExistingAgencyTT" matTooltipPosition="below" (click)="deleteBestehendeAgentur()"><mat-icon>delete</mat-icon></button>
+               </span>
+               
+                <!--
+                <div *ngIf="agenturanwesend">
+                    <span style="font-weight: bold;font-size: 18px;" *ngIf="termine.agenturanrede">{{termine.agenturanrede}}</span> <span style="font-weight: bold;font-size: 18px;" ng-if="termine.agenturvorname">{{termine.agenturvorname}}</span> <span style="font-weight: bold;font-size: 18px;" ng-if="termine.agenturname">{{termine.agenturname}}</span>
+                    <span *ngIf="termine.agenturzusatz1;else showleer;">{{termine.agenturzusatz1}}</span>
+                    <span *ngIf="termine.agenturzusatz2">{{termine.agenturzusatz2}}</span>
+                    <span *ngIf="termine.agenturfnamefirma">{{termine.agenturfnamefirma}}</span>
+                    <span *ngIf="termine.agenturzusatz1firma">{{termine.agenturzusatz1firma}}</span>
+                    <span *ngIf="termine.agenturzusatz2firma">{{termine.agenturzusatz2firma}}</span>
+                    <span *ngIf="agenturanwesend">{{termine.agenturstrasse}}</span>
+                    <span *ngIf="agenturanwesend">{{termine.agenturort}}</span>
+                </div>
+                
+                <div *ngIf="!agenturanwesend">
+                    <span style="font-weight: bold;font-size: 18px;" *ngIf="agenturneu"> {{agenturneu.vnameagentur}}</span> <span style="font-weight: bold;font-size: 18px;" *ngIf="agenturneu"> {{agenturneu.fnameagentur}}</span>
+                    <span *ngIf="agenturneu"> {{agenturneu.zusatz1}}</span>
+                    <span *ngIf="agenturneu"> {{agenturneu.zusatz2}}</span>
+                    <span *ngIf="agenturneu"> {{agenturneu.fnamefirma}}</span>
+                    <span *ngIf="agenturneu"> {{agenturneu.zusatz1firma}}</span>
+                    <span *ngIf="agenturneu"> {{agenturneu.zusatz2firma}}</span>
+                    <span *ngIf="agenturneu"> {{agenturneu.strasseagentur}}</span>
+                    <span *ngIf="agenturneu"> {{agenturneu.agenturort}}</span>
+                </div>
+                -->
+               
+               
+               <div *ngIf="agenturanwesend">
+                    <span style="font-weight: bold;font-size: 18px;" *ngIf="termine.agenturanrede">{{termine.agenturanrede}}</span> <span style="font-weight: bold;font-size: 18px;" ng-if="termine.agenturvorname">{{termine.agenturvorname}}</span> <span style="font-weight: bold;font-size: 18px;" ng-if="termine.agenturname">{{termine.agenturname}}</span>
+                </div>
+                <div *ngIf="!agenturanwesend">
+                    <span style="font-weight: bold;font-size: 18px;" *ngIf="agenturneu"> {{agenturneu.vnameagentur}}</span> <span style="font-weight: bold;font-size: 18px;" *ngIf="agenturneu"> {{agenturneu.fnameagentur}}</span>
+                </div>
+                <div *ngIf="agenturanwesend">
+                        <span *ngIf="termine.agenturzusatz1;else showleer;">{{termine.agenturzusatz1}}</span>
+                    </div>
+                    <div *ngIf="!agenturanwesend" >
+                        <span *ngIf="agenturneu"> {{agenturneu.zusatz1}}</span>
+                    </div>
+                    <div *ngIf="agenturanwesend" >
+                            <span *ngIf="termine.agenturzusatz2">{{termine.agenturzusatz2}}</span>
+                    </div>
+                    <div *ngIf="!agenturanwesend" >
+                            <span *ngIf="agenturneu"> {{agenturneu.zusatz2}}</span>
+                    </div>
+                    <div *ngIf="agenturanwesend">
+                            <span *ngIf="termine.agenturfnamefirma">{{termine.agenturfnamefirma}}</span>
+                    </div>
+                    <div *ngIf="!agenturanwesend">
+                        <span *ngIf="agenturneu"> {{agenturneu.fnamefirma}}</span>
+                    </div>
+                    <div *ngIf="agenturanwesend">
+                        <span  *ngIf="termine.agenturzusatz1firma">{{termine.agenturzusatz1firma}}</span>
+                    </div>
+                    <div *ngIf="!agenturanwesend">
+                        <span *ngIf="agenturneu"> {{agenturneu.zusatz1firma}}</span>
+                    </div>
+                    <div *ngIf="agenturanwesend">
+                        <span  *ngIf="termine.agenturzusatz2firma">{{termine.agenturzusatz2firma}}</span>
+                    </div>
+                    <div *ngIf="!agenturanwesend">
+                        <span *ngIf="agenturneu"> {{agenturneu.zusatz2firma}}</span>
+                    </div>
+                    <div *ngIf="agenturanwesend">
+                        <span  *ngIf="agenturanwesend" >{{termine.agenturstrasse}}</span>
+                    </div>
+                    <div *ngIf="!agenturanwesend">
+                        <span *ngIf="agenturneu"> {{agenturneu.strasseagentur}}</span>
+                    </div>
+                    <div *ngIf="agenturanwesend">
+                        <span  *ngIf="agenturanwesend">{{termine.agenturort}}</span>
+                    </div>
+                    <div *ngIf="!agenturanwesend">
+                        <span *ngIf="agenturneu"> {{agenturneu.agenturort}}</span>
+                    </div>
+                    <div>
+                        <button mat-button *ngIf="agenturanwesend" matTooltip="Agentur Telefon/Mails" i18n-matTooltip="@@agencyPhoneTT" matTooltipPosition="above" (click)="telefonwahl(termine)" [matMenuTriggerFor]="appMenu"><mat-icon>contact_phone</mat-icon></button>
+                        <span *ngIf="agenturgeloescht"><button mat-button *ngIf="!agenturanwesend" matTooltip="Agentur Telefon/Mails" i18n-matTooltip="@@agencyPhoneTT" matTooltipPosition="above" (click)="telefonwahlAgentur(agenturneu)" [matMenuTriggerFor]="appMenu"><mat-icon>contact_phone</mat-icon></button></span>
+                    </div>
+            </div>
+        </div> 
+          
+          <mat-menu #menuinnendienst="matMenu"  [overlapTrigger]="false" x-position="before">
+            <button style="padding-left: 250px;" mat-icon-button>
+                <mat-icon >close</mat-icon>
+            </button>
+            <div style="padding-right: 8px; padding-left: 8px; width: 300px;">Email: {{mailinnendienst}}</div>
+            <!-- <div style="padding-right: 8px; padding-left: 8px">Text:</div> -->
+            <div style="padding-right: 8px; padding-left: 8px">Mitteilung von {{termine.termmitarbeitername}}</div>
+            
+            <!--<div style="padding-right: 8px; padding-left: 8px" (click)="$event.stopPropagation()">
+                <div (click)="$event.stopPropagation()" style="border: solid lightgrey 1px;" [froalaEditor]="options" [(froalaModel)]="editorContent">
+                </div>
+            </div>-->
+            <div style="padding-right: 8px; padding-left: 8px">
+                <span class="example-full-width" (click)="$event.stopPropagation()">
+                    <mat-form-field>
+                    <textarea rows="5" matInput placeholder="Kunden Daten" style="background-color: #eee;" #innendiensttxt>
+    {{termine.beznr}}
+    {{termine.NAME}}
+    {{termine.strasse}}
+    {{termine.ort}}
+    </textarea>
+                        </mat-form-field>
+                </span>
+            </div>
+            <button mat-icon-button style="float:right" (click)="sendEmailtoinnendienst(innendiensttxt.value)">
+                <mat-icon >send</mat-icon>
+              </button>
+
+         </mat-menu>
+        
+        <!--Kunde Telefonnummern und Email editieren -->
+        <mat-menu #opemail="matMenu" [overlapTrigger]="false" x-position="before">
+            <div>
+                <span *ngIf="!telnummertelgebearbeiten" style="margin-left:5px">     
+                    <span class="fa fa-user-circle" style="width:15px;margin-right:3px"></span>
+                <span *ngIf="telgek"><span [innerHtml]="telgek | safepipe:'html'"></span>
+                <span style="margin-left:5px"></span>
+                </span>
+                <div mat-button class="fa fa-pencil" (click)="$event.stopPropagation()" (click)="telnummertelge(true)"></div>
+                </span>
+                <span *ngIf="telnummertelgebearbeiten" style="margin-left:5px">
+                            <span class="fa fa-user-circle" style="width: 15px;margin-right:5px"></span>
+                <input (click)="$event.stopPropagation()" style="width: 115px" type="text" [(ngModel)]="termine.kontakttelge" />
+                <div mat-button style="width: 15px;margin-right:3px" class="fa fa-times" (click)="$event.stopPropagation()" (click)="telnummertelge(false)"></div>
+                <div mat-button style="width: 15px;margin-right:3px" class="fa fa-floppy-o" (click)="$event.stopPropagation()" (click)="changetelgenummer(termine.kontaktnatel,termine.kontakttelge,termine.kontakttelgedi,termine.telpriv,termine.kontaktemail,beznrkontakt)"></div>
+                </span>
+            </div>
+            <div>
+                <span *ngIf="!telnummertelgedibearbeiten" style="margin-left:5px">
+                        <span class="fa fa-building-o" style="width:15px;margin-right:3px"></span>
+                <span *ngIf="telgedik" [innerHtml]="telgedik | safepipe:'html'"></span>
+                <span style="margin-left:5px"></span>
+                <div mat-button class="fa fa-pencil" (click)="$event.stopPropagation()" (click)="telnummertelgedi(true)"></div>
+                </span>
+                <span *ngIf="telnummertelgedibearbeiten" style="margin-left:5px">
+                    <span class="fa fa-building-o" style="width: 15px;margin-right:5px"></span>
+                <input (click)="$event.stopPropagation()" style="width: 115px" type="text" [(ngModel)]="termine.kontakttelgedi" />
+                <div mat-button style="width: 15px;margin-right:3px" class="fa fa-times" (click)="$event.stopPropagation()" (click)="telnummertelgedi(false)"></div>
+                <div mat-button style="width: 15px;margin-right:3px" class="fa fa-floppy-o" (click)="$event.stopPropagation()" (click)="changetelgedinummer(termine.kontaktnatel,termine.kontakttelge,termine.kontakttelgedi,termine.telpriv,termine.kontaktemail,beznrkontakt)"></div>
+                </span>
+            </div>
+            
+            <!--<div>
+                        <span *ngIf="!telnummerprivbearbeiten" style="margin-left:5px">
+                        <span class="fa fa-home" style="width: 15px;margin-right:3px"></span>
+                        <span *ngIf="telprivk" [innerHtml]="telprivk | safepipe:'html'"></span>
+                        <span style="margin-left:5px"></span>
+                        <div mat-button class="fa fa-pencil" (click)="$event.stopPropagation()"  (click)="telnummerpriv(true)"></div>
+                        </span>
+                        <span *ngIf="telnummerprivbearbeiten" style="margin-left:5px">
+                        <span class="fa fa-home" style="width: 15px;margin-right:5px"></span>
+                        <input (click)="$event.stopPropagation()" style="width: 115px" type="text" [(ngModel)]="termine.telpriv" />
+                        <div mat-button style="width: 15px;margin-right:3px" class="fa fa-times" (click)="$event.stopPropagation()" (click)="telnummerpriv(false)"></div>
+                        <div mat-button style="width: 15px;margin-right:3px" class="fa fa-floppy-o" (click)="$event.stopPropagation()" (click)="changeprivnummer(termine.natel,termine.telge,termine.telgedi,termine.telpriv,beznrkunde)"></div>
+                        </span>
+                
+                    </div>-->
+            
+            <div>
+                <span *ngIf="!telnummernatelbearbeiten" style="margin-left:5px">
+                        <span class="fa fa-mobile" style="width:15px;margin-right:3px"></span>
+                <span *ngIf="telnatelk" [innerHtml]="telnatelk | safepipe:'html'"></span>
+                <span style="margin-left:5px"></span>
+                <div mat-button class="fa fa-pencil" (click)="$event.stopPropagation()" (click)="telnummernatel(true)"></div>
+                </span>
+                <span *ngIf="telnummernatelbearbeiten" style="margin-left:5px">
+                        <span class="fa fa-mobile" style="width: 15px;margin-right:5px"></span>
+                <input (click)="$event.stopPropagation()" style="width: 115px" type="text" [(ngModel)]="termine.kontaktnatel" />
+                <div mat-button style="width: 15px;margin-right:3px" class="fa fa-times" (click)="$event.stopPropagation()" (click)="telnummernatel(false)"></div>
+                <div mat-button style="width: 15px;margin-right:3px" class="fa fa-floppy-o" (click)="$event.stopPropagation()" (click)="changenatelnummer(termine.kontaktnatel,termine.kontakttelge,termine.kontakttelgedi,termine.telpriv,termine.kontaktemail,beznrkontakt)"></div>
+                </span>
+            </div>
+            
+            <mat-divider></mat-divider>
+            
+            <div>
+                <span *ngIf="!emailbearbeiten" style="margin-left:5px">
+                            <span class="fa fa-envelope-square" style="width:15px;margin-right:3px"></span>
+                <span *ngIf="emailk" [innerHtml]="emailk | safepipe:'html'"></span>
+                <span style="margin-left:5px"></span>
+                <div mat-button class="fa fa-pencil" (click)="$event.stopPropagation()" (click)="editEmail(true)"></div>
+                </span>
+                <span *ngIf="emailbearbeiten" style="margin-left:5px">
+                            <span class="fa fa-envelope-square" style="width:15px;margin-right:3px"></span>
+                <input (click)="$event.stopPropagation()" style="width: 115px" type="text" [(ngModel)]="termine.kontaktemail" />
+                <div mat-button style="width: 15px;margin-right:3px" class="fa fa-times" (click)="$event.stopPropagation()" (click)="editEmail(false)"></div>
+                <div mat-button style="width: 15px;margin-right:3px" class="fa fa-floppy-o" (click)="$event.stopPropagation()" (click)="changeemail(termine.kontaktnatel,termine.kontakttelge,termine.kontakttelgedi,termine.telpriv,termine.kontaktemail,beznrkontakt)"></div>
+                </span>
+            </div>
+            <!--<a href="mailto: {termine.email2}}" target="_blank">{{termine.email2}}</a>
+                      <a href="mailto: {{termine.email3}}" target="_blank">{{termine.email3}}</a>-->
+        </mat-menu>
+    
+         <mat-menu #oppostpone="matMenu" [overlapTrigger]="false" x-position="before" >
+            <div *ngIf="minlata_15">
+                <span (click)="postpone15(termine)" style="cursor:pointer"> 15' <span (mouseleave)="deletevorschaue()" (mouseover)="getpostponedtime(900000)"><span i18n="@@fullTime1">Neue Zeit</span>: {{anzeigeplus15 | date:"HH:mm"}}</span></span>
+            </div>
+            <div *ngIf="minlata_60">
+                <span (click)="postpone60(termine)"  style="cursor:pointer"> 60' <span (mouseleave)="deletevorschaue()" (mouseover)="getpostponedtime60(3600000)"><span i18n="@@fullTime1">Neue Zeit</span>: {{anzeigeplus60 | date:"HH:mm"}}</span></span>
+            </div>
+            <div *ngIf="minlata_1T">
+                <span (click)="postpone24(termine)"  style="cursor:pointer"> 1T <span (mouseleave)="deletevorschaue()" (mouseover)="getpostponedtime24(86400000)"><span i18n="@@fullTime1">Neue Zeit</span>: {{anzeigeplus24 | date:"dd:MM:yyyy:HH:mm"}}</span></span>
+            </div>
+                <span (click)="opencalendar(termine)" style="cursor:pointer"><mat-icon>event</mat-icon>  </span>
+        </mat-menu> 
+    
+    
+         <!-- <mat-menu #opentel="matMenu" [overlapTrigger]="false" x-position="before">
+          <span class="fa fa-user-circle" style="width:15px;margin-right:3px"></span><span *ngIf="telgek"><span [innerHtml]="telgek | safepipe:'html'"></span><span style="margin-left:5px"></span><br></span>
+          <span class="fa fa-building-o" style="width:15px;margin-right:3px"></span><span *ngIf="telgedik" [innerHtml]="telgedik | safepipe:'html'"></span><span style="margin-left:5px"></span><br>
+          <span class="fa fa-mobile" style="width:15px;margin-right:3px"></span><span *ngIf="telnatelk" [innerHtml]="telnatelk | safepipe:'html'"></span><span style="margin-left:5px"></span><br>
+         </mat-menu> -->
+         <span style="font-weight: bold;"><br><span i18n="@@note">Notiz</span></span>&nbsp;<span i18n="@@of">von:</span><span> {{termine.mitarbeitername}} </span> <span i18n="@@at">am</span>:<span> {{termine.rapdatum | usdatestringtochstring}}</span> <br>
+         <span>{{termine.termrapptext}} </span>
+         <br>
+         <div style="background-color: #d3d3d3;margin-right:20px">
+          <div class="w3-container w3-margin-left w3-margin-right">
+    
+    
+            <mat-menu #appMenu="matMenu" [overlapTrigger]="false" x-position="before">
+                <div>
+                    <span *ngIf="!telnummertelgebearbeiten" style="margin-left:5px">
+                        <span class="fa fa-user-circle" style="width: 15px;margin-right:3px"></span>
+                        <span [innerHtml]="telge | safepipe:'html'"></span><span style="margin-left:5px"></span>
+                        <div mat-button class="fa fa-pencil" (click)="$event.stopPropagation()" (click)="telnummertelge(true)"></div>
+                    </span>
+                    <span *ngIf="telnummertelgebearbeiten" style="margin-left:5px">
+                        <span class="fa fa-user-circle" style="width: 15px;margin-right:5px"></span>
+                        <input (click)="$event.stopPropagation()" style="width: 115px" type="text" [(ngModel)]="termine.agenturtelge" />
+                        <div mat-button style="width: 15px;margin-right:3px" class="fa fa-times" (click)="$event.stopPropagation()" (click)="telnummertelge(false)"></div>
+                        <div mat-button style="width: 15px;margin-right:3px" class="fa fa-floppy-o" (click)="$event.stopPropagation()" (click)="changetelgenummer(termine.agenturnatel,termine.agenturtelge,termine.agenturtelgedi,termine.agenturtelpriv,termine.agenturemail,bznragentur)"></div>
+                    </span>
+                </div>
+                <div>
+                    <span *ngIf="!telnummertelgedibearbeiten" style="margin-left:5px">
+                        <span class="fa fa-building-o" style="width: 15px;margin-right:3px"></span>
+                        <span [innerHtml]="telgedi | safepipe:'html'"></span><span style="margin-left:5px"></span>
+                        <div mat-button class="fa fa-pencil" (click)="$event.stopPropagation()" (click)="telnummertelgedi(true)"></div>
+                        <span style="margin-left:5px"></span>
+                    </span>
+                    <span *ngIf="telnummertelgedibearbeiten" style="margin-left:5px">
+                        <span class="fa fa-building-o" style="width: 15px;margin-right:5px"></span>
+                        <input (click)="$event.stopPropagation()" style="width: 115px" type="text" [(ngModel)]="termine.agenturtelgedi" />
+                        <div mat-button style="width: 15px;margin-right:3px" class="fa fa-times" (click)="$event.stopPropagation()" (click)="telnummertelgedi(false)"></div>
+                        <div mat-button style="width: 15px;margin-right:3px" class="fa fa-floppy-o" (click)="$event.stopPropagation()" (click)="changetelgedinummer(termine.agenturnatel,termine.agenturtelge,termine.agenturtelgedi,termine.agenturtelpriv,termine.agenturemail,bznragentur)"></div>
+                    </span>
+                </div>
+                <div>
+                    <span *ngIf="!telnummerprivbearbeiten" style="margin-left:5px">
+                        <span class="fa fa-home" style="width: 15px;margin-right:3px"></span>
+                        <span [innerHtml]="telpriv | safepipe:'html'"></span><span style="margin-left:5px"></span>
+                        <div mat-button class="fa fa-pencil" (click)="$event.stopPropagation()" (click)="telnummerpriv(true)"></div>
+                        <span style="margin-left:5px"></span>
+                    </span>
+                    <span *ngIf="telnummerprivbearbeiten" style="margin-left:5px">
+                        <span class="fa fa-home" style="width: 15px;margin-right:5px"></span>
+                        <input (click)="$event.stopPropagation()" style="width: 115px" type="text" [(ngModel)]="termine.agenturtelpriv" />
+                        <div mat-button style="width: 15px;margin-right:3px" class="fa fa-times" (click)="$event.stopPropagation()" (click)="telnummerpriv(false)"></div>
+                        <div mat-button style="width: 15px;margin-right:3px" class="fa fa-floppy-o" (click)="$event.stopPropagation()" (click)="changeprivnummer(termine.agenturnatel,termine.agenturtelge,termine.agenturtelgedi,termine.agenturtelpriv,termine.agenturemail,bznragentur)"></div>
+                    </span>
+                </div>
+                <div>
+                    <span *ngIf="!telnummernatelbearbeiten" style="margin-left:5px">
+                        <span class="fa fa-mobile" style="width: 15px;margin-right:3px"></span>
+                        <span [innerHtml]="telnatel | safepipe:'html'"></span><span style="margin-left:5px"></span>
+                        <div mat-button class="fa fa-pencil" (click)="$event.stopPropagation()" (click)="telnummernatel(true)"></div>
+                        <span style="margin-left:5px"></span>
+                    </span>
+                    <span *ngIf="telnummernatelbearbeiten" style="margin-left:5px">
+                        <span class="fa fa-mobile" style="width: 15px;margin-right:5px"></span>
+                        <input (click)="$event.stopPropagation()" style="width: 115px" type="text" [(ngModel)]="termine.agenturnatel" />
+                        <div mat-button style="width: 15px;margin-right:3px" class="fa fa-times" (click)="$event.stopPropagation()" (click)="telnummernatel(false)"></div>
+                        <div mat-button style="width: 15px;margin-right:3px" class="fa fa-floppy-o" (click)="$event.stopPropagation()" (click)="changenatelnummer(termine.agenturnatel,termine.agenturtelge,termine.agenturtelgedi,termine.agenturtelpriv,termine.agenturemail,bznragentur)"></div>
+                    </span>
+                </div>
+                <div>
+                    <span *ngIf="!emailbearbeiten" style="margin-left:5px">
+                        <span class="fa fa-envelope-square" style="width: 15px;margin-right:3px"></span>
+                        <span [innerHtml]="email | safepipe:'html'"></span><span style="margin-left:5px"></span>
+                        <div mat-button class="fa fa-pencil" (click)="$event.stopPropagation()" (click)="editEmail(true)"></div>
+                        <span style="margin-left:5px"></span>
+                    </span>
+                    <span *ngIf="emailbearbeiten" style="margin-left:5px">
+                        <span class="fa fa-envelope-square" style="width: 15px;margin-right:5px"></span>
+                        <input (click)="$event.stopPropagation()" style="width: 115px" type="text" [(ngModel)]="termine.agenturemail" />
+                        <div mat-button style="width: 15px;margin-right:3px" class="fa fa-times" (click)="$event.stopPropagation()" (click)="editEmail(false)"></div>
+                        <div mat-button style="width: 15px;margin-right:3px" class="fa fa-floppy-o" (click)="$event.stopPropagation()" (click)="changeemail(termine.agenturnatel,termine.agenturtelge,termine.agenturtelgedi,termine.agenturtelpriv,termine.agenturemail,bznragentur)"></div>
+                    </span>
+                </div>
+            </mat-menu>
+          </div>
+    
+          <div class="w3-container w3-margin-left w3-margin-right " style="padding:10px">
+           <app-objektdropmaterial [objekttext]="objektfordrop" (dbvalueChanged)=myDbvalueChanged($event)></app-objektdropmaterial>
+          </div>
+          
+          <!-- Rubrik - z 530 in .ts kommentar entfernen -->
+          <div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+           <app-rubrikdropmaterial [rubriktext]="rubriktext" [objforrubrik]="objekttodb" (rubrikvalueChanged)="NewRubrikvalueChanged($event)"></app-rubrikdropmaterial>
+          </div>
+          <!-- Unterrubrik - z 543 in .ts kommentar entfernen -->
+          <div class="w3-container w3-margin-left w3-margin-right w3-margin-top" style="padding-bottom: 10px;">
+           <app-urubrikdropmaterial  [urubriktext]="urubriktext" [rubrikforurubrik]="rubriktodb" [objforrubrik]="objekttodb" (urubrikonvalueChanged)=NewUrubrikonvalueChanged($event) ></app-urubrikdropmaterial>
+          </div>
+          
+          <div class="w3-container w3-margin-left">
+           <!--<div style="font-weight: bold;">Notiz:</div>-->
+          </div>
+          <div class="w3-container w3-margin-left w3-margin-right">
+           <textarea placeholder="Notiz" i18n-placeholder="@@note" [(ngModel)]="termrapptext" rows="5" id="notizTextarea"></textarea>
+          </div>
+             <div class="w3-container w3-margin-left w3-margin-right">
+                 <mat-progress-bar *ngIf="saveimage" mode="indeterminate" color="warn"></mat-progress-bar>
+                 <input #variable type="file"
+                        id="uploadFile"
+                        class="hidden-input"
+                        accept=""
+                        (change)="selectFile($event); variable.value=''">
+                 <mat-form-field style="width: 50%; margin-left: 13%;" >
+                     <mat-select placeholder="Dokumente" [(ngModel)]="selected" name="doks" >
+                         <mat-option *ngFor="let doks of dokus" [value]="doks.datei" (click)="opendocumentsService.openselectedItem(doks, beznr, rapnr)">
+                             {{doks.datei}}
+                         </mat-option>
+                     </mat-select>
+                 </mat-form-field>
+             </div>
+          <div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+           <app-kontaktpersdropmaterial [objekt]="objektfordrop" [kundenNr]="beznrkunde" [vermit]="bznragentur" [kontaktpers]="kontaktpersnr" (kontaktpersonChanged)=NewkontaktpersonChanged($event)></app-kontaktpersdropmaterial>
+          </div>
+          <!--<br>-->
+          <div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+           <app-aktivitaetdropmaterial [aktivitaet]="aktivitaetfordrop" (aktivitaetonvalueChanged)=NewaktivitaetonvalueChanged($event)></app-aktivitaetdropmaterial>
+          </div>
+          <!--<br>-->
+          
+          <!-- Aktion -->
+          <div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+              <app-aktiondropmaterial [aktion]="aktionfordrop" (aktionvaluechanged)="NewaktionvalueChanged($event)"></app-aktiondropmaterial>
+          </div>
+          
+          <div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+           <app-mitarbeiterdropmaterial [mitarbeiter]="mitarbeiterbezfordrop" (mitarbeiteronvalueChanged)=NewmitarbeiteronvalueChanged($event)></app-mitarbeiterdropmaterial>
+          </div>
+          <!--<br>-->
+          
+            <!-- Ausgabe -->
+            <div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+                <app-aschluesseldropmaterial [width]="'30%'" [objektvalue]="objektfordrop" [aschluessel]="aschluessel" (ausgabeonvalueChanged)=NewausgabeonvalueChanged($event)></app-aschluesseldropmaterial>
+            
+                <app-datumzeitauswahl [datumToday]="datumTodaytrue" #datumzeit></app-datumzeitauswahl>
+            </div>
+            <div style="clear: both"></div>
+            
+          <div>
+           <div class="w3-container w3-margin-left">
+            <button mat-raised-button matTooltip="Speichern" i18n-matTooltip="@@Speichern" matTooltipPosition="above" (click)="showSuccessandSaveTermin(termrapptext,datumzeit)" i18n="@@save">Speichern</button>
+            <button mat-raised-button matTooltip="springe zu Offerte" i18n-matTooltip="@@springezuOfferte" matTooltipPosition="above" (click)="showOfferte(termine)" i18n="@@offer">Offerte</button>
+            <button mat-raised-button matTooltip="Excel Auftrag generieiren" i18n-matTooltip="@@ExcelAuftrag" matTooltipPosition="above" (click)="openkundenexcel(termine)" i18n="@@orderXLSX">Auftrag-XLSX</button>
+           </div>
+          </div>
+         </div>
+        </ul>
+       </div>
+      </div>
+     </div>
+    </div>
+</div>
+<p-dialog header="Termin Löschen" [(visible)]="display">
+    <span i18n="Beznr = Bezugsnummer@@cancelDateA">Termin mit Beznr</span>: {{beznrkunde}} <span i18n="@@cancelDateB">löschen</span> ?
+    <button type="button" pButton (click)="deleteTermin($event)" label="Löschen" class="ui-button-info"></button>
+</p-dialog>
+<div *ngIf="canEdit">
+    <app-mainpaneledit [terminlist]="termindetaillist" (editabbrechen)="editabbrechenchanged($event)" (terminbearbeitet)="terminbearbeitetevent($event)"></app-mainpaneledit>
+</div>
+<div *ngIf="termingeloescht">
+    <p i18n="@@dateCanceled">Termin Gelöscht</p>
+</div>
+<div *ngIf="neuertermin">
+    <app-mainpanelnew [kundevonauswahl]="kundevonauswahlnew" [tempdatenzukunde]="tempdatafornew" [termmitbeznr]="termindetaillist" [returnlink]="returnlink" [kundevonsuche]="kundevonsuche" (neuabbrechen)="neuabbrechenchanged($event)" (neuerterminerstellt)="neuerterminerstelltevent($event)" (termzeit)="termzeitevent($event)"></app-mainpanelnew>
+</div>

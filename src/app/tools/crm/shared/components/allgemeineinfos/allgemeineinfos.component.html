@@ -1,0 +1,64 @@
+<div [ngStyle]="{'height.px': innerheight}">
+    <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate" color="warn"></mat-progress-bar>
+    <div style="float: right">
+        <button pButton type="button" class="ui-button-secondary" [ngClass]="{'ui-button-warning': isActive}"   (click)=editieren() icon="fa-pencil-square-o" iconPos="left" *ngIf="showEdit" ></button>
+    </div>
+    <mat-list>
+        <mat-list-item *ngFor="let memo of memouebersicht" >
+            <p style="text-decoration: underline" mat-line *ngIf ="memo.typ === 'Z'">{{memo.NAME}}
+            </p>
+            <hr />
+        
+        
+            <p  mat-line>
+                <span style="float:right;font-size:x-small;" *ngIf="!canEdit" >{{memo.datum}} {{memo.benutzer}}</span>
+            
+            </p>
+        
+            <p mat-line (click)="onSelectmemo($event,memo,op50)">
+                <span *ngIf="!canEdit">{{memo.memotext}}</span>
+                <span *ngIf="canEdit">
+                    <mat-form-field class="example-full-width">
+                        <textarea matInput placeholder="Notiz" i18n-placeholder="@@note" mdTextareaAutosize mdAutosizeMinRows="3" mdAutosizeMaxRows="10" [(ngModel)]="memo.memotext"></textarea>
+                    </mat-form-field>
+                <!--<textarea pInputTextarea style="width: 95%" autoResize="autoResize" [(ngModel)]="memo.memotext"></textarea>-->
+                </span> 
+            </p>
+            <!-- </span>-->
+            <p mat-line *ngIf="canEdit">
+                <br>
+            </p>
+            <p mat-line *ngIf="canEdit">
+                <button mat-raised-button  (click)="UpdateMemo(memo.memotext, memo.ROWID)" i18n="@@update">Update</button>
+                <button mat-raised-button  (click)="DeleteMemo(memo.ROWID)" i18n="@@delete">Löschen</button>
+                <!--<button pButton type="button" class="ui-button-success" (click)="UpdateMemo(memo.memotext, memo.ROWID)" label="Update"></button>-->
+                <!--<button pButton type="button" class="ui-button-danger" (click)="DeleteMemo(memo.ROWID)" label="Löschen"></button>-->
+            </p>
+        
+        
+        </mat-list-item>
+        <mat-list-item *ngIf="canEdit" style="min-height: 126px !Important;">
+            <p mat-line *ngIf="canEdit">
+                <mat-form-field class="example-full-width" style="margin-top:35px">
+                    <textarea matInput placeholder="neue Notiz" i18n-placeholder="@@newNote" md-autosize minRows="2" [(ngModel)]="neuesmemo"></textarea>
+                </mat-form-field>
+                <!--<textarea pInputTextarea style="width: 95%;" autoResize="autoResize" [(ngModel)]="neuesmemo"></textarea>-->
+            </p> 
+            <p mat-line *ngIf="canEdit">
+                <br>
+            </p> 
+            <p mat-line *ngIf="canEdit">
+                <button mat-raised-button  (click)="NeuesMemo(neuesmemo)" i18n="@@new">Neu</button>
+                <!--<button pButton type="button" class="ui-button-success" (click)="NeuesMemo(neuesmemo)" label="Neu"></button>-->
+            </p>
+        </mat-list-item>
+        
+        <br>
+    
+    </mat-list>
+    <div>
+        <p-overlayPanel #op50  [showCloseIcon]=true>
+            <div>{{temphist}}</div>
+        </p-overlayPanel>
+    </div>
+</div>

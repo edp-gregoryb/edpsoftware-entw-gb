@@ -1,0 +1,41 @@
+<div *ngIf="(licensedModules.length > 1)">
+  <!-- Zoom vom oberen Bildrand
+  <div class="releasebild">&nbsp;</div>
+  <br>
+  <!-- Zoom vom unteren Bildrand
+  <div class="releasebild2">&nbsp;</div>
+  <br>-->
+  <!-- Zoom von der Bildmitte -->
+  <div class="releasebild3">&nbsp;</div>
+  
+  <div style="margin-top:20px;">
+    <h1><div style="float:left;height: 60px; width: 70px; background: url('assets/edi_rot_gruen_256.png') no-repeat left bottom; background-size: contain; transform: scaleX(-1);">&nbsp;</div> {{begruessung()}} <img src="../../assets//edp_rot.gif" style="width: 100px; float: right;"></h1>
+  </div>
+  <br>
+  <div class="content">
+    <!--  <p>Seit deinem letzten Besuch wurde eine neue Version der edpWebSuite aufgeschaltet. Wenn du mehr darüber erfahren möchtest, klicke <a href="#">hier...</a></p>-->
+    <h3 i18n="@@yourModules">Deine Module</h3>
+    <p><span i18n="@@openModules">Die folgenden Module sind für dich frei geschaltet</span>:</p>
+  </div>
+  
+  <div style="display:flex;flex-wrap: wrap; width:100%;">
+    <div class="edpModuleCard" *ngFor="let module of licensedModules" (click)="navigateModule(module)" tabindex="0">
+      <div class="moduleShorthand">
+        {{module.shorthand}}
+      </div>
+      <div class="moduleName">
+        {{module.name}}
+      </div>
+      <div class="moduleIcon">
+        <mat-icon>{{module.icon}}</mat-icon>
+      </div>
+    </div>
+  </div>
+  
+  <div class="content"> <!--style="margin-bottom: 400px;"  margin-bottom um height:stretch-Problem in Chrome zu umgehen und die Siedenav auf voller Höhe eingefärbt zu haben -->
+    <p><span i18n="@@additionalModules1">Falls du Zugriff auf weitere Funktionalitäten benötigst, wende dich bitte an die zuständige Person in deinem Unternehmen. 
+    Alternativ kannst du auch uns kontaktieren</span>: <a href="mailto:uspoering@edp.ch?subject=Lizenzierungsanfrage&amp;body=Guten%20Tag,%0D%0A%0D%0AIch%20möchte%20folgende%20Module%20lizenzieren:%0D%0A%0D%0A" target="_blank"><span i18n="@@additionalModules2">Ja, ich will zusätzliche Module nutzen</span> :-)</a></p>
+  </div>
+</div>
+
+<!--<div #hoeheAusgleich><div *ngIf="calcModuleWidth()" style="height: 220px;"></div><div [ngStyle]="{'height.px': innerheight}"></div></div>--> <!-- Hoehenausgleich, dass nicht mehr gescrollt werden kann aber Sidenav die ganze Bildschirmhoehe einnimmt. Wirft aber Error. -->

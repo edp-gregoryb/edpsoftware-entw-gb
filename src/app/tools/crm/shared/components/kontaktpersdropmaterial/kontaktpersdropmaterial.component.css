@@ -1,0 +1,10 @@
+.input-full-width {
+  width: 100%;
+  min-width: 350px;
+}
+.crop { 
+	overflow:hidden; 
+	white-space:nowrap; 
+	text-overflow:ellipsis; 
+	width:90%;
+  }

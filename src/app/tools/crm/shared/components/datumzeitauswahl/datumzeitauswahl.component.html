@@ -1,0 +1,17 @@
+    <!--      <div  style="font-weight: bold;">Datum / Zeit:</div>-->
+    <!--      <div>-->
+    <!--  <p-calendar  [style]="{'width':'92%'}" [inputStyle]="{'width':'91%'}" placeholder="Datum" [(ngModel)]="dateValuenew" [showIcon]="true" [locale]="ch" dateFormat="dd.mm.yy"></p-calendar>-->
+    <!--  </div>-->
+    <!--   <div style="margin-bottom: 5px;"></div>-->
+    <!--  <div>-->
+    <!--<p-calendar [style]="{'width':'91%'}" [inputStyle]="{'width':'98%'}" [(ngModel)]="zeitValuenew" [timeOnly]="true" placeholder="Zeit"></p-calendar>-->
+    <!--</div>-->
+    
+<!--<div  style="font-weight: bold;">Datum / Zeit:</div>-->
+
+<mat-form-field  class="input-third-width" style="margin-right: 5%;">
+<input matInput type="date" id="date" placeholder="Datum" i18n-placeholder="@@date" [(ngModel)]="dateValuenew" value="">
+</mat-form-field>
+<mat-form-field  class="input-third-width">
+<input matInput type="time" placeholder="Zeit" i18n-placeholder="@@time" [(ngModel)]="timeValuenew" value="">
+</mat-form-field>

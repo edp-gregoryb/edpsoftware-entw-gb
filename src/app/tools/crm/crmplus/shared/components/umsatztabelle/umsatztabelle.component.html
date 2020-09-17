@@ -1,0 +1,67 @@
+
+<mat-progress-bar *ngIf="searchumsatz" mode="indeterminate" color="warn"></mat-progress-bar>
+<div class="example-container mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource">
+        
+        <!-- Position Column   (selectionChange)="controlchanges(selected)"-->
+        <ng-container matColumnDef="feld1bez">
+          <mat-header-cell *matHeaderCellDef>
+            <mat-form-field>
+              <mat-select [(value)]="selected" >
+                <mat-option *ngFor="let name of columnone" [value]="name.value" (click)="controlchanges(name)">
+                  {{ name.value }}
+                </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-icon (click)="sortTable('feld1bez')" style="margin-left: 15px; cursor: pointer;">sort_by_alpha</mat-icon>
+              <mat-icon (click)="exportCSV()" style="margin-left: 10px; cursor: pointer;">save_alt</mat-icon>
+            </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.feld1bez}} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="sTOTAL">
+          <mat-header-cell class="header-rechts" *matHeaderCellDef i18n="Aktuelles Jahr@@currentYear" (click)="sortTable('sTOTAL')">Akt. Jahr</mat-header-cell>
+          <mat-cell class="cell-rechts" *matCellDef="let element"> {{element.sTOTAL | number : '1.0-0'}} </mat-cell>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="sTOTALVJ">
+          <mat-header-cell class="header-rechts" *matHeaderCellDef i18n="@@previousYear" (click)="sortTable('sTOTALVJ')">Vorjahr</mat-header-cell>
+          <mat-cell class="cell-rechts" *matCellDef="let element"> {{element.sTOTALVJ  | number : '1.0-0'}} </mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="sbdiffabs">
+          <mat-header-cell class="header-rechts" *matHeaderCellDef i18n="Differenz Absolut@@differenceAbs" (click)="sortTable('sdiffabs')">Diff-Abs</mat-header-cell>
+          <mat-cell class="cell-rechts" *matCellDef="let element"> {{element.sdiffabs  | number : '1.0-0'}} </mat-cell>
+        </ng-container>
+        <!--element.sbdiffabs -->
+        <ng-container matColumnDef="sbdiffproz">
+          <mat-header-cell class="header-rechts" *matHeaderCellDef i18n="Differenz in Prozent@@differenceAbsPercent" (click)="sortTable('sdiffproz')">Diff%</mat-header-cell>
+          <mat-cell class="cell-rechts" *matCellDef="let element"> {{element.sdiffproz}} </mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="sbudget">
+          <mat-header-cell class="header-rechts" *matHeaderCellDef i18n="@@budget" (click)="sortTable('sbudget')">Budget</mat-header-cell>
+          <mat-cell class="cell-rechts" *matCellDef="let element"> {{element.sbudget  | number : '1.0-0'}} </mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="sdiffabs">
+          <mat-header-cell class="header-rechts" *matHeaderCellDef i18n="Differenz Budget@@differenceBudgetAbs" (click)="sortTable('sbdiffabs')">Diff-Bud-Abs</mat-header-cell>
+          <mat-cell class="cell-rechts" *matCellDef="let element"> {{element.sbdiffabs  | number : '1.0-0'}} </mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="sdiffproz">
+          <mat-header-cell class="header-rechts" *matHeaderCellDef i18n="Differenz Budget in Prozent@@differenceBudgetPercent" (click)="sortTable('sbdiffproz')">Diff%-Bud</mat-header-cell>
+          <mat-cell class="cell-rechts" *matCellDef="let element"> {{element.sbdiffproz}} </mat-cell>
+        </ng-container>
+        <!--element.sdiffproz sTOTALNJ-->
+        <ng-container matColumnDef="sTOTALNJ">
+          <mat-header-cell class="header-rechts" *matHeaderCellDef i18n="@@followingYear" (click)="sortTable('sTOTALNJ')">Nachjahr</mat-header-cell>
+          <mat-cell class="cell-rechts" *matCellDef="let element"> {{element.sTOTALNJ | number : '1.0-0'}} </mat-cell>
+        </ng-container>
+        
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+  </div>

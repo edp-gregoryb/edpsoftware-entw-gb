@@ -1,0 +1,149 @@
+<style>
+  th, td {
+    padding: 2px;
+    border: 1px solid grey;
+    margin: 0;
+    white-space: nowrap;
+    overflow: auto;
+    width: 80px;
+  }
+
+  table {
+    margin-top: 10px;
+    border: 1px solid grey;
+  }
+
+  ::ng-deep .mat-tab-label {
+    min-height: 1px !important;
+    min-width: 1px !important;
+  }
+
+  ::ng-deep .mat-ink-bar {
+    background-color:#c5010e !important;
+  }
+</style>
+
+<h1 mat-dialog-title>
+  <div style="float: left" i18n>Erfassungs-Information</div>
+  <button mat-button style="float: right" matDialogClose>X</button>
+  <div style="clear: both"></div>
+</h1>
+
+<div mat-dialog-content>
+  <mat-tab-group [@.disabled]="true">
+    <!-- Erstellt -->
+      <mat-tab label="Erstellt">
+        <table cellspacing="0">
+          <tr>
+            <th i18n>Tabelle</th>
+            <th i18n>Firma</th>
+            <th i18n>Datum</th>
+            <th i18n>Zeit</th>
+            <th i18n>Abteilung</th>
+            <th i18n>Benutzer</th>
+            <th i18n>Rechner</th>
+          </tr>
+
+          <tr *ngFor="let key of objectKeys(data)">
+            <td>{{key}}</td>
+            <td>{{data[key].afirma}}</td>
+            <td>{{data[key].adatum | date}}</td>
+            <td>{{data[key].azeit}}</td>
+            <td>{{data[key].aabt}}</td>
+            <td>{{data[key].auser}}</td>
+            <td>{{data[key].arechner}}</td>
+          </tr>
+        </table>
+      </mat-tab>
+
+      <!-- Geaendert -->
+      <mat-tab label="Geaendert">
+        <table cellspacing="0">
+          <tr>
+            <th i18n>Tabelle</th>
+            <th i18n>Firma</th>
+            <th i18n>Datum</th>
+            <th i18n>Zeit</th>
+            <th i18n>Abteilung</th>
+            <th i18n>Benutzer</th>
+            <th i18n>Rechner</th>
+          </tr>
+
+          <tr *ngFor="let key of objectKeys(data)">
+            <td>{{key}}</td>
+            <td>{{data[key].nfirma}}</td>
+            <td>{{data[key].ndatum | date}}</td>
+            <td>{{data[key].nzeit}}</td>
+            <td>{{data[key].nabt}}</td>
+            <td>{{data[key].nuser}}</td>
+            <td>{{data[key].nrechner}}</td>
+          </tr>
+        </table>
+      </mat-tab>
+
+      <!-- Erstellt (Ext) -->
+      <mat-tab label="Erstellt (Ext)">
+        <table cellspacing="0">
+          <tr>
+            <th i18n>Tabelle</th>
+            <th i18n>Firma</th>
+            <th i18n>Datum</th>
+            <th i18n>Zeit</th>
+            <th i18n>Abteilung</th>
+            <th i18n>Benutzer</th>
+          </tr>
+
+          <tr *ngFor="let key of objectKeys(data)">
+            <td>{{key}}</td>
+            <td>{{data[key].extafirma}}</td>
+            <td>{{data[key].extadatum | date}}</td>
+            <td>{{data[key].extazeit}}</td>
+            <td>{{data[key].extaabt}}</td>
+            <td>{{data[key].extauser}}</td>
+          </tr>
+        </table>
+      </mat-tab>
+
+      <!-- Geaendert (Ext) -->
+      <mat-tab label="Geaendert (Ext)">
+        <table cellspacing="0">
+          <tr>
+            <th i18n>Tabelle</th>
+            <th i18n>Firma</th>
+            <th i18n>Datum</th>
+            <th i18n>Zeit</th>
+            <th i18n>Abteilung</th>
+            <th i18n>Benutzer</th>
+          </tr>
+
+          <tr *ngFor="let key of objectKeys(data)">
+            <td>{{key}}</td>
+            <td>{{data[key].extnfirma}}</td>
+            <td>{{data[key].extndatum | date}}</td>
+            <td>{{data[key].extnzeit}}</td>
+            <td>{{data[key].extnabt}}</td>
+            <td>{{data[key].extnuser}}</td>
+          </tr>
+        </table>
+      </mat-tab>
+
+      <!-- Anderes -->
+      <mat-tab label="Anderes">
+        <table cellspacing="0">
+          <tr>
+            <th i18n>Tabelle</th>
+            <th i18n>Status</th>
+            <th i18n>Stat-Datum</th>
+            <th i18n>Timestamp</th>
+          </tr>
+
+          <tr *ngFor="let key of objectKeys(data)">
+            <td>{{key}}</td>
+            <td>{{data[key].stat}}</td>
+            <td></td>
+            <td>{{data[key].timestamp | date}}</td>
+          </tr>
+        </table>
+      </mat-tab>
+  </mat-tab-group>
+</div>

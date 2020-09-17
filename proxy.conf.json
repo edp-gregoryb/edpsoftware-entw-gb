@@ -1,0 +1,22 @@
+{
+  "/refreshProgress/:objasch": {
+    "target": "http://localhost:4000",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/getRenderTable": {
+    "target": "http://localhost:4000",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/refreshPage": {
+  "target": "http://localhost:4000",
+  "secure": false,
+  "changeOrigin": true
+},
+  "/addObjekt": {
+  "target": "http://localhost:4000",
+  "secure": false,
+  "changeOrigin": true
+}
+}

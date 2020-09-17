@@ -1,0 +1,198 @@
+.size100 {
+    width: 100%;
+}
+
+.tool {
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.tool:hover {
+    background-color: rgb(206, 206, 206);
+}
+
+.tool:active {
+    color: #EEE;
+}
+
+.numberInput, .dateInput {
+    max-width: 100px;
+}
+.phoneInput {
+    max-width: 120px;
+}
+
+.formField, .numberInput {
+    /*margin: 0 0 0 10px;*/
+    width: 55%;
+    padding-left: 10px;
+}
+
+.dateInput {
+    padding-left: 5px;
+}
+
+.dateSelect {
+    width: 20px;
+    background-color: rgb(218, 218, 218);
+    padding-bottom: 3px;
+}
+
+.field {
+    height: 54px;
+}
+
+.formFieldText {
+    width: 25%;
+    text-align: right;
+    float: left;
+    line-height: 54px;
+    cursor: default !important;
+}
+.formFieldTextlang {
+    width: 30%;
+    text-align: right;
+    float: left;
+    line-height: 54px;
+    cursor: default !important;
+}
+
+.formFieldCODN {
+    width: 55%;
+    float: left;
+    margin: 12px 0 12px 5px;
+}
+
+.CodnInput {
+    outline: none;
+    width: 30%;
+    float: left;
+    line-height: 24px;
+}
+
+.CodnText {
+    line-height: 30px;
+    width: 70%;
+    float: left;
+    overflow-x: scroll;
+    white-space:nowrap;
+    background-color: rgb(218, 218, 218);
+    cursor: pointer;
+}
+
+.toolBar {
+    float: left;
+}
+
+mat-expansion-panel-header {
+    background-color: #ddd;
+}
+
+.mat-expansion-panel-header.mat-expanded {
+    background-color: #ddd !important;
+}
+
+.toolBar mat-icon {
+    cursor: pointer;
+}
+
+::ng-deep .mat-tooltip {
+    position: above;
+}
+
+/*.codnVerlinkung {
+    width: 55%;
+    overflow-x: scroll;
+    white-space:nowrap;
+    background-color: rgb(218, 218, 218);
+    float: left;
+    margin: 12px 0 12px 5px;
+    line-height: 32px;
+    cursor: pointer;
+    padding: 0 10px;
+}*/
+
+table, th, td {
+    border: 1px solid rgb(218, 218, 218);
+}
+th, td {
+    padding: 2px;
+}
+table, tr {
+    width: 80%;
+}
+td {
+    width: 16%;
+}
+
+.clear {
+    clear: both;
+}
+input {
+    caret-color: #262626;
+}
+
+div.container
+{
+    display:flex;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.container div[ng-reflect-flex*=calc] {
+    color: #343434;
+    background-color: #8bc34a;
+}
+
+.container div.col3 {
+    background-color: #009682;
+    color: white;
+}
+
+
+div.container > div
+{
+    flex: 1 1 5em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    background-color: #03A9F4;
+    margin-left: 10px;
+    height:50px;
+    padding-left: 10px;
+    padding-top:10px;
+}
+
+div.container > div:first-child
+{
+    margin-left: 0;
+}
+
+.mainContainer {
+    /* Ganzer Bildschirm */
+    background-color: #DDD;
+    /*height: stretch;*/
+}
+.sidenavContainer {
+    /* Bereich der Sidenav */
+    /*background-color: #c5010e;*/
+    background-color: #888;
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.currentAppContainer {
+    /* Bereich der laufenden Applikation */
+    width: 100%;
+}
+
+.mainContent {
+    display: flex;
+    height: 100%;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,144 @@
+<mat-drawer-container style="background-color: #DDD;" autosize (window:resize)="windowResize()">
+<!-- Drawer -->
+<mat-drawer #drawer class="sidenavContainer" mode="side">
+  <div style="float: right; padding-left: 5px; padding-right: 5px;">
+    <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+  </div>
+  <!-- Sidenav -->
+  <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+</mat-drawer>
+
+<!-- Header -->
+<app-defaultheader [currentAppModule]="currentAppModule" [modulename]="modulename" (onSidenavToggle)="drawer.toggle()" #header></app-defaultheader>
+
+<!-- Lade-Balken -->
+<!--<mat-progress-bar *ngIf="httpRequestsLoading > 0" mode="indeterminate" color="warn"></mat-progress-bar>-->
+
+<!-- Header -->
+<app-header [headerTitle]="headerTitle" [linkBack]="headerLinkBack"></app-header>
+  <div class="wrapper" [ngStyle]="{'height.px': innerheight}" style="overflow: scroll;">
+    <div class="smallWrapper">
+  <div class="example-container mat-elevation-z8">
+<!--    <table >-->
+<!--      <h2>Objekt Bezeichnung</h2>-->
+<!--      <tr ><td></td><td>PInfo</td><td>PDetail</td><td>Objekt</td></tr>-->
+<!--      <ng-container *ngFor="let group of dataSource" >-->
+<!--        <tr [class.active]="toggle" (click)="getrow(group)" > <td>{{group.obj_bezeichnung}}</td>-->
+<!--          <td *ngIf="objekt && aschlussel">-->
+<!--          <mat-icon routerLink="/workflow/workflow-show/productInfo/{{objekt}}/{{aschlussel}}">attach_file</mat-icon>-->
+<!--        </td>-->
+<!--          <td>-->
+<!--                    <button  class="editObjectbutton" mat-icon-button (click)="openProduktdetail( $event)">-->
+<!--                      <mat-icon >input</mat-icon>-->
+<!--                    </button>-->
+<!--        </td>-->
+<!--          <td *ngIf="objekt && aschlussel">-->
+<!--                    <mat-icon style="margin-right: 10px" class="editObject" routerLink="/workflow/workflow-show/object/{{objekt}}/{{aschlussel}}">categorye</mat-icon>-->
+<!--        </td></tr>-->
+<!--      </ng-container>-->
+<!--    </table>-->
+
+
+<!--    <table mat-table [dataSource]="dataSource">-->
+
+<!--      <ng-container matColumnDef="select">-->
+<!--        <th mat-header-cell *matHeaderCellDef></th>-->
+<!--        <td mat-cell *matCellDef="let row">-->
+<!--          <mat-checkbox (click)="$event.stopPropagation()"-->
+<!--                        (change)="setAll($event, row)"-->
+<!--                        [checked]="selection.isSelected(row)"-->
+<!--                        [aria-label]="checkboxLabel(row)">-->
+<!--          </mat-checkbox>-->
+<!--        </td>-->
+<!--      </ng-container>-->
+
+<!--      &lt;!&ndash; Position Column &ndash;&gt;-->
+<!--      <ng-container matColumnDef="obj_bezeichnung">-->
+<!--        <th mat-header-cell *matHeaderCellDef> Objekt Bezeichnung </th>-->
+<!--        <td mat-cell *matCellDef="let element"> {{element.obj_bezeichnung}} </td>-->
+<!--      </ng-container>-->
+
+
+<!--              <ng-container  matColumnDef="productInfo" stickyEnd>-->
+<!--                <th mat-header-cell *matHeaderCellDef></th>-->
+<!--                <td mat-cell *matCellDef="let element">-->
+<!--                  <mat-icon *ngIf="objekt && aschlussel !== undefined" routerLink="/workflow/workflow-show/productInfo/{{objekt}}/{{aschlussel}}">attach_file</mat-icon>-->
+<!--                </td>-->
+<!--              </ng-container>-->
+
+<!--      <ng-container  matColumnDef="openProduktdetail" stickyEnd>-->
+<!--        <th mat-header-cell *matHeaderCellDef></th>-->
+<!--        <td mat-cell *matCellDef="let element">-->
+<!--          <button *ngIf="objekt && aschlussel !== undefined  " class="editObjectbutton" mat-icon-button (click)="openProduktdetail( $event)">-->
+<!--                        <mat-icon >input</mat-icon>-->
+<!--                      </button>-->
+<!--        </td>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container  matColumnDef="object" stickyEnd>-->
+<!--        <th mat-header-cell *matHeaderCellDef></th>-->
+<!--        <td mat-cell *matCellDef="let element">-->
+<!--          <mat-icon *ngIf="objekt && aschlussel !== undefined  " style="margin-right: 10px" class="editObject" routerLink="/workflow/workflow-show/object/{{objekt}}/{{aschlussel}}">categorye</mat-icon>-->
+<!--        </td>-->
+<!--      </ng-container>-->
+<!--      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>-->
+<!--      <tr mat-row *matRowDef="let row; let i = index; columns: columnsToDisplay;"  (click)="selection.toggle(row)">{{i}}-->
+
+<!--      </tr>-->
+
+<!--    </table>-->
+
+    <table mat-table
+           [dataSource]="dataSource" multiTemplateDataRows
+           class="mat-elevation-z8">
+      <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
+        <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+        <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+      </ng-container>
+
+      <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+          <div class="example-element-detail"
+               [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+
+            <div class="example-element-description">
+              <span>
+                <span *ngIf="aschlussel">
+                Produktinfo :
+
+                <button *ngIf="objekt" class="editObjectbutton" mat-icon-button (click)="openProduktinfo( $event)">
+                <mat-icon >attach_file</mat-icon>
+              </button>
+               </span>
+<!--              <mat-icon *ngIf="objekt && aschlussel !== undefined" routerLink="/workflow/workflow-show/productInfo/{{objekt}}/{{aschlussel}}">attach_file</mat-icon>-->
+              </span>
+              <span>
+                Produktdetail :
+              <button *ngIf="objekt && aschlussel !== undefined  " class="editObjectbutton" mat-icon-button (click)="openProduktdetail( $event)">
+                <mat-icon >input</mat-icon>
+              </button>
+              </span>
+              <span>
+                 <span *ngIf="aschlussel">
+                Workflow :
+              <mat-icon *ngIf="objekt" style="margin-right: 10px" class="editObject" routerLink="/workflow/workflow-show/object/{{objekt}}/{{aschlussel}}">categorye</mat-icon>
+                 </span>
+              </span>
+              </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+          class="example-element-row"
+          [class.example-expanded-row]="expandedElement === element"
+          (click)="expandedElement = expandedElement === element ? null : element" (click)="getrow(element)">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+    </table>
+  </div>
+    </div>
+  </div>
+</mat-drawer-container>

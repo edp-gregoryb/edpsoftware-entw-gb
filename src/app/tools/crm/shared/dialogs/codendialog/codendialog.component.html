@@ -1,0 +1,28 @@
+<div style="margin: 15px 0; padding: 10px;" [ngStyle]="{'height.px': innerheight}" class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
+  <table style="float: left; min-width: 70%;cursor: pointer;">
+    <tr>
+      <th (click)="sort(code_wert)">Code-wert</th>
+      <th (click)="sort(code_text)">Code-text</th>
+      <th (click)="sort(code_text1)">Code-text1</th>
+      <th (click)="sort(code_text2)">Code-text2</th>
+      <th (click)="sort(code_sprache)">Sprache</th>
+      <th (click)="sort(code_firma)">Firma</th>
+      <th (click)="sort(code_art)">Code-art</th>
+      <th (click)="sort(code_Kz)">Kz</th>
+    </tr>
+
+    <tr *ngFor="let item of suchresult" (click)="openCodeart(item)" (dblclick)="directChoose(item)" [ngClass]="{'highlight' : momentanerWert == item.code_wert}">
+      <td>{{item.code_wert}}</td>
+      <td>{{item.code_text}}</td>
+      <td>{{item.code_text1}}</td>
+      <td>{{item.code_text2}}</td>
+      <td>{{item.sprache}}</td>
+      <td>{{item.firma}}</td>
+      <td>{{item.code_art}}</td>
+      <td>{{item.code_Kz}}</td>
+    </tr>
+  </table>
+
+
+  <div class="clear"></div>
+</div>

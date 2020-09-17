@@ -1,0 +1,47 @@
+<table>
+     <tr>
+       <td style="width:90%"> <input style="width:95%;font-size: 18px;height:24" type="text" [(ngModel)]="val0" (ngModelChange)="searchttermine($event)" /></td>
+       <td style="width:10%"><app-infosverknuepfung [termindataChanged]="termindataChanged" (verknuepfungEinAusSchalter)="verknuepfungEinAus($event)"></app-infosverknuepfung></td>
+     </tr>
+    </table>
+    <mat-progress-bar *ngIf="verknuepfungicon" mode="indeterminate" color="warn"></mat-progress-bar>
+    <mat-list [ngStyle]="{'height.px': innerheight}">
+        <!--(click)="onSelect($event,hist,op50)"-->
+      <mat-list-item *ngFor="let hist of terminhist"  (click)="openMemoinDialog(hist.termrapptext)" class="pointer">
+        <h4 mat-line>{{hist.termkontaktpers}} <span style="float:right;font-size:x-small;" ><span mat-line>{{hist.vertr_name}}</span></span></h4>
+        <p mat-line>
+          <span>{{hist.termaktivid}}<span *ngIf="hist.termdatum  && hist.termaktivid">, </span></span>
+          <span class="demo-secondary-text">{{hist.termdatum}}<span *ngIf="hist.termzeit">, </span></span>
+           <span class="demo-secondary-text">{{hist.termzeit}}</span>
+        </p>
+        <p  mat-line>
+            <span>{{hist.objekt}}<span *ngIf="hist.ausgbez">, </span></span>
+            <span class="demo-secondary-text">{{hist.ausgbez}}</span>
+        </p>
+        <p mat-line>
+          <span >{{hist.termrapptext| ellipsis: 50}}</span>
+            <!--<span [matMenuTriggerFor]="menushowall" (click)="openMemoinDialog(hist.termrapptext)">{{hist.termrapptext}}</span>-->
+        </p>
+        <!--<mat-menu #menushowall="matMenu">-->
+          <!--<div style="margin-left:5px;">{{hist.termrapptext}}</div>-->
+        <!--</mat-menu>-->
+        
+        <!-- Alle hochgeladenen Dokumente anzeigen -->
+        <div mat-line *ngIf="hist.dokArray">
+            <div *ngIf="hist.dokArray[0] !== ''">
+                <span>Hochgeladene Dateien:</span>
+                <div *ngFor="let name of hist.dokArray" (click)="openDocument(name, hist)" style="cursor: pointer;">
+                    <span style="display:inline-block; width: 7%;"></span><span>{{name}}</span>
+                </div>
+            </div>
+        </div>
+        <!--<p mat-line *ngFor="let name of hist.dokArray" (click)="openDocument(name)">
+            <span>{{name}}</span>
+        </p>-->
+
+      </mat-list-item>
+
+    </mat-list>
+
+    
+    

@@ -1,0 +1,40 @@
+<!-- Obere Card -->
+<div style="margin: 15px 0; padding: 10px; background-color: #eee">
+  <!-- Titel -->
+  <h4>Suchkriterien</h4>
+  <!-- Suchfeld -->
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+    <div class="item item-1" fxFlex="30%" fxFlexOrder="1" fxLayoutGap="10px">
+      <mat-form-field class="size100" fxFlex>
+        <input matInput type="text" placeholder="Suche" [(ngModel)]="suchfeld" (keyup.enter)="suchen()">
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="suchen()">Suchen</button>
+      <button mat-raised-button color="primary" (click)="abbruch()">Abbrechen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Zwischenabstand -->
+<div style="margin-bottom: 15px;"></div>
+
+<!-- Anzeige-Tabelle -->
+<div style="margin: 15px 0; padding: 10px;" class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+  <table style="float: left; min-width: 70%;" [hidden]="!suchergebnisse || suchergebnisse.length === 0">
+    <tr>
+      <th (click)="sort('beznr')">Beznr</th>
+      <th (click)="sort('fname')">Firmenname</th>
+      <th (click)="sort('zusatz1')">Zusatz 1</th>
+      <th (click)="sort('zusatz2')">Zusatz 2</th>
+    </tr>
+
+    <tr *ngFor="let ergebnis of suchergebnisse; let i = index" (click)="auswahl(i)" [ngClass]="{'highlight' : momentaneBeznr == ergebnis.beznr}">
+      <td>{{ergebnis.beznr}}</td>
+      <td>{{ergebnis.fname}}</td>
+      <td>{{ergebnis.zusatz1}}</td>
+      <td>{{ergebnis.zusatz2}}</td>
+    </tr>
+  </table>
+
+  <button mat-raised-button style="float: left; max-height: 50px;" color="primary" (click)="empty()">Leere Auswahl</button>
+  <div class="clear"></div>
+</div>

@@ -1,0 +1,28 @@
+<!--<app-loading-screen></app-loading-screen>-->
+<mat-drawer-container class="mainContainer" autosize (window:resize)="windowResize()">
+
+  <mat-drawer #drawer class="sidenavContainer" mode="side">
+    <div style="float: right; padding-left: 5px; padding-right: 5px;">
+      <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded">
+        <mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon>
+      </button>
+    </div>
+    <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [lastAppModule]="lastAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+  </mat-drawer>
+
+  <div class="appMainframe">
+    <div><app-headeranzeige [currentAppModule]="currentAppModule" [modulename]="modulename" (onSidenavToggle)="drawer.toggle()"></app-headeranzeige></div>
+    <mat-progress-bar style="position:fixed;top:0;width:100%;z-index:100;" *ngIf="progressbar_visible" color="warn" mode="query"></mat-progress-bar>
+    <div [ngStyle]="{'height.px': innerheight}">
+    <p style="font-size: medium;font-weight: bold;margin-left: 20px">Erstes Kriterium</p>
+    <app-merksuche [idmerk]="mitKrit" (selectemerkmals)="merkmals($event)" (deletemerkmal)="deletemerkal($event)"></app-merksuche>
+    <p style="font-size: medium;font-weight: bold;margin-left: 20px">Ohne Kriterium</p>
+    <app-merksuche [idmerk]="ohneKrit" (selectemerkmalsohne)="merkmalsohne($event)" (deletemerkmalohne)="deletemerkalohne($event)"></app-merksuche>
+    <app-objektmerksuche (selecteobjektsa)="aobjekts($event)" (selecteobjektsb)="bobjekts($event)" (deleteobjektsa)="deleteobja($event)" (deleteobjektsb)="deleteobjb($event)"></app-objektmerksuche>
+    <button style="float: right;margin-top: 20px;margin-right: 10px" mat-raised-button (click)="startAdresselection()">Adressselektion</button>
+    <mat-form-field style="float: right;margin-right: 20px;width: 300px">
+      <textarea matTextareaAutosize matInput placeholder="Beschreibung" [(ngModel)]="beschreibung"></textarea>
+    </mat-form-field>
+    </div>
+  </div>
+</mat-drawer-container>

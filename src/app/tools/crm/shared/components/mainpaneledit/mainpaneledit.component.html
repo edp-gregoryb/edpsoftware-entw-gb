@@ -1,0 +1,53 @@
+
+<div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+<!--<app-kundensuchfeld [kundendata]="terminlist" (kundevalueChanged)="NewKundevalueChanged($event)"></app-kundensuchfeld>-->
+<app-kundenanzeige [kundendata]="terminlist" (kundevalueChanged)="NewKundevalueChanged($event)"></app-kundenanzeige>
+</div>
+<div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+<app-objektdropmaterial  [objekttext]="objekttext" (dbvalueChanged)=myDbvalueChanged($event) ></app-objektdropmaterial>
+</div>
+<div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+<app-agentursuchfeld [agenturdata]="terminlist" (agenturvalueChanged)="NewAgenturvalueChanged($event)"></app-agentursuchfeld>
+</div>
+<div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+<app-rubrikdropmaterial  [rubriktext]="rubriktext" [objforrubrik]="objekttodb" (rubrikvalueChanged)=NewRubrikvalueChanged($event) ></app-rubrikdropmaterial>
+</div>
+<div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+<app-urubrikdropmaterial  [urubriktext]="urubriktext" [rubrikforurubrik]="rubriktodb" [objforrubrik]="objekttodb" (urubrikonvalueChanged)=NewUrubrikonvalueChanged($event) ></app-urubrikdropmaterial>
+</div>
+<!--<div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+    <app-aschluesseldropmaterial  [objektvalue]="objektfordrop" [aschluessel]="aschluesseltext" (ausgabeonvalueChanged)=NewausgabeonvalueChanged($event) ></app-aschluesseldropmaterial>
+</div>-->
+<div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+<div  style="font-weight: bold;">Notiz:</div>
+<span ><textarea pInputTextarea style="width: 100%" rows="10" [(ngModel)]="termrapptextkunde"></textarea>
+</span>
+</div>
+<div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+    <app-kontaktpersdropmaterial #kontaktpers [kundenNr]="beznrkunde"  [vermit]="agenturtodb" [kontaktpers]="kontaktpersnr" (kontaktpersonChanged)=NewkontaktpersonChanged($event) ></app-kontaktpersdropmaterial>
+    </div>
+<div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+    <app-aktivitaetdropmaterial #aktivitaet [aktivitaet]="aktivitaetfordrop" (aktivitaetonvalueChanged)=NewaktivitaetonvalueChanged($event) ></app-aktivitaetdropmaterial>
+    </div>
+<!-- Aktion -->
+<div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+    <app-aktiondropmaterial [aktion]="aktionfordrop" (aktionvaluechanged)="NewaktionvalueChanged($event)"></app-aktiondropmaterial>
+</div>
+<!-- Mitarbeiter -->
+<div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+    <app-mitarbeiterdropmaterial #mitarbeiter [mitarbeiter]="mitarbeiterbezfordrop" (mitarbeiteronvalueChanged)=NewmitarbeiteronvalueChanged($event) ></app-mitarbeiterdropmaterial>
+</div>
+<div class="w3-container w3-margin-left w3-margin-right w3-margin-top">
+    <app-aschluesseldropmaterial  [width]="'30%'" [objektvalue]="objektfordrop" [aschluessel]="aschluesseltext" (ausgabeonvalueChanged)=NewausgabeonvalueChanged($event) ></app-aschluesseldropmaterial>
+ <app-datumzeitauswahl #datumzeit [timeValuenewfromdb]="zeitValuenew" [dateValuenewfromdb]="dateValuenew"></app-datumzeitauswahl>
+</div>
+<div>
+  <br>
+   <!--<button type="button"  pButton (click)="SaveTermin(termrapptextkunde,dateValuenew,zeitValuenew,datumzeit,kontaktpers,aktivitaet,mitarbeiter)" label="Speichern" class="ui-button-success"></button>-->
+  <!--<button type="button"  pButton (click)="showInfoAbbrechen()" label="Abbrechen" class="ui-button-info"></button>-->
+<button mat-raised-button  (click)="SaveTermin(termrapptextkunde,dateValuenew,zeitValuenew,datumzeit,kontaktpers,aktivitaet,mitarbeiter,aschluesseltext)" i18n="@@save" >Speichern</button>
+<button mat-raised-button  (click)="showInfoAbbrechen()" i18n="@@interrupt" >Abbrechen</button>
+</div>
+<p-messages [value]="msgs"></p-messages>
+
+

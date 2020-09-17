@@ -1,0 +1,41 @@
+<mat-toolbar color="primary">
+  <span style="flex: 1 1 auto;margin-top:5px;">
+     
+      <h1><button mat-icon-button><mat-icon class="md-24" aria-label="button back" (click)="backtoAgenda()">keyboard_backspace</mat-icon></button>
+          <span style="color:red;">edp</span><span i18n="@@offerAndOrder">Offert- & Auftrags-Tool</span></h1>
+  </span>
+  <!-- <span class="headerleft">
+      <h1>
+        <button type="button" mat-icon-button (click)="onSidenavToggle.emit()"><mat-icon aria-label="Hamburgersymbol">dehaze</mat-icon></button>
+
+        <span class="edprot">edp</span>WebSuite
+      </h1>
+  </span> -->
+
+<button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>account_circle</mat-icon> <!-- more_vert -->
+    </button>
+<mat-menu #menu="matMenu">
+     <div style="background-color:#b3ffcc">
+     <div style="margin-left: 10px">
+     <div><span i18n="@@logInAs">Angemeldet als</span>:</div>
+        <div style="font-size: 12px;">{{currentUser}}</div>
+        <i style="font-size: 13px;" class="material-icons">local_activity</i><span style="font-size: 12px;">  {{instanz}}</span>
+        <div style="float:right;margin-right:20px"><i style="font-size: 13px" class="material-icons">domain</i><span style="font-size: 12px;">   {{mandant}}</span></div>
+        </div>
+        </div>
+      <button mat-menu-item (click)="programminformationen()">
+        <mat-icon>info</mat-icon>
+        <span i18n="@@information">Information</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>settings</mat-icon>
+        <span i18n="@@settings">Einstellungen</span>
+      </button>
+      <button mat-menu-item (click)="logout($event)">
+        <mat-icon>power_settings_new</mat-icon>
+        <span i18n="@@logout">Abmelden</span>
+      </button>
+    </mat-menu>
+
+</mat-toolbar>

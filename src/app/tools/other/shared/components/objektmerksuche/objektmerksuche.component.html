@@ -1,0 +1,71 @@
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="50%" fxFlexOrder="1" >
+
+    <div >
+      <div style="float: left">
+      <p style="font-size: medium;font-weight: bold;margin-left: 20px">Objekt aus ITKO</p>
+      </div>
+      <div style="float: left; margin-left: 12px; margin-top: 9px">
+      <button mat-raised-button (click)="openDialog('a')">Objekt auswählen</button>
+      </div>
+    </div>
+
+
+  </div>
+  <div class="item item-2" fxFlex="50%" fxFlexOrder="2" >
+    <div>
+      <div style="float: left">
+      <p style="font-size: medium;font-weight: bold;margin-left: 20px">Objekt für Verantwortlichen</p>
+      </div>
+      <div style="float: left; margin-left: 12px; margin-top: 9px">
+      <button mat-raised-button (click)="openDialog('b')">Objekt auswählen</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="50%" fxFlexOrder="1" >
+    <form [formGroup]="filter" style="margin-left: 20px">
+      <div formArrayName="itemforsearch">
+
+        <div *ngFor="let _itemforsearch of filter.get('itemforsearch')?.controls; let i = index" >
+          <!--fxLayoutAlign="center"-->
+          <div [formGroupName]="i"  class="container" fxLayout fxLayout.xs="column"  fxLayoutGap="10px" fxLayoutGap.xs="0">
+            <div >
+              <div >
+                <!--<div class="item item-1" fxFlex="30%" fxFlexOrder="1">Objekte:</div>-->
+                <div style="float:left"><input matInput   formControlName="objekt"></div>
+                <div style="float:left"><input matInput   formControlName="objektbez"></div>
+                <div style="float:right; margin-top:-10px" ><button mat-icon-button (click)="deleteitemforsearch(i)" ><mat-icon>delete</mat-icon></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="item item-2" fxFlex="50%" fxFlexOrder="2" >
+    <form [formGroup]="filterb" style="margin-left: 20px">
+      <div formArrayName="itemforsearchb">
+
+        <div *ngFor="let _itemforsearch of filterb.get('itemforsearchb')?.controls; let i = index" >
+          <!--fxLayoutAlign="center"-->
+          <div [formGroupName]="i"  class="container" fxLayout fxLayout.xs="column"  fxLayoutGap="10px" fxLayoutGap.xs="0">
+            <div >
+              <div >
+                <!--<div class="item item-1" fxFlex="30%" fxFlexOrder="1">Objekte:</div>-->
+                <div style="float:left"><input matInput   formControlName="objekt"></div>
+                <div style="float:left"><input matInput   formControlName="objektbez"></div>
+                <div style="float:right; margin-top:-10px" ><button mat-icon-button (click)="deleteitemforsearchb(i)" ><mat-icon>delete</mat-icon></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

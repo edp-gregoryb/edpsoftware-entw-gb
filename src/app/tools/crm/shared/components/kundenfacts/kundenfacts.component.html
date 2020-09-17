@@ -1,0 +1,227 @@
+<div *ngIf="kundendetails">
+<div  class="ui-g-12">
+<mat-progress-bar *ngIf="ladendoku" mode="indeterminate" color="warn"></mat-progress-bar>
+<mat-card style="text-align: left;background-color: #DDD" >
+    <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+        <div fxFlex="60%" fxFlexOrder="1">
+            <div style="margin-top: 20px"></div>
+            <span style="font-weight: bold;" class="clientTitle" i18n="@@kunde">Kunde:</span><span class="clientTitle"> {{kundendetails.bbeznr}}</span><span>
+                <button mat-icon-button matTooltip="Karte anzeigen" matTooltipPosition="below" (click)=showLocation()><mat-icon>directions</mat-icon></button>
+                <button mat-icon-button matTooltip="Mail an Innendienst" matTooltipPosition="below" [matMenuTriggerFor]="menuinnendienst" (click)=getMailid($event)><mat-icon>alternate_email</mat-icon></button>
+                <button mat-icon-button matTooltip="Kunde editieren" matTooltipPosition="below" (click)=editHauptkunde(kundendetails.bbeznr)><mat-icon>edit</mat-icon></button>
+                <button mat-icon-button matTooltip="Kunde löschen" matTooltipPosition="below" (click)=deleteKunde(kundendetails)><mat-icon>delete</mat-icon></button>
+            </span>
+        </div>
+        <div  fxFlex="40%" fxFlexOrder="2">
+            <app-kontaktpersdropmaterial [kundenNr]="kundenbeznr" [kontaktpers]="kontaktpersnr" (kontaktpersonChanged)=NewkontaktpersonChanged($event)></app-kontaktpersdropmaterial>
+            <div *ngIf="ungleichebeznr">
+            <span class="clientTitle" >{{kundendetails.beznr}}</span>
+            <span *ngIf="!canEdit"><button mat-icon-button matTooltip="Kontaktperson editieren" matTooltipPosition="below" (click)=editAgent(1)><mat-icon>edit</mat-icon></button></span>
+            <span *ngIf="canEdit"><button mat-icon-button matTooltip="Nicht speichern" matTooltipPosition="below" (click)=editAgent(0)><mat-icon>clear</mat-icon></button></span>
+            <span *ngIf="canEdit"><button mat-icon-button matTooltip="Speichern" matTooltipPosition="below" (click)=saveAgent()><mat-icon>done</mat-icon></button></span>
+            </div>
+        </div>
+    </div>
+    <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+         <app-openstreetmap [strasse]="kundendetails.bstrasse" [ort]="kundendetails.bort" *ngIf="showloc"></app-openstreetmap>
+    </div>
+   <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+        <!-- <div fxFlex="40%" fxFlexOrder="1"><h4>{{kundendetails.bfname}}</h4></div><div fxFlex="20%" fxFlexOrder="2"> {{kundendetails.bbeznr}}</div>
+        <div  *ngIf="ungleichebeznr"  ><h4 fxFlexOrder="3" fxFlex="30%">{{kundendetails.bfname}}</h4><span  fxFlexOrder="4"> {{kundendetails.beznr}}</span></div> -->
+        <div fxFlex="40%" fxFlexOrder="1" ><h4>{{kundendetails.bfname}}</h4></div> <!--<span fxFlexOrder="2" fxFlex="19%" >{{kundendetails.bbeznr}}</span>-->
+        <div fxFlex="20%" fxFlexOrder="2"></div>
+        <div *ngIf="ungleichebeznr" fxFlex="40%" fxFlexOrder="3" >
+            <h4 class="crop">{{kundendetails.fname}}</h4>
+        </div>
+    </div>
+    <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+        <div fxFlex="20%" fxFlexOrder="1"><span i18n="@@name">Name</span>: </div>
+        <div fxFlex="40%" fxFlexOrder="2" class="crop">{{kundendetails.anrede}} {{kundendetails.bvname}} {{kundendetails.bfname}}</div>
+        <div *ngIf="ungleichebeznr" fxFlex="40%" fxFlexOrder="3" class="crop">{{kundendetails.anrede}} {{kundendetails.vname}} {{kundendetails.fname}}</div>
+    </div>
+    <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+        <div fxFlex="20%" fxFlexOrder="1"><span i18n="@@addition">Zusatz</span> 1: </div>
+        <div fxFlex="40%" fxFlexOrder="2">{{kundendetails.bzusatz1}}</div>
+        <div *ngIf="ungleichebeznr" fxFlex="40%" fxFlexOrder="3">{{kundendetails.zusatz1}}</div>
+    </div>
+    <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+        <div fxFlex="20%" fxFlexOrder="1"><span i18n="@@additionFirmOneTwo">Zusatz</span> 2: </div>
+        <div fxFlex="40%" fxFlexOrder="2">{{kundendetails.bzusatz2}}</div>
+        <div *ngIf="ungleichebeznr" fxFlex="40%" fxFlexOrder="3">{{kundendetails.zusatz2}}</div>
+    </div>
+    <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+        <div fxFlex="20%" fxFlexOrder="1"><span i18n="@@street">Strasse</span>: </div>
+        <div fxFlex="40%" fxFlexOrder="2">{{kundendetails.bstrasse}}</div>
+        <div *ngIf="ungleichebeznr" fxFlex="40%" fxFlexOrder="3">{{kundendetails.strasse}}</div>
+    </div>
+    <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+        <div fxFlex="20%" fxFlexOrder="1"><span i18n="@@place">Ort</span>: </div>
+        <div fxFlex="40%" fxFlexOrder="2">{{kundendetails.bort}}</div>
+        <div *ngIf="ungleichebeznr" fxFlex="40%" fxFlexOrder="3">{{kundendetails.ort}}</div>
+    </div>
+    <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+        <div fxFlex="20%" fxFlexOrder="1"><span i18n="@@country">Land</span>: </div>
+        <div fxFlex="40%" fxFlexOrder="2">{{kundendetails.bland}}</div>
+        <div *ngIf="ungleichebeznr" fxFlex="40%" fxFlexOrder="3">{{kundendetails.land}}</div>
+    </div>
+    <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+        <div fxFlex="20%" fxFlexOrder="1"><span i18n="@@phone">Telefon</span>: </div>
+        <div *ngIf="btelgek" fxFlex="40%" fxFlexOrder="2"><span [innerHtml]="btelgek | safepipe:'html'"></span></div>
+        <div *ngIf="ungleichebeznr" fxFlex="40%" fxFlexOrder="3">
+            <div *ngIf="!canEdit && telgek" ><span [innerHtml]="telgek | safepipe:'html'"></span></div>
+            <input *ngIf="canEdit" type="text" maxlength="25" placeholder="Telefon" [(ngModel)]="tempAgent.telge">
+        </div>
+    </div>
+    <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+        <div fxFlex="20%" fxFlexOrder="1"><span i18n="@@phoneBusiness">Telefon Geschäft</span>: </div>
+        <div *ngIf="btelgedik" fxFlex="40%" fxFlexOrder="2"><span [innerHtml]="btelgedik | safepipe:'html'"></span></div>
+        <div *ngIf="ungleichebeznr" fxFlex="40%" fxFlexOrder="3">
+            <div *ngIf="!canEdit && telgedik" ><span [innerHtml]="telgedik | safepipe:'html'"></span></div>
+            <input *ngIf="canEdit" type="text" maxlength="25" placeholder="Telefon Geschäft" [(ngModel)]="tempAgent.telgedi">
+        </div>
+    </div>
+    <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+        <div fxFlex="20%" fxFlexOrder="1"><span i18n="@@phonePrivate">Telefon Privat</span>: </div>
+        <div *ngIf="btelprivk" fxFlex="40%" fxFlexOrder="2"><span [innerHtml]="btelprivk | safepipe:'html'"></span></div>
+        <div *ngIf="ungleichebeznr" fxFlex="40%" fxFlexOrder="3">
+            <div *ngIf="!canEdit && telprivk" ><span [innerHtml]="telprivk | safepipe:'html'"></span></div>
+            <input type="text" *ngIf="canEdit" maxlength="25" placeholder="Telefon Privat" [(ngModel)]="tempAgent.telpriv">
+        </div>
+    </div>
+    <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+        <div fxFlex="20%" fxFlexOrder="1" i18n="@@mobile">Mobile: </div>
+        <div *ngIf="btelnatelk" fxFlex="40%" fxFlexOrder="2"><span [innerHtml]="btelnatelk | safepipe:'html'"></span></div>
+        <div *ngIf="ungleichebeznr" fxFlex="40%" fxFlexOrder="3">
+            <div *ngIf="!canEdit && telnatelk" ><span [innerHtml]="telnatelk | safepipe:'html'"></span></div>
+            <input type="text" *ngIf="canEdit" maxlength="25" placeholder="Mobile" [(ngModel)]="tempAgent.natel">
+        </div>
+    </div>
+    <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+        <div fxFlex="20%" fxFlexOrder="1"><span i18n="@@email">Email</span>: </div>
+        <div *ngIf="bemail" fxFlex="40%" fxFlexOrder="2"><span [innerHtml]="bemail | safepipe:'html'"></span></div>
+        <div *ngIf="ungleichebeznr" fxFlex="40%" fxFlexOrder="3">
+            <div *ngIf="!canEdit && email" ><span [innerHtml]="email | safepipe:'html'"></span></div>
+            <input type="text" *ngIf="canEdit" maxlength="25" placeholder="Email" [(ngModel)]="tempAgent.email">
+        </div>
+    </div>
+    <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+        <div fxFlex="20%" fxFlexOrder="1"><span i18n="@@place">Vertreter</span>: </div>
+        <div fxFlex="40%" fxFlexOrder="2">
+            <span *ngIf="kundendetails.gebvertrname">{{kundendetails.gebvertrname}}</span>
+            <span *ngIf="kundendetails.quali"> / {{kundendetails.quali}}</span>
+        </div>
+    </div>
+    <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+        <div fxFlex="20%" fxFlexOrder="1"><span i18n="@@place">Sperre</span>: </div>
+        <div fxFlex="40%" fxFlexOrder="2">
+        <mat-chip-list *ngIf="kundendetails.bsperrtext" aria-label="gesperrt">
+            <mat-chip color="warn" selected>{{kundendetails.bsperrtext}}</mat-chip>
+        </mat-chip-list>
+        </div>
+    </div>
+
+    </mat-card>
+
+
+    <!-- <div  class="ui-g-12" style="background-color: #f4f4f4"> -->
+        
+        <!-- Neue Darstellung -->
+        <mat-card class="bgcolor">
+            <div style="display:flex;flex-wrap: wrap; width:100%;">
+                <div fxFlex="29%" class="edpModuleCard" (click)="neuertermin()" *ngIf="moduleBerechtigt('VETN')">
+                    <div class="moduleShorthand">
+                        VETN
+                    </div>
+                    <div class="moduleName" i18n="@@newDate">
+                        Neuer Termin
+                    </div>
+                    <div class="moduleIcon">
+                        <mat-icon>contact_phone</mat-icon>
+                    </div>
+                </div>
+                <div fxFlex="29%" class="edpModuleCard" (click)="neuerofferte()" *ngIf="moduleBerechtigt('WEOA')">
+                    <div class="moduleShorthand">
+                        WEOA
+                    </div>
+                    <div class="moduleName" i18n="@@newOffer">
+                        Neue Offerte
+                    </div>
+                    <div class="moduleIcon">
+                        <mat-icon>description</mat-icon>
+                    </div>
+                </div>
+                <div fxFlex="29%" class="edpModuleCard" (click)="goToAbos()" *ngIf="moduleBerechtigt('WABO')">
+                    <div class="moduleShorthand">
+                        WABO
+                    </div>
+                    <div class="moduleName" i18n="@@abos">
+                        Abos
+                    </div>
+                    <div class="moduleIcon">
+                        <mat-icon>description</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+        <mat-card class="bgcolor">
+            <div style="display:flex;flex-wrap: wrap; width:100%;">
+                <div fxFlex="29%" class="edpModuleCard" (click)="gotoTerminliste()" *ngIf="moduleBerechtigt('TELI')">
+                    <div class="moduleShorthand">
+                        TELI
+                    </div>
+                    <div class="moduleName" i18n="@@newAddress">
+                        Verkaufsausgabe
+                    </div>
+                    <div class="moduleIcon">
+                        <mat-icon>face</mat-icon>
+                    </div>
+                </div>
+                <div fxFlex="29%" class="edpModuleCard" (click)="gotoWerbeauftragsliste()" *ngIf="moduleBerechtigt('WEAL')">
+                    <div class="moduleShorthand">
+                        WEAL
+                    </div>
+                    <div class="moduleName" i18n="@@newSub">
+                        Werbeauftragsliste
+                    </div>
+                    <div class="moduleIcon">
+                        <mat-icon>shopping_basket</mat-icon>
+                    </div>
+                </div>
+                <div fxFlex="29%" class="edpModuleCard" (click)="gotoUmsatz()" *ngIf="moduleBerechtigt('UMSA')">
+                    <div class="moduleShorthand">
+                        UMSA
+                    </div>
+                    <div class="moduleName" i18n="@@sales">
+                        Umsätze
+                    </div>
+                    <div class="moduleIcon">
+                        <mat-icon>shopping_basket</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+</div>
+</div>
+
+<mat-menu #menuinnendienst="matMenu"  [overlapTrigger]="false" x-position="before">
+    <div *ngIf="kundendetails">
+        <button style="padding-left: 250px;" mat-icon-button>
+            <mat-icon >close</mat-icon>
+        </button>
+        <div style="padding-right: 8px; padding-left: 8px; width: 300px;">Email: {{mailinnendienst}}</div>
+        <!-- <div style="padding-right: 8px; padding-left: 8px">Text:</div> -->
+        <div style="padding-right: 8px; padding-left: 8px">
+            <span class="example-full-width" (click)="$event.stopPropagation()">
+                <textarea rows="5" matInput placeholder="Kunden Daten" style="background-color: #eee;" #innendiensttxt>
+{{kundendetails.bbeznr}}
+{{kundendetails.bvname}} {{kundendetails.bfname}}
+{{kundendetails.bstrasse}}
+{{kundendetails.bort}}
+</textarea>
+            </span>
+        </div>
+        <button mat-icon-button style="float:right" (click)="sendEmailtoinnendienst(innendiensttxt.value)">
+            <mat-icon >send</mat-icon>
+        </button>
+    </div>
+</mat-menu>

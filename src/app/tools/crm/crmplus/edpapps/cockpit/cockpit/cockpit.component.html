@@ -1,0 +1,40 @@
+<app-loading-screen></app-loading-screen>
+ <mat-drawer-container class="mainContainer" autosize [ngStyle]="{'height.px': innerheight}">
+
+    <mat-drawer #drawer class="sidenavContainer" mode="side">
+        <div style="float: right; padding-left: 5px; padding-right: 5px;">
+            <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+        </div>
+        <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [lastAppModule]="lastAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+    </mat-drawer>
+
+    <div class="appMainframe">
+        <app-defaultheader [currentAppModule]="currentAppModule" [modulename]="modulename" (changeSicht)="sichtchange($event)" (onSidenavToggle)="drawer.toggle()" #header></app-defaultheader>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1"  fxFlexOrder="2">
+      <div style="margin-top:5px"></div>
+   <app-cockpitnexttermin  [searchtermine]="searchparameter"></app-cockpitnexttermin>
+</div>
+<div class="item item-1"  fxFlexOrder="2">
+      <div style="margin-top:5px"></div>
+    <!--<app-verkaufschancen></app-verkaufschancen>-->
+    <app-cockpitverkaufschancen [searchverkaufschancen]="searchparameter">></app-cockpitverkaufschancen>
+</div>
+<br>
+</div>
+<div style="margin-bottom:10px"></div>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  
+  <div class="item item-1"  fxFlexOrder="2">
+     <!--<app-vollansichtumsatz></app-vollansichtumsatz>-->
+    <!--<span>Umsatz in CHF</span>-->
+    <!--<app-umsatzdiagram [kundenbez]="kundenbez" [objekt]="kundenobjekt"></app-umsatzdiagram>-->
+    <app-cockpitumsatz [umsatzdata]="umsatzdata"></app-cockpitumsatz>
+</div>
+<div class="item item-1"  fxFlexOrder="2">
+    <app-cockpittimeline [searchtimeline]="searchparameter"></app-cockpittimeline>
+</div>
+<br>
+</div>
+    </div>
+</mat-drawer-container>

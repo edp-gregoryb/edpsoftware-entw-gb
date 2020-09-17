@@ -1,0 +1,27 @@
+<div class="demo">
+    <mat-tab-group (selectChange)="onSelectTabChange($event)" *ngFor="let tab of dyntab" (selectedIndexChange)="setValue($event)" [selectedIndex]="selectedIndex.value">
+        <!--(click)="showhistroy()"-->
+        <mat-tab label="{{tab.tab1name}}" *ngIf="tab.tab1anzeigen">
+            <app-infoshistory [termindata]="termin"></app-infoshistory>
+        </mat-tab>
+        <mat-tab label="{{tab.tab2name}}" *ngIf="tab.tab2anzeigen">
+            <app-allgemeineinfos [beznr]="kundenbez" [vertrname]="vertretername"></app-allgemeineinfos>
+        </mat-tab>
+        <mat-tab label="{{tab.tab3name}}" *ngIf="tab.tab3anzeigen">
+            <app-chipsanzeige [kundenbez]="kundenbez" [kontaktbez]="kontaktbez" [refreshChipbez]="kundenbezref"></app-chipsanzeige>
+        </mat-tab>
+        <mat-tab label="{{tab.tab4name}}" *ngIf="tab.tab4anzeigen">
+            <app-umsatzdiagram [kundenbez]="kundenbez" [objekt]="kundenobjekt"></app-umsatzdiagram>
+            <app-infosauftraege [termindata]="termin"></app-infosauftraege>
+        </mat-tab>
+        <mat-tab label="{{tab.tab5name}}" *ngIf="tab.tab5anzeigen">
+            <app-infosofferten [termindata]="termin"></app-infosofferten>
+        </mat-tab>
+        <mat-tab label="{{tab.tab6name}}" *ngIf="tab.tab6anzeigen">
+            <app-infosmails [kundenbez]="kundenbez"></app-infosmails>
+        </mat-tab>
+<!--        <mat-tab label="{{tab.tab7name}}" *ngIf="tab.tab7anzeigen">-->
+<!--            <app-infosabo [kundennummer]="kundenbez"></app-infosabo>-->
+<!--        </mat-tab>-->
+    </mat-tab-group>
+</div>

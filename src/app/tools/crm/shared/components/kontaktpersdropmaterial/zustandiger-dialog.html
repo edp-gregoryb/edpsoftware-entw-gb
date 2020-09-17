@@ -1,0 +1,5 @@
+
+    <button style="float: right;"  mat-icon-button (click)="onNoClick()"> <mat-icon>close</mat-icon></button>
+    <h2 cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>Kontaktperson</h2>
+<div style="margin-top: 13px"></div>
+<app-adrzu  [zustandignummer]="zustandignummer" [bbezner]="bbezner" (abgleich)="zustandigeruber($event)"></app-adrzu>

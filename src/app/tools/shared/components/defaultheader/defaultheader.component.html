@@ -1,0 +1,49 @@
+<mat-toolbar color="primary">
+  <span class="headerleft">
+      <h1>
+        <button type="button" mat-icon-button (click)="onSidenavToggle.emit()"><mat-icon aria-label="Hamburgersymbol">dehaze</mat-icon></button>
+        <!--<button mat-icon-button><mat-icon class="md-24" aria-label="button back" (click)="backtoAgenda()">keyboard_backspace</mat-icon></button>-->
+        <span class="edprot">edp</span> <span> {{currentAppModule}} </span><span> {{modulename}}</span>
+      </h1>
+  </span>
+
+  <div style="flex: 1 0 auto;margin-left: -150px">
+    <div style="margin-top: 20px"></div>
+      <app-customersearch *ngIf="anzeigenjanein"  (custsearch)="getcustsearch($event)" (loading)="currentlyLoading($event)"></app-customersearch>
+    </div>
+  <div>
+		<!--<span style="margin-left: 7px;"><mat-icon >visibility</mat-icon></span>-->
+		<app-sicht *ngIf="sichtjanein" [detailanzeige]="sidenavExpanded"  (sichtvalue)="valuesicht($event)"></app-sicht>
+  </div>
+  
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <div class="anmeldeinformationen">
+      <div><small><span i18n="@@logInAs">Angemeldet als</span>:</small></div>
+      <div><small><b>{{currentUser}}</b></small></div>
+      <div class="instanz-mandant">
+        <div class="instanz">
+          <small><i class="material-icons small-icons vcenter">business</i><span class="vcenter" matTooltip="{{instanz}}" matTooltipShowDelay="800" matTooltipPosition="left">  {{instanz}}</span></small>
+        </div>
+        <div class="mandant">
+          <small><i class="material-icons small-icons vcenter">group_work</i><span class="vcenter"> {{mandant}}</span></small>
+        </div>
+      </div>
+    </div>
+    <button mat-menu-item (click)="programminformationen()">
+      <mat-icon>info</mat-icon>
+      <span i18n="@@information">Information</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>settings</mat-icon>
+      <span i18n="@@settings">Einstellungen</span>
+    </button>
+    <button mat-menu-item (click)="logout($event)">
+      <mat-icon>power_settings_new</mat-icon>
+      <span i18n="@@logout">Abmelden</span>
+    </button>
+  </mat-menu>
+
+</mat-toolbar>

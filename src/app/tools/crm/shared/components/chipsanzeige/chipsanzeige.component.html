@@ -1,0 +1,35 @@
+<div [ngStyle]="{'height.px': innerheight}">
+        <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate" color="warn"></mat-progress-bar>
+<div    *ngFor="let chips of merkmallist; let i = index">
+        <!--<span *ngIf="chips.typ === 'Z' ">-->
+        <!--<hr *ngIf="chips.typ === 'Z' " style="margin-top:0px;margin-bottom:0px"/>-->
+        <!--<div *ngIf="chips.typ === 'Z' " >{{chipslist[i].NAME}}</div>-->
+        <!--<div  class="chipsanzeige" *ngFor="let merk of chips.merkmal">-->
+        <!--<span  *ngIf="merk.mkmartBez">{{merk.mkmartBez}}</span><span *ngIf="merk.mkmerk1Bez">{{merk.mkmerk1Bez}}</span><span *ngIf="merk.mkmerk2Bez">{{merk.mkmerk2Bez}}</span><span *ngIf="merk.mkmerk3Bez">{{merk.mkmerk3Bez}}</span>-->
+        <!--<button *ngIf="merk.mkmartBez" (click)="deletechips(chips,'onSelectpostpone','',oppostpone,'')"  mat-icon-button matTooltip="Löschen" matTooltipPosition="above"  aria-label="Open basic menu">x</button><br>-->
+        <!--</div></span>-->
+        <!--<div *ngFor="let merk of chips.merkmal">-->
+        <!--<div *ngIf="chips.typ === 'K'" class="chipsanzeige" >-->
+        <!--<span  *ngIf="merk.mkmartBez">{{merk.mkmartBez}}</span><span *ngIf="merk.mkmerk1Bez">{{merk.mkmerk1Bez}}</span><span *ngIf="merk.mkmerk2Bez">{{merk.mkmerk2Bez}}</span><span *ngIf="merk.mkmerk3Bez">{{merk.mkmerk3Bez}}</span>-->
+        <!--<button *ngIf="merk.mkmartBez" (click)="deletechips(chips,'onSelectpostpone','',oppostpone,'')"  mat-icon-button matTooltip="Löschen" matTooltipPosition="above"  aria-label="Open basic menu">x</button><br>-->
+        <!--</div><br>-->
+        <!--</div>-->
+         
+        <hr  style="margin-top:0px;margin-bottom:0px"/>
+        <div  >{{merkmallist[i].NAME}}</div>
+        <div  class="chipsanzeige" *ngFor="let merk of chips.merkmal">
+        <span  *ngIf="merk.mkmartBez">{{merk.mkmartBez}}</span><span *ngIf="merk.mkmerk1Bez">{{merk.mkmerk1Bez}}</span><span *ngIf="merk.mkmerk2Bez">{{merk.mkmerk2Bez}}</span><span *ngIf="merk.mkmerk3Bez">{{merk.mkmerk3Bez}}</span>
+        <button *ngIf="merk.mkmartBez" (click)="deletechips(chips.beznr,merk,'onSelectpostpone','',oppostpone,'')"  mat-icon-button matTooltip="Löschen" i18n-matTooltip="@@delete" matTooltipPosition="above"  aria-label="Open basic menu">
+                <mat-icon style="margin-top: -25px;">clear</mat-icon>
+        </button><br>
+        
+        </div>
+         <button (click)="addChip(chips.beznr)"  mat-icon-button matTooltip="Merkmal" i18n-matTooltip="@@featureTT" matTooltipPosition="above"  aria-label="Open basic menu">
+                 <mat-icon>add</mat-icon></button>
+        <!--<br>-->
+        <!--</div>-->
+
+</div>
+</div>
+   
+

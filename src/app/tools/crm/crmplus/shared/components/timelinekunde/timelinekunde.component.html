@@ -1,0 +1,21 @@
+<div>
+   <mat-form-field class="example-full-width">
+   <input type="text"  matInput [formControl]="formctrl" placeholder="Kunde" i18n-placeholder="@@client" [(ngModel)]="kundenvalue" (ngModelChange)="Kunden($event)" [matAutocomplete]="auto" style="margin-bottom:-20px">
+   <section style="float:right">
+          <mat-slide-toggle  [color]="color" [checked]="checkedKunde" [disabled]="disabled" (change)="changecheckedKunde()">
+            P/A
+         </mat-slide-toggle>
+ </section>
+ <button mat-button *ngIf="kundenvalue" matSuffix mat-icon-button aria-label="Clear" (click)="deletekunde(kundenvalue='')" >
+    <mat-icon style="margin-bottom:-38px; margin-left:10px">close</mat-icon>
+  </button>
+</mat-form-field>
+
+<mat-autocomplete #auto="matAutocomplete" >
+   <mat-option *ngFor="let kunde of kunden" [value]="kunde.bfname" (click)="additemforsearch(kunde)">
+      <!--{{ kunde.bfname+','<span *ngIf="kunde.vname">{{kunde.vname}}</span>+kunde.bzusatz1+','+kunde.bzusatz2+','+kunde.bort+','+kunde.bbeznr}}-->
+       <span *ngIf="kunde.bfname"> {{kunde.bfname}}, </span><span *ngIf="kunde.vname"> {{kunde.vname}}, </span><span *ngIf="kunde.bzusatz1"> {{kunde.bzusatz1}}, </span><span *ngIf="kunde.bzusatz2"> {{kunde.bzusatz2}}, </span><span *ngIf="kunde.bort"> {{kunde.bort}}, </span><span *ngIf="kunde.bbeznr"> {{kunde.bbeznr}} </span>
+   </mat-option>
+</mat-autocomplete>
+ 
+</div>

@@ -1,0 +1,40 @@
+<div>
+   <mat-form-field class="example-full-width">
+   <input type="text"  matInput [formControl]="formctrl" [(ngModel)]="vertretervalue" placeholder="Vertreter" i18n-placeholder="@@representative" (ngModelChange)="Vertreterchange($event)" [matAutocomplete]="auto">
+   <button mat-button *ngIf="vertretervalue" matSuffix mat-icon-button aria-label="Clear" (click)="vertretervalue=''" >
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>
+
+<mat-autocomplete #auto="matAutocomplete">
+   <mat-option *ngFor="let ver of vertreters" [value]="ver.vertreter" (click)="additemforsearch(ver)">
+      {{ ver.vertreter}}
+   </mat-option>
+</mat-autocomplete>
+</div>
+<form [formGroup]="filter">
+<div formArrayName="itemforsearch">
+    
+    <div *ngFor="let _itemforsearch of filter.get('itemforsearch')?.controls; let i = index" >
+
+            <div [formGroupName]="i"  class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+                <div >
+                    <div >
+                        <!--<div class="item item-1" fxFlex="20%" fxFlexOrder="1">Vertreter:</div>-->
+                        <!--<div class="item item-2" fxFlex="20%" fxFlexOrder="2"><input matInput class="example-full-width" formControlName="firstname"></div>-->
+                        <!--<div class="item item-3" fxFlex="20%" fxFlexOrder="3"><input matInput class="example-full-width" formControlName="lastname"></div>-->
+                        <!--<div class="item item-4" fxFlex="40%" fxFlexOrder="4"><input matInput class="example-full-width" formControlName="kundennummer"></div>-->
+                        <!--<div class="item item-4" fxFlex="20%" fxFlexOrder="5"><button mat-icon-button (click)="deleteitemforsearch(i)" ><mat-icon style="margin-bottom:15px">delete</mat-icon></button>-->
+                        <div style="float:left"><input matInput formControlName="firstname" /></div>
+                        <div style="float:left; width:100px"><input matInput matInput formControlName="lastname" /></div>
+                        <div style="float:left; width:100px"><input matInput matInput formControlName="kundennummer" /></div>
+                        <div style="float:right; margin-top:-10px"><button mat-icon-button (click)="deleteitemforsearch(i)" ><mat-icon>delete</mat-icon></button></div>
+                     
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</form>
+
+

@@ -1,0 +1,31 @@
+<div style="position: relative;background: #eff0f0;width:698px;">
+<div  style="height:80px;padding-left:16px;padding-right:16px;justify-content: space-between;display: flex;"> 
+  <div style="margin-top: 6px"> 
+  <span style="font-weight: bold" i18n="@@salesInCHF">Umsatz in CHF</span>
+</div>
+<div>
+ <button mat-icon-button matTooltipPosition="below" matTooltip="Umsatz Ansicht" i18n-matTooltip="@@salesViewTT" style="float:right;" (click)="gotoUmsatz()"><mat-icon style="margin-bottom: 10px">list</mat-icon></button>
+
+
+    <div class="posrel" style="height:0px; width:100%;" id="gauge_chart" [chartData]="gauge_ChartData" [chartOptions] = "gauge_ChartOptions" chartType="Gauge" GoogleChart></div>
+    <div class="posrel1" style="height:0px; width:100%;" id="gauge_chart_einytodate" [chartData]="gauge_ChartData_einytodate" [chartOptions] = "gauge_ChartOptions" chartType="Gauge" GoogleChart></div>
+    <div class="posrel2" style="height:0px; width:100%;" id="gauge_chart_monat" [chartData]="gauge_ChartData_monat" [chartOptions] = "gauge_ChartOptions" chartType="Gauge" GoogleChart></div>
+  </div>
+ 
+</div>
+<!--<mat-expansion-panel style="max-width:794px" expanded="true">-->
+<!--<mat-expansion-panel expanded="true">-->
+<!--  <mat-expansion-panel-header>-->
+<!--    <mat-panel-title>-->
+<!--      Leistung-->
+<!--    </mat-panel-title>-->
+<!--    </mat-expansion-panel-header>-->
+
+<!--<app-gaugechart  ></app-gaugechart>-->
+
+<!--</mat-expansion-panel>-->
+<!--<div style="background-color:white;max-width:794px">-->
+<div style="background-color:white; height: 343px" class="mat-elevation-z8">
+  <canvas id="canvas">{{ chart }}</canvas>
+</div>
+</div>

@@ -1,0 +1,122 @@
+<div class="toolBar">
+  <button mat-icon-button [disabled]="selectedRowIndex < 1" (click)="skipKategorie(-1)" (window:keydown.control.arrowup)="execFunction('skipKategorie',-1)"><mat-icon matTooltip="First (CTRL + cursorup)" i18n-matTooltip matTooltipPosition="above">skip_previous</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex < 1" (click)="changeKategorie(-1)" (window:keydown.alt.arrowup)="execFunction('changeKategorie',-1)"><mat-icon matTooltip="Previous (ALT + cursorup)" i18n-matTooltip matTooltipPosition="above">arrow_left</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === -1 || selectedRowIndex === abokategoriensource.data.length - 1" (click)="changeKategorie(1)" (window:keydown.alt.arrowdown)="execFunction('changeKategorie',1)"><mat-icon matTooltip="Next (ALT + cursordown)" i18n-matTooltip matTooltipPosition="above">arrow_right</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === -1 || selectedRowIndex === abokategoriensource.data.length - 1" (click)="skipKategorie(1)" (window:keydown.control.arrowdown)="execFunction('skipKategorie',1)"><mat-icon matTooltip="Last (CTRL + cursordown)" i18n-matTooltip matTooltipPosition="above">skip_next</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === -1" (click)="deleteKategorie()" (window:keydown.f8)="execFunction('deleteKategorie')"><mat-icon matTooltip="Löschen (F8)" i18n-matTooltip matTooltipPosition="above">clear</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === -1" (click)="saveKategorie()" (window:keydown.f7)="execFunction('saveKategorie')"><mat-icon matTooltip="Speichern (F7)" i18n-matTooltip matTooltipPosition="above">save</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === -1" (click)="showErstellInfo()" (window:keydown.F10)="execFunction('showErstellInfo')"><mat-icon matTooltip="Information (F11)" i18n-matTooltip matTooltipPosition="above">info</mat-icon></button>
+
+  <mat-form-field class="formField">
+    <mat-label i18n>Kategorien</mat-label>
+    <mat-select placeholder="" [(ngModel)]="ausgewaehlteKategorie">
+      <mat-option></mat-option>
+      <mat-option *ngFor="let kat of kategorienAuswahl" [value]="kat.r_rowid" [disabled]="kategorieSchonDa(kat.r_rowid)">
+        {{kat.merkmart_txt}}
+        <span *ngIf="kat.merkmart_txt && kat.merk1_txt">,</span> {{kat.merk1_txt}}
+        <span *ngIf="(kat.merkmart_txt || kat.merk1_txt) && kat.merk2_txt">,</span> {{kat.merk2_txt}}
+        <span *ngIf="(kat.merkmart_txt || kat.merk1_txt || kat.merk2_txt) && kat.merk3_txt">,</span> {{kat.merkt3_txt}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-icon-button [disabled]="!ausgewaehlteKategorie" (click)="addKategorie()" (window:keydown.F9)="execFunction('addKategorie')"><mat-icon matTooltip="Hinzufügen (F9)" i18n-matTooltip matTooltipPosition="above">edit</mat-icon></button>
+</div>
+
+<div style="float: right; margin-top: 10px;">
+  <mat-checkbox i18n>interne Mutation</mat-checkbox>
+</div>
+<div class="clear"></div>
+
+<div class="mat-elevation-z2" style="margin-right: 10px;">
+  <mat-table [dataSource]="abokategoriensource" matSort class="test">
+    <ng-container matColumnDef="vorgnr">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Vorgnr</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{abodetails.vorgnr}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="posnr">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Posnr</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{abodetails.posnr}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="merkArt">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Merkmal Art</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.merkmart}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="bezeichnung">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Bezeichnung</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.merkmart_txt}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="merk1">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Merkmal 1</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.merk1}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="bezeichnung1">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Bezeichnung</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.merk1_txt}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="merk2">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Merkmal 2</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.merk2}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="bezeichnung2">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Bezeichnung</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.merk2_txt}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="merk3">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Merkmal 3</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.merk3}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="bezeichnung3">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Bezeichnung</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.merk3_txt}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="datum1">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Datum 1</mat-header-cell>
+      <mat-cell *matCellDef="let element" style="white-space: nowrap">
+        <input [matDatepicker]="picker" placeholder="" [(ngModel)]="element.datum1" style="width: 80px;">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="datum2">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Datum 2</mat-header-cell>
+      <mat-cell *matCellDef="let element" style="white-space: nowrap">
+        <input [matDatepicker]="picker2" placeholder="" [(ngModel)]="element.datum2" style="width: 80px;">
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="menge">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Menge</mat-header-cell>
+      <mat-cell *matCellDef="let element"><input [(ngModel)]="element.menge" type="number" style="width: 90%"></mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="textfeld">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Textfeld</mat-header-cell>
+      <mat-cell *matCellDef="let element"><input [(ngModel)]="element.textfeld" type="text" style="width: 90%"></mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="firma">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Firma</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.firma}}</mat-cell>
+    </ng-container>
+    
+    <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+    <mat-row  *matRowDef="let row; columns: columnsToDisplay;"
+              [ngClass]="{'highlight': shouldBeHighlighted(row)}"
+              (click)="highlight(row)">
+    </mat-row>
+  </mat-table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"  [pageSize]="5"></mat-paginator>
+</div>

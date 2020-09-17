@@ -1,0 +1,223 @@
+<div class="toolBar">
+  <button mat-icon-button [disabled]="selectedRowIndex < 1" (click)="skipTermin(-1)" (window:keydown.control.arrowup)="execFunction('skipTermin',-1)"><mat-icon matTooltipPosition="above" matTooltip="First (CTRL + cursorup)" i18n-matTooltip>skip_previous</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex < 1" (click)="changeTermin(-1)" (window:keydown.alt.arrowup)="execFunction('changeTermin',-1)"><mat-icon matTooltipPosition="above" matTooltip="Previous (ALT + cursorup)" i18n-matTooltip>arrow_left</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === aboterminesource.data.length - 1 || selectedRowIndex === -1" (click)="changeTermin(1)" (window:keydown.alt.arrowdown)="execFunction('changeTermin',1)"><mat-icon matTooltipPosition="above" matTooltip="Next (ALT + cursordown)" i18n-matTooltip>arrow_right</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === aboterminesource.data.length - 1 || selectedRowIndex === -1" (click)="skipTermin(1)" (window:keydown.control.arrowdown)="execFunction('skipTermin',1)"><mat-icon matTooltipPosition="above" matTooltip="Last (CTRL + cursordown)" i18n-matTooltip>skip_next</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === -1" (click)="resetProgress()" (window:keydown.F2)="execFunction('resetProgress')"><mat-icon matTooltipPosition="above" matTooltip="Reset (F3)" i18n-matTooltip>refresh</mat-icon></button>
+  <button mat-icon-button [disabled]="editingNew" (click)="newTermin()" (window:keydown.F9)="execFunction('newTermin')"><mat-icon matTooltipPosition="above" matTooltip="Neu (F9)" i18n-matTooltip>edit</mat-icon></button>
+  <button mat-icon-button [disabled]="editingNew || selectedRowIndex === -1" (click)="copyTermin()" (window:keydown.shift.F9)="execFunction('copyTermin')"><mat-icon matTooltipPosition="above" matTooltip="Kopieren (SHIFT + F9)" i18n-matTooltip>file_copy</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === -1" (click)="saveTermin()" (window:keydown.f7)="execFunction('saveTermin')"><mat-icon matTooltipPosition="above" matTooltip="Speichern (F7)" i18n-matTooltip>save</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === -1 || terminDetails.r_rowid !== ''" (click)="cancleTermin()" (window:keydown.f4)="execFunction('cancleTermin')"><mat-icon matTooltipPosition="above" matTooltip="Abbrechen (F4)" i18n-matTooltip>power_settings_new</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === -1 || terminDetails.r_rowid === ''" (click)="deleteTermin()" (window:keydown.f8)="execFunction('deleteTermin')"><mat-icon matTooltipPosition="above" matTooltip="Löschen (F8)" i18n-matTooltip>clear</mat-icon></button>
+  <button mat-icon-button [disabled]="selectedRowIndex === -1 || terminDetails.r_rowid === ''" (click)="showErstellInfo()" (window:keydown.F10)="execFunction('showErstellInfo')"><mat-icon matTooltipPosition="above" matTooltip="Information (F10)" i18n-matTooltip>info</mat-icon></button>
+</div>
+
+<div *ngIf="terminDetails && selectedRowIndex != -1" style="float: right; margin-top: 10px;">
+  <mat-checkbox i18n>interne Mutation</mat-checkbox>
+</div>
+<div class="clear"></div>
+
+<div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+  <!-- Tabelle -->
+  <div class="flex-item" fxFlex="50%">
+    <div class="mat-elevation-z2" style="margin-right: 10px;">
+      <mat-table [dataSource]="aboterminesource" matSort>
+
+        <ng-container matColumnDef="termart">
+          <mat-header-cell *matHeaderCellDef mat-sort-header i18n>TermArt</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.termart}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="termindat">
+          <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Termin</mat-header-cell>
+          <mat-cell *matCellDef="let element"><span *ngIf="element.termindat">{{element.termindat | date:'dd.MM.yyyy'}}</span></mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="stat">
+          <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Status</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.stat}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="anzahl">
+          <mat-header-cell *matHeaderCellDef mat-sort-header i18n>Anzahl</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.anzahl}}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+        <mat-row  *matRowDef="let row; columns: columnsToDisplay;"
+                  [ngClass]="{'highlight': shouldBeHighlighted(row), 'highlight_new': row.r_rowid === ''}"
+                  (click)="highlight(row)">
+        </mat-row>
+      </mat-table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"  [pageSize]="5"></mat-paginator>
+    </div>
+  </div>
+
+  <!-- Editor-Maske -->
+  <div *ngIf="!terminDetails || selectedRowIndex == -1" class="flex-item" fxFlex="50%"></div>
+
+  <div *ngIf="terminDetails && selectedRowIndex != -1" class="flex-item" fxFlex="50%">
+    <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+      <!-- Spalte 1 -->
+      <div class="flex-item" fxFlex="50%">
+        <div class="field">
+          <span class="formFieldText"><span i18n>Vorgnr</span>:</span>
+          <mat-form-field class="numberInput">
+            <input matInput placeholder="" type="number" [(ngModel)]="terminDetails.vorgnr" disabled>
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <span class="formFieldText"><span i18n>Status</span>:</span>
+          <mat-form-field class="numberInput">
+            <input matInput placeholder="" type="number" [(ngModel)]="terminDetails.stat" disabled>
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <div class="formFieldText"><span style="white-space: nowrap" i18n>Termin-Art</span>:</div>
+          <div class="formFieldCODN">
+            <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ABOTERM', 'termart', 'terminArt')" id="terminArt" value="{{terminDetails.termart}}">
+            <div (click)="openInModule('CODN', 'termart', 'ABOTERM')" class="CodnText">
+              {{terminDetails.termart_txt}}&nbsp;
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+
+        <div class="field">
+          <span class="formFieldText"><span i18n>Merkmal</span>:</span>
+          <mat-form-field class="numberInput">
+            <input matInput placeholder="" type="text" [(ngModel)]="terminDetails.merkmal">
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <span class="formFieldText"><span i18n>Nachbearb.</span>:</span>
+          <mat-form-field class="dateInput">
+            <input matInput [matDatepicker]="picker2" placeholder="" [(ngModel)]="terminDetails.nachbearbdat">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <span class="formFieldText"><span i18n>Objekt</span>:</span>
+          <mat-form-field class="formField">
+            <mat-select placeholder="" [(ngModel)]="terminDetails.artnr" (ngModelChange)="objektHasChanged()">
+              <mat-option value=""></mat-option>
+              <mat-option *ngFor="let obj of objektAuswahl" [value]="obj.objekt">{{obj['obj-bezeichnung']}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <div class="formFieldText"><span i18n>BezNr</span>:</div>
+          <div class="formFieldCODN">
+            <input type="text" class="CodnInput" (keyup.enter)="searchADRW('beznr', 'termBeznr')" id="termBeznr" [value]="terminDetails.beznr">
+            <div (click)="openInModule('ADRW', 'beznr')" class="CodnText">
+              {{abodetails.beznr_txt}}&nbsp;
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+      </div>
+
+      <!-- Spalte 2 -->
+      <div class="flex-item" fxFlex="50%">
+        <div class="field">
+          <span class="formFieldText"><span i18n>Posnr</span>:</span>
+          <mat-form-field class="numberInput">
+            <input matInput placeholder="" type="number" [(ngModel)]="terminDetails.posnr" disabled>
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <span class="formFieldText"><span i18n>Firma</span>:</span>
+          <mat-form-field class="numberInput">
+            <input matInput placeholder="" type="number" [(ngModel)]="terminDetails.firma" disabled>
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <span class="formFieldText"><span i18n>Termin</span>:</span>
+          <mat-form-field class="dateInput">
+            <input matInput [matDatepicker]="picker" placeholder="" [(ngModel)]="terminDetails.termindat">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <span class="formFieldText"><span i18n>Anzahl</span>:</span>
+          <mat-form-field class="numberInput">
+            <input matInput placeholder="" type="number" [(ngModel)]="terminDetails.anzahl">
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <span class="formFieldText"><span i18n>Nachlief.</span>:</span>
+          <mat-form-field class="numberInput">
+            <input matInput placeholder="" type="text" [(ngModel)]="terminDetails.nachlief">
+          </mat-form-field>
+        </div>
+
+        <div class="field">
+          <span class="formFieldText"><span i18n>Artikel</span>:</span>
+          <mat-form-field class="formField">
+            <mat-select placeholder="" [(ngModel)]="terminDetails.artnr2" (ngModelChange)="artikelHasChanged()">
+              <mat-option *ngFor="let art of artikelAuswahl" [value]="art.artnr">{{art.bez}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div i18n>Freier Text:</div>
+      <textarea style="width: 100%" [(ngModel)]="terminDetails.textfeld"></textarea>
+    </div>
+
+    <!-- Kuzrzmitteilungen -->
+    <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+      <!-- Spalte 1 -->
+      <div class="flex-item" fxFlex="48%">
+        <div>
+          <div style="width: 30%; float: left"><span i18n>Mitteilung1</span>:</div>
+          <div style="width: 60%; float: right">
+            <div (click)="openInModule('CODN', 't-kurzmitt1z', 'ABOTEMSG')" style="overflow-x: scroll;white-space:nowrap;background-color: rgb(218, 218, 218);cursor: pointer;">
+              {{terminDetails['t-kurzmitt1z1']}}&nbsp;
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+        
+        <div>
+          <input style="width: 60%; float: right" type="text" [(ngModel)]="terminDetails['t-kurzmitt1z2']">
+          <input style="width: 60%; float: right" type="text" [(ngModel)]="terminDetails['t-kurzmitt1z3']">
+          <div class="clear"></div>
+        </div>
+      </div>
+
+      <div class="flex-item" fxFlex="4%"></div>
+      <!-- Spalte 2 t-kurzmitt1z1-->
+      <div class="flex-item" fxFlex="48%">
+        <div>
+          <div style="width: 30%; float: left"><span i18n>Mitteilung2</span>:</div>
+          <div style="width: 60%; float: right">
+            <div (click)="openInModule('CODN', 't-kurzmitt2z', 'ABOTEMS2')" style="overflow-x: scroll;white-space:nowrap;background-color: rgb(218, 218, 218);cursor: pointer;">
+              {{terminDetails['t-kurzmitt2z1']}}&nbsp;
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+        
+        <div>
+          <input style="width: 60%; float: right" type="text" [(ngModel)]="terminDetails['t-kurzmitt2z2']">
+          <input style="width: 60%; float: right" type="text" [(ngModel)]="terminDetails['t-kurzmitt2z3']">
+          <div class="clear"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

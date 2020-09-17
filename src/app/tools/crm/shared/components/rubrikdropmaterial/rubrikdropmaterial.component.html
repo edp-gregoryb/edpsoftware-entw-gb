@@ -1,0 +1,6 @@
+<mat-select class="input-full-width" placeholder="Rubrik" i18n-placeholder="@@rubric" [(ngModel)]="rubriktext" (selectionChange)="rubrikauswahl($event)"  (focus)="selectedrubrik($event)" >
+  <mat-option>leer</mat-option>
+  <mat-option class="input-full-width" *ngFor="let rubrik of rubrikdata" [value]="rubrik.rubrik">
+    {{ rubrik.rubrik_bezeichnung}}
+  </mat-option>
+</mat-select>

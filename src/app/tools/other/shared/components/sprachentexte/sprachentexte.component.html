@@ -1,0 +1,48 @@
+
+    <form [formGroup]="sprachenForm" (ngSubmit)="onSubmit()">
+      <div formArrayName="sprachen" style="overflow-y: auto; height:700px;;">
+    <div  *ngFor="let item of sprachenForm.get('sprachen')['controls'];  let i = index;" [formGroupName]="i">
+    <p>{{tabs[i]}}</p>
+      <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+
+        <mat-form-field class="size100" fxFlex>
+          <input matInput formControlName="autortext" placeholder="Autortext">
+        </mat-form-field>
+      </div>
+
+        <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+            <mat-form-field class="size100" fxFlex>
+                <input matInput formControlName="erscheinungtext" placeholder="Erscheinungtext">
+            </mat-form-field>
+        </div>
+
+
+      <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+
+
+        <mat-form-field class="size100" fxFlex>
+          <input matInput formControlName="text1" placeholder="Titel">
+        </mat-form-field>
+
+
+      </div>
+
+        <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+            <mat-form-field class="size100" fxFlex>
+                <input matInput formControlName="text2" placeholder="Untertitel">
+            </mat-form-field>
+        </div>
+
+              <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+                  <mat-form-field class="example-full-width" fxFlex>
+                      <textarea matInput formControlName="zusatztext2" placeholder="Klappentext" maxRows="10" matTextareaAutosize="true"> </textarea>
+                  </mat-form-field>
+
+              </div>
+
+
+    </div>
+        <button style="float: right" color="warn" mat-raised-button [mat-dialog-close]="" (click)="updateSprachenForm()">Daten dieses Abschnitts speichern</button>
+    </div>
+
+    </form>

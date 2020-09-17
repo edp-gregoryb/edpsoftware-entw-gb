@@ -1,0 +1,34 @@
+<button mat-icon-button mat-dialog-close  style="float:right"><mat-icon>clear</mat-icon></button>
+<div  style="font-weight: bold;"><span i18n="@@searchbox">Suchfeld</span>:
+</div>
+<!--<button mat-icon-button style="float:right" (click)="clearfilter()"><mat-icon>cancel</mat-icon></button>-->
+<div class="w3-container w3-margin-left w3-margin-right w3-margin-bottom" >  
+<app-objektdropmaterial #obj [objekttext]="objekttext" (dbvalueChanged)="objvalueChanged($event)"></app-objektdropmaterial>
+</div>
+<div class="w3-container w3-margin-left w3-margin-right w3-margin-bottom" >  
+<app-aschluesseldropmaterial #ausgabe [aschluessel]="aschluessel" [objektvalue]="objektforausgabe"></app-aschluesseldropmaterial>
+</div>
+<div class="w3-container w3-margin-left w3-margin-right w3-margin-bottom" >  
+<mat-select  placeholder="Eigene/Alle" i18n-placeholder="@@ownAllPlaceholder" name="sicht" class="input-full-width" [(ngModel)]="selectedValue">
+    <mat-option *ngFor="let sicht of sichten" [value]="sicht.value">
+      {{sicht.viewValue}}
+    </mat-option>
+  </mat-select>
+</div>
+<div class="w3-container w3-margin-left w3-margin-right w3-margin-bottom"  >  
+<button mat-raised-button mat-dialog-close (click)="searchObjAusgabe(obj,ausgabe)" style="float:right;color:red" i18n="@@searchPlaceholder">Suchen</button>
+</div>
+<div *ngIf="aschluessel" class="w3-container  w3-margin-right w3-margin-bottom">
+    <table>
+        <tr>
+            <td>
+                <button mat-raised-button  mat-dialog-close (click)="dispolisteAnzeigen()">Dispoliste Anzeigen...</button>
+            </td>
+            <td style="width: 100%; padding-left: 40px;">
+                <app-anschluesseldroppast [aschluessel]="aschluessel" [objektvalue]="objektforausgabe" (ausgabeonvalueChanged)="ausgabechanged($event)"></app-anschluesseldroppast>
+            </td>
+        </tr>
+    </table>
+
+
+</div>

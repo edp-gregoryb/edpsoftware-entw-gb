@@ -1,0 +1,38 @@
+<div>
+   <mat-form-field class="example-full-width">
+   <input style="margin-bottom:-25px;" type="text"  matInput [formControl]="formctrl" placeholder="Kunde" i18n-placeholder="@@client" (ngModelChange)="Kunden($event)" [matAutocomplete]="auto">
+   <section style="float:right; margin-top:8px">
+          <mat-slide-toggle [color]="color" [checked]="checkedKunde" [disabled]="disabled" (change)="changecheckedKunde()">
+            <span i18n="Privat / Alle@@PA">P/A</span>
+         </mat-slide-toggle>
+ </section>
+</mat-form-field>
+
+
+<mat-autocomplete #auto="matAutocomplete">
+   <mat-option *ngFor="let kunde of kunden" [value]="kunde.bfname" (click)="additemforsearch(kunde)">
+       <span *ngIf="kunde.bfname"> {{kunde.bfname}}, </span><span *ngIf="kunde.vname"> {{kunde.vname}}, </span><span *ngIf="kunde.bzusatz1"> {{kunde.bzusatz1}}, </span><span *ngIf="kunde.bzusatz2"> {{kunde.bzusatz2}}, </span><span *ngIf="kunde.bort"> {{kunde.bort}}, </span><span *ngIf="kunde.bbeznr"> {{kunde.bbeznr}} </span>
+   </mat-option>
+</mat-autocomplete>
+ 
+</div>
+<form [formGroup]="filter">
+<div formArrayName="itemforsearch">
+    
+    <div *ngFor="let _itemforsearch of filter.get('itemforsearch')?.controls; let i = index" >
+
+            <div [formGroupName]="i"  class="container" fxLayout fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+                <div >
+                     <div >
+                        <div>
+                        <div style="float:left"><input matInput formControlName="firstname" /></div>
+                        <div style="float:left; width:100px"><input matInput matInput formControlName="lastname" /></div>
+                        <div style="float:left; width:100px"><input matInput matInput formControlName="kundennummer" /></div>
+                        <div style="float:right; margin-top:-10px"><button mat-icon-button (click)="deleteitemforsearch(i)" ><mat-icon>delete</mat-icon></button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</form>

@@ -1,0 +1,28 @@
+ <ngx-charts-pie-chart  *ngIf="diagrammumsatz" 
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="diagrammumsatz"
+      [legend]="showLegend"
+      [explodeSlices]="explodeSlices"
+      [labels]="showLabels"
+      [doughnut]="doughnut"
+      [gradient]="gradient"
+      (select)="onSelect($event)">
+    </ngx-charts-pie-chart>
+    
+    <!-- <ngx-charts-advanced-pie-chart  *ngIf="diagrammumsatz" -->
+    <!--  [view]="view"-->
+    <!--  [scheme]="colorScheme"-->
+    <!--  [results]="diagrammumsatz"-->
+    <!--  [gradient]="gradient"-->
+    <!--  (select)="onSelect($event)">-->
+    <!--</ngx-charts-advanced-pie-chart>-->
+<!--<div style="width: 100%;">-->
+<!--  <canvas-->
+<!--      baseChart-->
+<!--      [chartType]="'pie'"-->
+<!--      [data]="chartData"-->
+<!--      [labels]="chartLabels"-->
+<!--      [legend]="true">-->
+<!--  </canvas>-->
+<!--</div>-->

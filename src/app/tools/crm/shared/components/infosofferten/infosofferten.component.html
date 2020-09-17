@@ -1,0 +1,31 @@
+<table style="width: 100%">
+    <tr >
+        <td > <input style="width:95%;font-size: 18px;height:24" type="text" [(ngModel)]="val0" (ngModelChange)="searchttermine($event)" /></td>
+    </tr>
+</table>
+<mat-list [ngStyle]="{'height.px': innerheight}">
+    <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate" color="warn"></mat-progress-bar>
+    <mat-list-item *ngFor="let offert of offertenhist" (click)="getofferte(offert.aufnr)">
+        <span matline><mat-icon style="margin-bottom: 112px;cursor: pointer;" (click)="deleteOfferte($event, offert.aufnr)">clear</mat-icon></span>
+        <h4 mat-line style="margin-bottom: 15px;">{{offert.sujet}} </h4>
+        <p mat-line>
+            <span>{{offert.aufnr}}{{offert.sujetnr}}</span>
+        </p>
+        <p mat-line>
+            <span>{{offert.ndatum}} </span>  /  <span>{{offert.datum}} </span>
+        </p>
+        <p mat-line>
+            <span>{{offert.objekt}} -- </span>
+            <span class="demo-secondary-text">{{offert.rubrik}} -- </span>
+            <span class="demo-secondary-text">{{offert.urubrik}}</span>
+        </p>
+        <p mat-line>
+            <span>{{offert.groesse}}</span>
+        </p>
+        <p mat-line>
+            <span i18n="@@brutto">Brutto</span> : <span>{{offert.brutto | currency:"CHF"}}</span>&nbsp;&nbsp;
+            <span i18n="@@netto">Netto</span> : <span>{{offert.netto | currency:"CHF"}}</span>&nbsp;&nbsp;
+            <span i18n="@@nettonetto">NettoNetto</span> : <span>{{offert.nettoNetto | currency:"CHF"}}</span>
+        </p>
+    </mat-list-item>
+</mat-list>

@@ -1,0 +1,8 @@
+<mat-selection-list  #objlist [(ngModel)]="selectedOptions">
+    <mat-list-option *ngFor="let obj of objektauswahl"  (click)="selectItem($event.target.getAttribute('ng-reflect-state'), obj)">
+
+        {{obj.obj_bezeichnung}}
+    </mat-list-option>
+</mat-selection-list>
+
+<button style="float: right; margin-top: 20px" mat-button (click)="onNoClick()" cdkFocusInitial>Übernehmen</button>

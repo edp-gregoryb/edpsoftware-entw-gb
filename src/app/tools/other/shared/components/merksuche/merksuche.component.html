@@ -1,0 +1,172 @@
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="22%" fxFlexOrder="1">
+    <mat-form-field class="size100">
+      <input matInput placeholder="Merkmal Art" value="" [(ngModel)]="merkmalart">
+    </mat-form-field>
+
+    <!--<div>-->
+      <!--<ul id="auswahllist">-->
+      <!--<li *ngFor="let list of kriteriumausgabe">{{list.mkmerk3Bez}}<mat-icon  (click)="deleteauswahl(list)">close</mat-icon></li>-->
+      <!--</ul>-->
+    <!--</div>-->
+
+    <!--<mat-form-field class="size100">-->
+    <!--<mat-select placeholder="Merkmalsart" multiple >-->
+    <!--<mat-option *ngFor="let mart of merkmallist" [value]="mkmart" (click)="merkmalartAuswahl(mart.mkmart)">{{mart.mkmart}}</mat-option>-->
+    <!--</mat-select>-->
+    <!--</mat-form-field>-->
+    <!--<ul>-->
+    <!--<li *ngFor="let merk of selectedmerkart">{{merk}}</li>-->
+    <!--</ul>-->
+
+  </div>
+  <div class="item item-2" fxFlex="22%" fxFlexOrder="2" >
+    <mat-form-field class="size100">
+      <input matInput placeholder="Merkmal1" value="" [(ngModel)]="merkmal1">
+    </mat-form-field>
+    <!--<div class="hoeherow">-->
+
+    <!--</div>-->
+    <!--<mat-form-field class="size100">-->
+    <!--<mat-select placeholder="Merkmal1"  multiple>-->
+    <!--<mat-option *ngFor="let merk1 of merkmallist" [value]="mkmerk1Bez" (click)="merkmal1Auswahl(merk1.mkmerk1Bez)">{{merk1.mkmerk1Bez}}</mat-option>-->
+    <!--</mat-select>-->
+    <!--</mat-form-field>-->
+    <!--<ul>-->
+    <!--<li *ngFor="let merk of selectedmerk1">{{merk}}</li>-->
+    <!--</ul>-->
+  </div>
+  <div class="item item-3" fxFlex="22%" fxFlexOrder="3">
+    <mat-form-field class="size100">
+      <input matInput placeholder="Merkmal2" value="" [(ngModel)]="merkmal2">
+    </mat-form-field>
+    <!--<div class="hoeherow">-->
+
+    <!--</div>-->
+    <!--<mat-form-field class="size100">-->
+    <!--<mat-select placeholder="Merkmal2"  multiple>-->
+    <!--<mat-option *ngFor="let merk2 of merkmallist" [value]="mkmerk2Bez" (click)="merkmal2Auswahl(merk2.mkmerk2Bez)">{{merk2.mkmerk2Bez}}</mat-option>-->
+    <!--</mat-select>-->
+    <!--</mat-form-field>-->
+    <!--<ul>-->
+    <!--<li *ngFor="let merk of selectedmerk2">{{merk}}</li>-->
+    <!--</ul>-->
+  </div>
+  <div class="item item-4" fxFlex="22%" fxFlexOrder="4">
+    <mat-form-field class="size100">
+      <input matInput placeholder="Merkmal3" value="" [(ngModel)]="merkmal3">
+    </mat-form-field>
+    <!--<div class="hoeherow">-->
+
+    <!--</div>-->
+    <!--<mat-form-field class="size100">-->
+    <!--<mat-select placeholder="Merkmal3"  multiple >-->
+    <!--<mat-option *ngFor="let merk3 of merkmallist" [value]="mkmerk3Bez" (click)="merkmal3Auswahl(merk3.mkmerk3Bez)">{{merk3.mkmerk3Bez}}</mat-option>-->
+    <!--</mat-select>-->
+    <!--</mat-form-field>-->
+    <!--<ul>-->
+    <!--<li *ngFor="let merk of selectedmerk3">{{merk}}</li>-->
+    <!--</ul>-->
+  </div><br>
+  <div class="item item-4" fxFlex="4%" fxFlexOrder="5">
+    <div class="hoeherow">
+      <button mat-flat-button (click)="getMerkmale()">Suchen</button>
+    </div>
+  </div>
+</div>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div class="item item-1" fxFlex="100%" fxFlexOrder="1">
+  <form [formGroup]="filter" style="margin-left: 20px">
+    <div formArrayName="itemforsearch">
+
+      <div *ngFor="let _itemforsearch of filter.get('itemforsearch')?.controls; let i = index" >
+        <!--fxLayoutAlign="center"-->
+        <div [formGroupName]="i"  class="container" fxLayout fxLayout.xs="column"  fxLayoutGap="10px" fxLayoutGap.xs="0">
+          <div >
+            <div >
+              <!--<div class="item item-1" fxFlex="30%" fxFlexOrder="1">Objekte:</div>-->
+              <div style="float:left"><input matInput formControlName="art"></div>
+              <div style="float:left"><input matInput formControlName="merk1"></div>
+              <div style="float:left"><input matInput formControlName="merk2"></div>
+              <div style="float:left;width: 370px"><input matInput formControlName="merk3"></div>
+              <div style="float:right; margin-top:-10px" ><button mat-icon-button (click)="deleteitemforsearch(i)" ><mat-icon>delete</mat-icon></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  </div>
+</div>
+
+
+
+<!--<div class="mat-elevation-z8">-->
+  <!--<table mat-table [dataSource]="dataSource" >-->
+
+    <!--&lt;!&ndash; Checkbox Column &ndash;&gt;-->
+    <!--<ng-container matColumnDef="select">-->
+      <!--<th mat-header-cell *matHeaderCellDef>-->
+        <!--<mat-checkbox (change)="$event ? masterToggle() : null"-->
+                      <!--[checked]="selection.hasValue() && isAllSelected()"-->
+                      <!--[indeterminate]="selection.hasValue() && !isAllSelected()">-->
+        <!--</mat-checkbox>-->
+      <!--</th>-->
+      <!--<td mat-cell *matCellDef="let row">-->
+        <!--<mat-checkbox (click)="$event.stopPropagation()"-->
+                      <!--(change)="$event ? selection.toggle(row) : null"-->
+                      <!--[checked]="selection.isSelected(row)">-->
+        <!--</mat-checkbox>-->
+      <!--</td>-->
+    <!--</ng-container>-->
+
+    <!--&lt;!&ndash; Position Column &ndash;&gt;-->
+    <!--<ng-container matColumnDef="mkmartBez">-->
+      <!--<th mat-header-cell *matHeaderCellDef> Art </th>-->
+      <!--<td mat-cell *matCellDef="let element"> {{element.mkmartBez}} </td>-->
+    <!--</ng-container>-->
+
+    <!--&lt;!&ndash; Name Column &ndash;&gt;-->
+    <!--<ng-container matColumnDef="mkmerk1Bez">-->
+      <!--<th mat-header-cell *matHeaderCellDef> Merkmal 1 </th>-->
+      <!--<td mat-cell *matCellDef="let element"> {{element.mkmerk1Bez}} </td>-->
+    <!--</ng-container>-->
+
+    <!--&lt;!&ndash; Weight Column &ndash;&gt;-->
+    <!--<ng-container matColumnDef="mkmerk2Bez">-->
+      <!--<th mat-header-cell *matHeaderCellDef> Merkmal 2 </th>-->
+      <!--<td mat-cell *matCellDef="let element"> {{element.mkmerk2Bez}} </td>-->
+    <!--</ng-container>-->
+
+    <!--&lt;!&ndash; Symbol Column &ndash;&gt;-->
+    <!--<ng-container matColumnDef="mkmerk3Bez">-->
+      <!--<th mat-header-cell *matHeaderCellDef> Merkmal 3 </th>-->
+      <!--<td mat-cell *matCellDef="let element"> {{element.mkmerk3Bez}} </td>-->
+    <!--</ng-container>-->
+
+    <!--<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
+    <!--<tr mat-row *matRowDef="let row; columns: displayedColumns;"-->
+        <!--(click)="selection.toggle(row)">-->
+    <!--</tr>-->
+  <!--</table>-->
+  <!--<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>-->
+<!--</div>-->
+
+
+<!--<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0">-->
+  <!--<div class="item item-1" fxFlex="25%" fxFlexOrder="1">-->
+    <!--<li *ngFor="let art of selectedartArray">-->
+      <!--<p>{{art}}</p>-->
+    <!--</li>-->
+  <!--</div>-->
+  <!--<div class="item item-2" fxFlex="25%" fxFlexOrder="2">-->
+
+  <!--</div>-->
+  <!--<div class="item item-3" fxFlex="25%" fxFlexOrder="3">-->
+
+  <!--</div>-->
+  <!--<div class="item item-4" fxFlex="25%" fxFlexOrder="4">-->
+
+  <!--</div><br>-->
+<!--</div>-->

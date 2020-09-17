@@ -1,0 +1,27 @@
+.sectionheight{
+  /* height: 100px; */
+  /* margin-bottom: 10px; 
+
+    background-color: #EEE;
+    
+    box-shadow: 0 3px 3px 0 rgba(0,0,0,0.2),0 0px 0px 0 rgba(0,0,0,0.19)!important;
+    padding: 1px; */
+} 
+hr{
+    margin-bottom: 21px;
+    border: 0;
+   border-top: 1px solid #434857;
+ }
+
+
+  
+  li {
+    margin: 10px 10px 10px 10px;
+    display: block;
+  }
+  
+  ul, menu, dir {
+  
+      -webkit-padding-start: 0px !important;
+  }
+ 

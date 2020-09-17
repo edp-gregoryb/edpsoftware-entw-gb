@@ -1,0 +1,12 @@
+<div class="termindialog">
+   <div class="w3-container w3-margin-left w3-margin-right w3-margin-top"> 
+          <app-datumzeitauswahl #datumzeit ></app-datumzeitauswahl>
+            </div>
+  <br>
+  <div style="margin: auto">
+    <button pButton type="button" (click)="onclick(datumzeit, param1.rapnr)" (click)="dialogRef.close()" label="Verschieben"></button>
+  </div>
+  <div>
+<!--<span>{{param1}}</span>-->
+  </div>
+</div>

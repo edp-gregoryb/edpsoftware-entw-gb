@@ -1,0 +1,188 @@
+<div style="background-color: #e1e1e1; margin: -24px; margin-top: -43px;padding: 25px;" class="modalheader">
+    <br>
+    <!--<img src="../../assets//edp_rot.gif" style="width: 105px;float:right;">-->
+    <img src="assets/edp_rot.gif" style="width: 105px;float:right;">
+	<br>
+    <h1><span style="color:red;">edp</span>Software</h1>
+    <br>
+    
+</div>
+
+<div> <!-- Body -->
+    
+    <br><br>
+    
+    <!--<div><img src="../../assets//rel70.jpg" style="width: 595px;"></div>-->
+    <div><img src="assets/rel70.jpg" style="width: 595px;"></div>
+
+    <!--<h6>Lizenz: edp kommerziell. Copyright 2015-2017 by edp-services ag <a href="http://www.edp.ch/" target="_blank">http://www.edp.ch</a> <img width="16" src="../../assets//edi.png" alt="Bild: edp Maskottchen" border="0"></h6>-->
+    <h6><span>Lizenz: edp kommerziell. Copyright 2015-2020 by edp-services ag</span> <a href="http://www.edp.ch/" target="_blank">http://www.edp.swiss</a> <img width="16" src="assets/edi.png" alt="Bild: edp Maskottchen" border="0"></h6>
+
+    
+    <small>
+        <p><span>Releasenotes</span>:</p>
+        <span>Version :{{buildVersion}}</span>
+        <textarea id="faros_releasenotes" style="width:100%; height: 150px">
+Software-Voraussetzung (minimal): 
+Backoffice: 
+     Basis: faros Release 10.0
+
+
+Installationsvoraussetzung:
+Servlet:    Benennung gemäss Namenskonvention: RESTService-<Instanz>-LP, wobei Instanz = Kundenkürzel - Art der DB 
+=> Bsp: edp-prod
+
+
+Hinweise zu den Browsern:
+- Empfehlung edp: Google Chrome (Begründung: überlegene Performance, Druckfunktion ausgereift)
+- Mit Einschränkungen möglich: Mozilla Firefox ab Version 54
+  (bekannte Einschränkungen: Druckfunktion untauglich, Performance zumindest bis Version 54
+  deutlich schlechter als Google Chrome; tw. optische Beeinträchtigungen;
+  ab Version 55 brauchbare Performance und optisch vergleichbar mit Google Chrome)
+
+
+Hinweise zur Software:
+
+
+Neu:
+Allgemein:
+  - iURL-Unterstützung bei Instanz im Login
+
+CRMtel: 
+  - Agentureinbindung
+  - Instanz von Login durch die ganze App
+
+Offert- & Auftrags-Tool:
+  - Default für Mail-Text
+  - Default für werbemittelFarbanz
+  - Sujetnr ist - wenn erlaubt - pro Werbemittel änderbar
+  - Default für buchungsartErscheinung
+  - Zurück an den oberen Rand scrollen (Button links unten)
+  - Auftragsdetails mit möglicher Direktverlinkung aus Drittapps
+  - Unterstützung von Werbeformaten, die nach Anzahl funktionieren (Basis)
+  - Neue Felder: VermittlerID, Vermittlername und KontaktID und Kontaktname
+  - Neuer PDF-Renderer
+  - Möglichkeit, Seitenumbruch nach Werbemittel zu forcieren
+  - Internet-Zuschläge können erfasst werden
+  - Objekt-Autocompleter
+  - Auto-Cleanup bei Preispositionen wenn Werbemittel geändert werden
+  - non-blocking-Warnung bei unvollständigen Daten für Preisberechnung
+  - Automatische Assistenz beim Neuberechnen und Aufräumen möglicherweise ungültiger Kombinationen
+  - DeLuxe-Scroll-Funktion auch für aktuelle Firefox-Versionen
+  - Erweiterungen beim Aufruf aus Dritt-Applikationen
+  - Querformat-Templates
+  - Farbigkeit zur Auswahl
+  - Abschlussintegration
+  - Produktionsgrösse
+  - Zusätzliche Zwischentotale bei Preisberechnungen in Template verwendbar
+  - Neues Template a4-quer-1 (beta)
+  - Auto-Scaling im Previewbereich
+  - Intro-Screen mit Kurzanleitung
+  - Abschliessen/zur Bearbeitung öffnen
+  - PDF-Generierung und Anzeige vom Server her
+  - Mail-Funktion
+  - Freeform-Vorlage mit WYSIWYG-Editor inkl. entsprechendem Handling im bestehenden applikatorischen Umfeld
+  - BK pro Werbemittel
+  - Insertionsschluss: Uhrzeit
+  - Ausgabentyp wird geführt (GA, Normalauflage etc.)
+  - Erweiterte Funktionalität, wenn Tool eingebettet wird (reduzierte Funktionalität, nicht empfohlen)
+
+
+Anpassungen:
+
+Allgemein:
+  - Neuste Frameworks
+  - Anpassungen Login 
+  - div. Bereinigungen
+  
+CRMtel:
+  - Sichtbarkeit von Aufträgen nicht mehr auf Mitarbeiter, sondern objektbezogen
+
+Offert- & Auftrags-Tool:
+  - E-Mail-Preferences erweitert
+  - Templates quer: Abstand zwischen Titelinfo und erstem Item eliminiert
+  - Bei Werbemitteln mit mehreren Dimensionen Disanz1 & Disanz2 -> Abgleich Offerte erst ausführen, wenn beide Werte eingegeben wurden
+  - Reihenfolge- & Textanpassungen bei DropDown 'Preisposition -> Typ'
+  - Instanzerkennung neu auch auf Teilen des Applikationspfades möglich (statt nur auf Host)
+  - Wenn nur eine Unterrubrik vorhanden, so wird diese bei einem Wechsel der Rubrik automatisch ausgewählt
+  - Anpassung PDF-Dateinamen-Erzeugung: Gross-Kleinschrift wie durch den Benutzer eingegeben
+  - Verwendung des Begriffs 'Objekt' statt 'Titel' in GUI
+  - Auswahlmöglichkeit "keine" bei Farbigkeit (für Medien ohne Farbigkeit)
+  - OnClick-Save&Finalize bei previewloser Integration in Drittapplikationen
+  - Templates a4-quer-1, a4-hoch-2
+  - MM-Tarif: GUI-Elemente Dismenge1 und Dismenge2 auch dann verfügbar, wenn amasys noch nicht rechnen kann
+  - Zusatzpreispositionen: ergänzt mit Typ 4 (fester Wert je Objekt)
+  - Umbau Template-Engine
+  - Encodierungsproblem behoben (Transfer mit amasys)
+  - Laden von Offerten verbessert
+  - Print-Generator verbessert (Ausrichtung wird korrekt weitergegeben)
+  - Action-Buttons angepasst
+  - Datenstruktur erweitert (versch. E-Mail-Adressen und Agentur)
+  - SnackBar wird nach 10s automatisch geschlossen
+  - kein Titel-Popup, wenn Titel fehlt aber hidePreview=true ist
+  - OpportunityID kann empfangen und in die amasys-Datenstruktur überführt werden
+  - Erweiterungen Daten-JSON
+  - Anpassung Vorlagenauswahl, keine Transformation für freeform Templates
+  - Seitenumbruch bei mehrseitigen freeform Templates korrigiert
+  - Freeform-Vorlage: keine Aktualisierung auf amasys bei Änderungen des Sujets/Dokumentenbezeichnung
+  - Vereinfachungen im GUI/UX
+  - kleine Bugfixes
+
+--------------------------- letzter Release --------------------
+
+--------------------------- älter --------------------
+
+    </textarea></small>
+
+    <br><br>
+    
+    <small>
+        <p><span style="color:red;">edp</span><span>Software verwendet die folgenden Bibliotheken & Frameworks, deren Copyright wie folgt geregelt ist</span>:</p>
+        <textarea style="width:100%; height: 150px">
+        
+The MIT License
+
+Copyright (c) 2014-2017 Google, Inc. http://angular.io
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+
+---
+
+Fingerprintjs2 1.5.1 - Modern & flexible browser fingerprint library v2
+https://github.com/Valve/fingerprintjs2
+Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
+Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL VALENTIN VASILYEV BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    
+        </textarea>
+    </small>
+    <br>
+    
+</div> <!-- End: Body -->

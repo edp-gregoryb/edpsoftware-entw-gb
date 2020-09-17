@@ -1,0 +1,22 @@
+<app-loading-screen></app-loading-screen>
+<mat-drawer-container class="mainContainer" autosize (window:resize)="windowResize($event)">
+
+    <mat-drawer #drawer class="sidenavContainer" mode="side">
+        <div style="float: right; padding-left: 5px; padding-right: 5px;">
+            <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+        </div>
+        <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [lastAppModule]="lastAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+    </mat-drawer>
+
+    <div class="appMainframe">
+        <app-defaultheader [currentAppModule]="currentAppModule" [modulename]="modulename" (changeSicht)="sichtchange($event)" (onSidenavToggle)="drawer.toggle()" (customerforsearch)="kundenliste($event)" (loading)="currentlyLoading($event)" #header></app-defaultheader>
+        
+        <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate" color="warn"></mat-progress-bar>
+        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+            <div class="flex-item" fxFlex="25%" [ngStyle]="{'height.px': innerheight}" style="overflow: scroll;"><app-kundendetails [kunden]="customers" (kundeninfo)="kundendetailinfo($event)" ></app-kundendetails></div>
+            <div class="flex-item" fxFlex="43%" [ngStyle]="{'height.px': innerheight}" style="overflow: scroll;"><app-kundenfacts [kundendetails]="newTermnotmod" (refreshChipsanzeige)="refreshChips($event)" ></app-kundenfacts></div>
+            <div class="flex-item" fxFlex="32%" [ngStyle]="{'height.px': innerheight}" style="overflow: scroll;"><app-infopanel *ngIf="newTerm" [termin]="newTerm" [merkrefresh]="refreshmerk" [kontaktpersbez]="kontbez" [fromModul]="currentAppModule" [selectedInfoTab]="selectedInfoTab"></app-infopanel></div>
+        </div>
+   
+    </div>
+</mat-drawer-container>

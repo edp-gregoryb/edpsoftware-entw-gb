@@ -1,0 +1,156 @@
+<div id="druckvorschau_alignment_spacer" style="height: 0px;">&nbsp;</div>
+
+<div class="druckvorschau_vorlage2 style" id="druckvorschau">
+
+    <div id="header" class="a4-quer-5" style="margin-top: 29px">
+        <img id="mainTemplateLogo" src="{{'assets/' + templatedata.instanz + '/logo.png'}}"/>
+    </div>
+
+    <div>
+        <table class="print-element infotable a4-quer-5">
+            <tr>
+                <td class="infotable_spalte1"><span i18n="@@clientNumber2">Kunden-Nr.</span>:</td>
+                <td class="infotable_spalte2">{{verkaufsdokument.controls.kundBeznr.value}}</td>
+                <td class="infotable_spalte3"><span i18n="@@yourContact">Ihr Kontakt</span>:</td>
+                <td class="infotable_spalte4">{{verkaufsdokument.controls.verfasser1.value}}</td>
+            </tr>
+
+            <tr>
+                <td class="infotable_spalte1"><span i18n="@@client">Kunde</span>:</td>
+                <td class="infotable_spalte2"><span>{{verkaufsdokument.controls.bestName.value}}</span></td>
+                <td class="infotable_spalte3" i18n="@@email">E-Mail:</td>
+                <td class="infotable_spalte4">{{verkaufsdokument.controls.verfasser1mail.value}}</td>
+            </tr>
+            <tr>
+                <td class="infotable_spalte1"><span i18n="@@place">Ort</span>:</td>
+                <td class="infotable_spalte2">{{verkaufsdokument.controls.bestOrt.value}}</td>
+                <td class="infotable_spalte3"><span i18n="@@phone">Telefon</span>:</td>
+                <td class="infotable_spalte4">{{verkaufsdokument.controls.verfasser1tel.value}}</td>
+            </tr>
+            <tr>
+                <td class="infotable_spalte1"><span i18n="@@contact">Kontakt</span>:</td> <!-- oder Agentur -->
+                <td class="infotable_spalte2">{{verkaufsdokument.controls.bestZustaendiger.value}}</td>
+                <td class="infotable_spalte3"><span i18n="@@date">Datum</span>:</td>
+                <td class="infotable_spalte4">{{verkaufsdokument.controls.ausstelldatum.value | date : "dd.MM.yyyy"}}
+                </td>
+            </tr>
+            <tr *ngIf="verkaufsdokument.controls.vermname.value != ''">
+                <td class="infotable_spalte1"><span i18n="@@agent">Vermittler</span>:</td>
+                <td class="infotable_spalte2">{{verkaufsdokument.controls.vermname.value}}</td>
+            </tr>
+        </table>
+
+        <div class="print-element a4-quer-5 dokumenttitel" *ngIf="verkaufsdokument.controls.sujet.value != ''"><b>{{verkaufsdokument.controls.sujet.value}}<br><br></b>
+        </div>
+
+        <table class="print-element a4-quer-5">
+            <tr>
+                <td>
+                    <pre *ngIf="verkaufsdokument.controls.indivEinleitungstext.value!=''">{{verkaufsdokument.controls.indivEinleitungstext.value}}</pre>
+                </td>
+            </tr>
+        </table>
+
+        <table id="tbheader" class="print-element a4-quer-5 offerttabelle offerttabelleheader"> <!-- Header Table -->
+            <tr>
+                <td class="objektspalte" i18n="@@object">Objekt</td>
+
+                <td class="kostenerscheinungsspalte"><span i18n="@@costPerEditionA">Kosten</span><br><span>
+                </span></td>
+                <td class="anzerscheinungsspalte"><span i18n="@@nrOfEditionsA">Anzahl</span><br><span>
+                </span></td>
+                <td class="totalnettonettospalte"><span i18n="@@totalNetSlashNetA">Total</span><br><span
+                        i18n="@@totalNetSlashNetB">Netto/Netto</span></td>
+            </tr>
+        </table>
+
+        <div *ngFor="let titel of getTasks(verkaufsdokument); let i=index"> <!-- Titel-Loop -->
+
+            <table class="print-element a4-quer-5 offerttabelle offerttabelleitems ">
+                <tr>
+                    <td class="objektspalte objektspalteinfo linierechts"
+                        *ngIf="verkaufsdokument.controls.titel.controls[i].controls.objBezeichnung.value != ''"><b>{{verkaufsdokument.controls.titel.controls[i].controls.objBezeichnung.value}}</b>
+                        <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.zusatzinfo.value != ''"><br><i>{{verkaufsdokument.controls.titel.controls[i].controls.zusatzinfo.value}}</i></span>
+                    </td>
+                    <!--<td class="auflagenspalte linierechts">&nbsp;</td>-->
+                    <td class="kostenerscheinungsspalte linierechts">&nbsp;</td>
+                    <td class="anzerscheinungsspalte linierechts">&nbsp;</td>
+                    <!--<td class="bruttospalte linierechts">&nbsp;</td>-->
+                    <!--<td class="abschlussrabattprozentspalte linierechts">&nbsp;</td>-->
+                    <!--<td class="abschlussrabattspalte linierechts">&nbsp;</td>-->
+                    <td class="totalnettonettospalte">&nbsp;</td>
+                </tr>
+            </table>
+            <!-- Werbemittel-Loop -->
+            <div *ngFor="let werbemittel of verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls; let j=index">
+                <table class="a4-quer-5 print-element offerttabelle offerttabelleitems">
+                    <!--<table class="a4-quer-5 print-element offerttabelle offerttabelleitems" *ngFor="let werbemittel of verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls; let j=index" >-->
+                    <tr>
+                        <!-- objektspalteinfo in Class entfernt 3.1.18/RPS -->
+                        <td class="objektspalte werbemittel linierechts">
+                            {{verkaufsdokument.controls.titel.controls[i].controls.rubBezeichnung.value}}<span
+                                *ngIf="verkaufsdokument.controls.titel.controls[i].controls.urubBezeichnung.value!=''">, {{verkaufsdokument.controls.titel.controls[i].controls.urubBezeichnung.value}}</span><span
+                                *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatFarbanz.value === '0'">, <span
+                                i18n="@@commaBlackWhite">s/w</span></span><span
+                                *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatFarbanz.value === '4'">, <span
+                                i18n="@@commaColored">farbig</span></span><span
+                                *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatFarbanz.value !== '0' && verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatFarbanz.value !== '4'"></span><span
+                                *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformat.value.length > 8"><br>{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformat.value}}</span>
+                            <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.hinweis.value != ''"><br>{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.hinweis.value}}</span>
+                            <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformat.value.length <=8"><br><span
+                                    i18n="@@productionSize">Produktionsgrösse (B x H)</span>: {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatProdgroesse.value}}</span>
+
+                            <br><span>{{erscheinungsdatenAufbereiten(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsausgbez.value,0)}}</span>
+                        </td>
+                        <td class="kostenerscheinungsspalte linierechts">
+                            {{findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,"GP").preisUserTotal
+                            | number : '1.2-2'}}
+                        </td>
+
+                        <td class="anzerscheinungsspalte linierechts">
+                            {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsanzahl.value}}
+                        </td>
+
+                        <td class="totalnettonettospalte">
+                            {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value
+                            | number : '1.2-2'}}
+                        </td>
+                    </tr>
+
+                </table>
+                <div *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.seitenumbruch.value == true"
+                     class="print-element seitenumbruch_marker seitenumbruch" style="height:0px;"></div>
+            </div>
+        </div>
+
+        <table class="print-element offerttabelle offerttabellefooter a4-quer-5">
+            <tr>
+                <td></td>
+
+            </tr>
+        </table>
+
+        <span class="print-element a4-quer-5"><br><br></span>
+
+        <table class="print-element a4-quer-5">
+            <tr>
+                <td>
+                    <pre *ngIf="verkaufsdokument.controls.indivSchlusssatz.value!=''">{{verkaufsdokument.controls.indivSchlusssatz.value}}</pre>
+                    <span i18n="@@businessconditionsWOmwst">Daten-, Tarif- und Grössenänderungen vorbehalten. Die Preise verstehen sich in CHF, exkl. Mehrwertsteuer. Es gelten die allgemeinen Geschäftsbedingungen.</span>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <!-- Footer -->
+    <div id="footer" class="a4-quer-5" style="page-break-after: always; margin-bottom: 54px">
+        <!-- margin, damit Chrome 66-Systemfooter überdeckt wird -->
+        <div>
+        <span class="page-number"></span>
+        <img  id="footerTemplateLogo" src="{{'assets/' + templatedata.instanz + '/google-premier.png'}}"/>
+        </div>
+    </div>
+    <!-- damit Seitenumbruch in jedem Fall richtig funktionert, 12.04.2018 fp -->
+    <div class="print-element a4-quer-1">&nbsp;</div>
+
+</div> <!-- Ende Druckvorschau-DIV -->

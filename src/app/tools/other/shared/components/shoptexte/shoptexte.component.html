@@ -1,0 +1,141 @@
+
+
+<!--<mat-tab-group>-->
+<form fxLayout="column" [formGroup]="shopForm" (ngSubmit)="onSubmit()" xmlns="http://www.w3.org/1999/html">
+  <!--<mat-tab label="Projektdetails">-->
+  <!--<div style="margin-top: 13px"></div>-->
+
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+
+    <mat-form-field class="size100" fxFlex>
+      <input matInput formControlName="objekt"  placeholder="Bestellnummer">
+    </mat-form-field>
+
+    <mat-form-field class="size100" fxFlex>
+      <input matInput formControlName="fremdschluessel"  [readonly]="true" placeholder="Fremdschlüssel">
+    </mat-form-field>
+
+
+    <mat-form-field class="size100" fxFlex>
+      <input matInput formControlName="barcode" placeholder="Barcode">
+    </mat-form-field>
+
+
+  </div>
+
+<!--  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+
+<!--    <mat-form-field class="size100" fxFlex>-->
+<!--      <input matInput formControlName="objbezeichnung" placeholder="Bezeichnung">-->
+<!--    </mat-form-field>-->
+
+
+<!--  </div>-->
+
+
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+    <mat-form-field class="size100" fxFlex>
+      <input matInput formControlName="ISSN" placeholder="ISSN-Nr">
+    </mat-form-field>
+    <mat-form-field class="size100" fxFlex>
+      <input matInput formControlName="ISBN" placeholder="ISBN-Nr.">
+    </mat-form-field>
+  </div>
+
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+    <mat-form-field class="size100" fxFlex>
+<!--      <input matInput formControlName="objtyp" placeholder="Objekttype">-->
+      <mat-label>Objekttype</mat-label>
+      <mat-select  formControlName="objtyp">
+        <mat-option *ngFor="let coden of suchresult4" [value]="coden.code_wert" (change)="changeCodenObjtyp(coden.code_wert)">
+          {{coden.code_text}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </div>
+
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+    <mat-form-field class="size100" fxFlex>
+      <mat-label>Artikelgruppe</mat-label>
+      <mat-select  formControlName="artgrp">
+        <mat-option *ngFor="let coden of suchresult" [value]="coden.code_wert" (change)="changeCoden(coden.code_wert)">
+          {{coden.code_text}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+
+    <mat-form-field class="size100" fxFlex>
+      <!--          <input matInput formControlName="praesgrp" placeholder="Präsentations-Gruppe">-->
+      <mat-label>Präsentations-Gruppe</mat-label>
+      <mat-select  formControlName="praesgrp">
+        <mat-option *ngFor="let coden of suchresult2" [value]="coden.code_wert" (change)="changeCodenPrasentation(coden.code_wert)">
+          {{coden.code_text}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="size100" fxFlex>
+<!--      <input matInput formControlName="praessubgrp" placeholder="Präsentations-SubGrp">-->
+      <mat-label>Präsentations-SubGrp</mat-label>
+      <mat-select  formControlName="praessubgrp">
+        <mat-option *ngFor="let coden of suchresult3" [value]="coden.code_wert" (change)="changeCodenPrasentationSub(coden.code_wert)">
+          {{coden.code_text}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+
+
+  </div>
+
+
+
+<!--  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+
+
+<!--  </div>-->
+
+<!--  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+
+
+<!--  </div>-->
+
+<!--  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+
+
+<!--  </div>-->
+<!--  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+
+
+<!--  </div>-->
+
+<!--  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+
+
+<!--  </div>-->
+<!--  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+
+
+<!--  </div>-->
+
+</form>
+<!--[mat-dialog-close]=""-->
+<!--<button  mat-raised-button color="primary"  (click)="updateObjForm()">Speichern</button>-->
+
+
+
+
+
+
+
+
+
+
+
+
+

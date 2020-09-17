@@ -1,0 +1,15 @@
+<div (scroll)="onElementScroll($event)" (onresize)='onreziseElement($event)' class="demo" style="height: 100%;" id="scrollID" #scrollItems>
+    <div *ngIf="vonfilter" class="sticky">
+        <div *ngIf="termines" style="background-color: #ddd;box-shadow: 0 3px 3px 0 rgba(0,0,0,0.2),0 0px 0px 0 rgba(0,0,0,0.19)!important;padding: 20px;">
+        <input style="width:80%;font-size: 18px; background-color: white; border: 0px solid;cursor: text;text-indent:4px;" type="text" [(ngModel)]="val0" (ngModelChange)="searchItems($event)" />
+        <button style="float: right;margin-top: -6px;" mat-icon-button matTooltip="Springe auf den Markierten Eintrag zurück" i18n-matTooltip="@@goback" matTooltipPosition="below" (click)=goBack()><mat-icon>explore</mat-icon></button>
+        </div>
+    </div>
+  <div (mouseleave)='over($event)' [ngStyle]="{'height.px': minInnerHeight}">
+
+        <container  [sections]="termines" [scroll]="scrolling" (auswahl)="auswahlevent($event)"></container>
+
+  </div>
+</div>
+
+

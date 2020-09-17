@@ -1,0 +1,1007 @@
+<div *ngIf="abodetails">
+  <!-- Toolbar -->
+  <div class="toolBar">
+    <button mat-icon-button [disabled]="aboPos === 'first'" (click)="skipAbo(-1)" (window:keydown.control.arrowup)="execFunction('skipAbo', -1)"><mat-icon matTooltipPosition="above" matTooltip="First (CTRL + cursorup)" i18n-matTooltip>skip_previous</mat-icon></button>
+    <button mat-icon-button [disabled]="aboPos === 'first'" (click)="changeAbo(-1)" (window:keydown.alt.arrowup)="execFunction('changeAbo',-1)"><mat-icon matTooltipPosition="above" matTooltip="Previous (ALT + cursorup)" i18n-matTooltip>arrow_left</mat-icon></button>
+    <button mat-icon-button [disabled]="aboPos === 'last'" (click)="changeAbo(1)" (window:keydown.alt.arrowdown)="execFunction('changeAbo',1)"><mat-icon matTooltipPosition="above" matTooltip="Next (ALT + cursordown)" i18n-matTooltip>arrow_right</mat-icon></button>
+    <button mat-icon-button [disabled]="aboPos === 'last'" (click)="skipAbo(1)" (window:keydown.control.arrowdown)="execFunction('skipAbo',1)"><mat-icon matTooltipPosition="above" matTooltip="Last (CTRL + cursordown)" i18n-matTooltip>skip_next</mat-icon></button>
+    <button mat-icon-button (click)="resetProgress()" (window:keydown.F2)="execFunction('resetProgress')"><mat-icon matTooltipPosition="above" matTooltip="Reset (F2)" i18n-matTooltip>refresh</mat-icon></button>
+    <button mat-icon-button [disabled]="editingAbo" (click)="newAbo()" (window:keydown.F9)="execFunction('newAbo')"><mat-icon matTooltipPosition="above" matTooltip="Neu (F9)" i18n-matTooltip>edit</mat-icon></button>
+    <button mat-icon-button [disabled]="editingAbo" (click)="copyAbo()" (window:keydown.shift.F9)="execFunction('copyAbo')"><mat-icon matTooltipPosition="above" matTooltip="Kopieren (SHIFT + F9)" i18n-matTooltip>file_copy</mat-icon></button>
+    <button mat-icon-button (click)="saveAbo()" (window:keydown.f7)="execFunction('saveAbo')"><mat-icon matTooltipPosition="above" matTooltip="Speichern (F7)" i18n-matTooltip>save</mat-icon></button>
+    <button mat-icon-button [disabled]="!editingAbo || aboPos !== 'last'" (click)="cancleNewAbo()" (window:keydown.f4)="execFunction('cancleNewAbo')"><mat-icon matTooltipPosition="above" matTooltip="Abbrechen (F4)" i18n-matTooltip>power_settings_new</mat-icon></button>
+    <button mat-icon-button [disabled]="editingAbo && aboPos === 'last'" (click)="deleteAbo()" (window:keydown.f8)="execFunction('deleteAbo')"><mat-icon matTooltipPosition="above" matTooltip="Löschen (F8)" i18n-matTooltip>clear</mat-icon></button>
+    <button mat-icon-button (click)="showAbopreis()" (window:keydown.shift.F2)="execFunction('showAbopreis')"><mat-icon matTooltipPosition="above" matTooltip="Abopreis (SHIFT + F2)" i18n-matTooltip>attach_money</mat-icon></button>
+    <button mat-icon-button [disabled]="istAboNeu === true" (click)="showErstellInfo()" (window:keydown.F10)="execFunction('showErstellInfo')"><mat-icon matTooltipPosition="above" matTooltip="Information (F10)" i18n-matTooltip>info</mat-icon></button>
+  </div>
+
+  <!-- interne Mutation-checkbox -->
+  <div style="float: right; margin-top: 10px;">
+      <mat-checkbox i18n>interne Mutation</mat-checkbox>
+  </div>
+  <div class="clear"></div>
+
+  <mat-accordion class="accordion" multi="true" displayMode="flat">
+    <!-- Allgemeines -->
+    <mat-expansion-panel class="accordionPanel" [expanded]="expanded.includes(0)" (opened)="setExpanded(0)" (closed)="removeExpanded(0)">
+      <mat-expansion-panel-header class="accordionHeader">
+        <mat-panel-title>
+          <b i18n>Allgemeines</b>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <!-- Allgemeines -->
+      <div class="accordionContent">
+        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+          <!-- Spalte 1 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Abonnent -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Abonnent</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchADRW('beznr', 'abobeznr')" id="abobeznr" value="{{abodetails.beznr}}">
+                <div (click)="openInModule('ADRW', 'beznr')" class="CodnText">
+                  {{abodetails.beznr_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Aboart -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Aboart</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ABOART', 'artverk', 'aboart')" id="aboart" value="{{abodetails.artverk}}">
+                <div (click)="openInModule('CODN', 'artverk', 'ABOART')" class="CodnText">
+                  {{abodetails.artverk_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Objekt -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Objekt</span>:</span>
+              <mat-form-field class="formField">
+                <mat-select placeholder="" [(ngModel)]="abodetails.artnr" (ngModelChange)="objektHasChanged()">
+                  <mat-option value=""></mat-option>
+                  <mat-option *ngFor="let obj of objektAuswahl" [value]="obj.objekt">{{obj['obj-bezeichnung']}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Zustellung von/bis -->
+            <div>
+              <span i18n>Zustellungen</span><br>
+              <div style="width: 50%; float: left">
+                <span style="display: inline-block; width: 30px !important;"><span i18n>Von</span>:</span>
+                <span style="white-space: nowrap">
+                  <mat-form-field class="dateInput">
+                    <input matInput [matDatepicker]="picker" placeholder="" [(ngModel)]="abodetails.terminvon" (ngModelChange)="chooseDateZuAusgabe('zustVon', 'terminvon')">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+
+                  <mat-select placeholder="" *ngIf="ausgabeplan && ausgabeplan.length > 0" [(ngModel)]="ausgabeplanAusgewaehlt.zustVon" class="dateSelect" (ngModelChange)="chooseAusgabe('zustVon', 'terminvon')">
+                    <mat-select-trigger></mat-select-trigger>
+                    <mat-option value=""></mat-option>
+                    <mat-option *ngFor="let ausg of ausgabeplan" [value]="ausg.aschlussel">{{ausg.ausgbez}}</mat-option>
+                  </mat-select>
+                </span>
+              </div>
+
+              <div style="width: 50%; float: right">
+                <span style="display: inline-block; width: 30px !important;"><span i18n>Bis</span>:</span>
+                <span style="white-space: nowrap">
+                  <mat-form-field class="dateInput">
+                    <input matInput [matDatepicker]="picker2" placeholder="" [(ngModel)]="abodetails.terminbis" (ngModelChange)="chooseDateZuAusgabe('zustBis', 'terminbis')">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                  </mat-form-field>
+
+                  <mat-select placeholder="" *ngIf="ausgabeplan && ausgabeplan.length > 0" [(ngModel)]="ausgabeplanAusgewaehlt.zustBis" class="dateSelect" (ngModelChange)="chooseAusgabe('zustBis', 'terminbis')">
+                    <mat-select-trigger></mat-select-trigger>
+                    <mat-option value=""></mat-option>
+                    <mat-option *ngFor="let ausg of ausgabeplan" [value]="ausg.aschlussel">{{ausg.ausgbez}}</mat-option>
+                  </mat-select>
+                </span>
+              </div>
+            </div>
+            <div class="clear"></div>
+
+            <!-- Faktura ab/fix -->
+            <div>
+              <span i18n>Faktura</span><br>
+              <div style="width: 50%; float: left;">
+                <span style="display: inline-block; width: 30px !important;"><span i18n>Ab</span>:</span>
+                <span style="white-space: nowrap">
+                  <mat-form-field class="dateInput">
+                    <input matInput [matDatepicker]="picker3" placeholder="" [(ngModel)]="abodetails.fakturabeginn1" (ngModelChange)="chooseDateZuAusgabe('faktAb', 'fakturabeginn1')">
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker>
+                  </mat-form-field>
+  
+                  <mat-select placeholder="" *ngIf="ausgabeplan && ausgabeplan.length > 0" [(ngModel)]="ausgabeplanAusgewaehlt.faktAb" class="dateSelect" (ngModelChange)="chooseAusgabe('faktAb', 'fakturabeginn1')">
+                    <mat-select-trigger></mat-select-trigger>
+                    <mat-option value=""></mat-option>
+                    <mat-option *ngFor="let ausg of ausgabeplan" [value]="ausg.aschlussel">{{ausg.ausgbez}}</mat-option>
+                  </mat-select>
+                </span>
+              </div>
+
+              <div style="width: 50%; float: right;">
+                <span style="display: inline-block; width: 30px !important;"><span i18n>Fix</span>:</span>
+                <span style="white-space: nowrap">
+                  <mat-form-field class="dateInput">
+                    <input matInput [matDatepicker]="picker4" placeholder="" [(ngModel)]="abodetails.fakturabeginn2" (ngModelChange)="chooseDateZuAusgabe('faktFix', 'fakturabeginn2')">
+                    <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                    <mat-datepicker #picker4></mat-datepicker>
+                  </mat-form-field>
+
+                  <mat-select placeholder="" *ngIf="ausgabeplan && ausgabeplan.length > 0" [(ngModel)]="ausgabeplanAusgewaehlt.faktFix" class="dateSelect" (ngModelChange)="chooseAusgabe('faktFix', 'fakturabeginn2')">
+                    <mat-select-trigger></mat-select-trigger>
+                    <mat-option value=""></mat-option>
+                    <mat-option *ngFor="let ausg of ausgabeplan" [value]="ausg.aschlussel">{{ausg.ausgbez}}</mat-option>
+                  </mat-select>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Spalte 2 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- leeres Feld -->
+            <div style="height: 54px;"></div>
+
+            <!-- Vorgnr -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Vorgnr</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" [(ngModel)]="abodetails.vorgnr">
+              </mat-form-field>
+            </div>
+            
+            <!-- Teilausgabe -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Teilausgabe</span>:</span> <!-- AWTE -->
+              <mat-form-field class="formField">
+                <mat-select placeholder="" [(ngModel)]="abodetails.teilausg" (ngModelChange)="ausgabeHasChanged()">
+                  <mat-option value=""></mat-option>
+                  <mat-option *ngFor="let ausg of ausgAuswahl" [value]="ausg.artnr">{{ausg.bez}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Nummer -->
+            <br style="line-height: 54px">
+            <div class="field">
+              <span class="formFieldText"><span i18n>Nummern</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" [(ngModel)]="anznr" (keyup.enter)="calculateTerminBis()">
+              </mat-form-field>
+            </div>
+
+            <!-- Naechste -->
+            <br style="line-height: 54px">
+            <div class="field">
+              <span class="formFieldText"><span i18n>Nächste</span>:</span>
+              <mat-form-field class="dateInput">
+                <input matInput [matDatepicker]="picker5" placeholder="" [(ngModel)]="abodetails.tt_abokontr[0]['termin-neu']">
+                <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                <mat-datepicker #picker5></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Spalte 3 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- leeres Feld -->
+            <div style="height: 54px;"></div>
+
+            <!-- Posnr -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Posnr</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" [(ngModel)]="abodetails.posnr">
+              </mat-form-field>
+            </div>
+            
+            <!-- Firma -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Firma</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" [(ngModel)]="abodetails.firma" disabled>
+              </mat-form-field>
+            </div>
+
+            <!-- Ursprungsjahr -->
+            <br style="line-height: 54px">
+            <div class="field">
+              <span class="formFieldText"><span i18n>Ursprungsjahr</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" [(ngModel)]="abodetails.urjahr">
+              </mat-form-field>
+            </div>
+
+            <!-- Erneuerung -->
+            <br style="line-height: 54px">
+            <div class="field">
+              <div class="formFieldText"><span i18n>Erneuerung</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ABONEU', 'autoneu', 'erneuerung')" id="erneuerung" value="{{abodetails.autoneu}}">
+                <div (click)="openInModule('CODN', 'autoneu', 'ABONEU')" class="CodnText">
+                  {{abodetails.autoneu_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Lieferdaten -->
+    <mat-expansion-panel class="accordionPanel" [expanded]="expanded.includes(1)" (opened)="setExpanded(1)" (closed)="removeExpanded(1)">
+      <mat-expansion-panel-header class="accordionHeader">
+        <mat-panel-title>
+          <b i18n>Lieferdaten</b>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="accordionContent">
+        <!-- Lieferdaten-Tabelle -->
+        <table style="margin-top: 10px; float: left" cellspacing="0">
+          <tr>
+            <th i18n>Wochentage</th>
+            <th i18n>Lieferadresse</th>
+            <th i18n>Menge</th>
+            <th i18n>Versandart</th>
+            <th i18n>Leitweg</th>
+            <th i18n>Plakate</th>
+            <th></th>
+          </tr>
+
+          <!-- Regelmaessig -->
+          <ng-container *ngFor="let zust of abodetails.tt_abozust; let i = index"> <!-- abodetails.tt_abozust[i] === zust -->
+            <ng-container *ngIf="lieferungUnreg || (!lieferungUnreg && i === 0)">
+              <tr>
+                <td *ngIf="lieferungUnreg">{{zust.bezeichnung}}</td>
+                <td *ngIf="!lieferungUnreg" i18n>Immer</td>
+  
+                <td>
+                  <input type="text" class="CodnInput" style="width: 25%" (keyup.enter)="searchADRW('tt_abozust[' + i + '].lbeznr', 'zustlbeznr:' + i)" [value]="zust.lbeznr" #zustlbeznr>
+                  <div (click)="openInModule('ADRW', 'tt_abozust[' + i + '].lbeznr')" class="CodnText">
+                    {{zust.lbeznr_txt}}&nbsp;
+                  </div>
+                </td>
+
+                <td><input matInput placeholder="" type="number" [(ngModel)]="zust.menge"></td>
+
+                <td>
+                  <input type="text" class="CodnInput" style="width: 25%;" (keyup.enter)="searchCODN('ABOVSART', 'tt_abozust[' + i + '].vart', 'zustvart:' + i)" [value]="zust.vart" #zustvart>
+                  <div style="width: 65%" (click)="openInModule('CODN', 'tt_abozust[' + i + '].vart', 'ABOVSART')" class="CodnText">
+                    {{zust.vart_txt}}&nbsp;
+                  </div>
+                </td>
+
+                <td>
+                  <mat-select placeholder="" [(ngModel)]="zust.leitweg" (ngModelChange)="getVTRNR(i, zust.leitweg)">
+                    <mat-select-trigger>{{leitwegeAusgewaehlt[i]}}</mat-select-trigger>
+                    <mat-option value=""></mat-option>
+                    <mat-option *ngFor="let leitweg of leitwegAuswahlen[i]" [value]="leitweg.r_rowid">[{{leitweg.vtrnr}}]&nbsp;{{leitweg.strasse}}&nbsp;{{leitweg.hnrn}}{{leitweg.hnra}}</mat-option>
+                  </mat-select>
+                </td>
+                <td><input matInput placeholder="" type="number" [(ngModel)]="zust.anzplak"></td>
+
+                <td style="white-space: nowrap">
+                  <mat-icon class="tool" (click)="copyUnreg(i)">file_copy</mat-icon>
+                  <mat-icon class="tool" (click)="deleteUnreg(i)">delete_outline</mat-icon>
+                </td>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </table>
+
+        <!-- Unregelmaessig-checkbox -->
+        <div *ngIf="abodetails.artnr" style="width: 15%; float: right; padding: 5px; margin-top: 10px;">
+          <mat-checkbox (click)="toggleUnregelmaessig()" [(ngModel)]="lieferungUnreg" i18n>Unregelmässig</mat-checkbox>
+        </div>
+        <div class="clear"></div>
+
+        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+          <!-- Spalte 1 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Zustellung Manuell Checkbox -->
+            <div style="line-height: 54px">
+              <mat-checkbox [(ngModel)]="abodetails.zustman" i18n>Zustellung Manuell</mat-checkbox>
+            </div>
+          </div>
+
+          <!-- Spalte 2 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Letzte Spedi -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Letzte Spedi</span>:</span>
+              <mat-form-field class="dateInput">
+                <input matInput [matDatepicker]="picker6" placeholder="" [value]="abodetails.tt_abokontr[0].sped_last" disabled>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Spalte 3 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Palettier-ID -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>PalID</span>:</span> <!-- ASPA -->
+              <mat-form-field class="formField">
+                <mat-select placeholder="" [(ngModel)]="abodetails.tt_abozust[0].palettierID">
+                  <mat-option value=""></mat-option>
+                  <mat-option *ngFor="let palett of palettierIdAuswahl" [value]="palett.palettierID">{{palett.bezeichnung}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Rechnungsdaten -->
+    <mat-expansion-panel class="accordionPanel" [expanded]="expanded.includes(2)" (opened)="setExpanded(2)" (closed)="removeExpanded(2)">
+      <mat-expansion-panel-header class="accordionHeader">
+        <mat-panel-title>
+          <b i18n>Rechnungsdaten</b>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="accordionContent">
+        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+          <!-- Spalte 1 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Rechnungsempgaenger -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Rechnungsempf</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchADRW('rbeznr', 'aborbeznr')" id="aborbeznr" value="{{abodetails.rbeznr}}">
+                <div (click)="openInModule('ADRW', 'rbeznr')" class="CodnText">
+                  {{abodetails.rbeznr_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Abotarif -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Abotarif</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ABOTARIF', 'tarif', 'abotarif')" id="abotarif" value="{{abodetails.tarif}}">
+                <div (click)="openInModule('CODN', 'tarif', 'ABOTARIF')" class="CodnText">
+                  {{abodetails.tarif_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+          </div>
+
+          <!-- Spalte 2 -->          
+          <div class="flex-item" fxFlex="33%">
+            <!-- GeschenkAbo -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>GeschenkAbo</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" [(ngModel)]="abodetails.gabo">
+              </mat-form-field>
+            </div>
+
+            <!-- Kundenuntergruppe -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Untergruppe</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('KUNDGEB', 'vkg', 'kundenuntergruppe')" id="kundenuntergruppe" value="{{abodetails.vkg}}">
+                <div (click)="openInModule('CODN', 'vkg', 'KUNDGEB')" class="CodnText">
+                  {{abodetails.vkg_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+          </div>
+
+          <!-- Spalte 3 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Zahlungsweg -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Zahlungsweg</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ZWEG', 'zweg', 'zahlungsweg')" id="zahlungsweg" value="{{abodetails.zweg}}">
+                <div (click)="openInModule('CODN', 'zweg', 'ZWEG')" class="CodnText">
+                  {{abodetails.zweg_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+            
+            <!-- Waehrung -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Währung</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('CURRENCY', 'curr', 'waehrung')" id="waehrung" value="{{abodetails.curr}}">
+                <div (click)="openInModule('CODN', 'curr', 'CURRENCY')" class="CodnText">
+                  {{abodetails.curr_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Aboklassierungen & Kundenuntergruppe-->
+    <mat-expansion-panel class="accordionPanel" [expanded]="expanded.includes(3)" (opened)="setExpanded(3)" (closed)="removeExpanded(3)">
+      <mat-expansion-panel-header class="accordionHeader">
+        <mat-panel-title>
+          <b i18n>Aboklassierungen & Kundenuntergruppe</b>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="accordionContent">
+        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+          <!-- Spalte 1 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Aboklassierung 1 -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Klassierung</span>&nbsp;1:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ABOKLAS1', 'bezart1', 'aboklas1')" id="aboklas1" value="{{abodetails.bezart1}}">
+                <div (click)="openInModule('CODN', 'bezart1', 'ABOKLAS1')" class="CodnText">
+                  {{abodetails.bezart1_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Kundenuntergruppe -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Untergruppe</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('KUNDUGEB', 'vkug', 'kundugrup')" id="kundugrup" value="{{abodetails.vkug}}">
+                <div (click)="openInModule('CODN', 'vkug', 'KUNDUGEB')" class="CodnText">
+                  {{abodetails.vkug_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+          </div>
+
+          <!-- Spalte 2 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Aboklassierung 2 -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Klassierung</span>&nbsp;2:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ABOKLAS2', 'bezart2', 'aboklas2')" id="aboklas2" value="{{abodetails.bezart2}}">
+                <div (click)="openInModule('CODN', 'bezart2', 'ABOKLAS2')" class="CodnText">
+                  {{abodetails.bezart2_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+          </div>
+
+          <!-- Spalte 3 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Aboklassierung 3 -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Klassierung</span>&nbsp;3:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ABOKLAS3', 'bezart3', 'aboklas3')" id="aboklas3" value="{{abodetails.bezart3}}">
+                <div (click)="openInModule('CODN', 'bezart3', 'ABOKLAS3')" class="CodnText">
+                  {{abodetails.bezart3_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Kundenuntergruppe -->
+    <mat-expansion-panel class="accordionPanel" [expanded]="expanded.includes(4)" (opened)="setExpanded(4)" (closed)="removeExpanded(4)">
+      <mat-expansion-panel-header class="accordionHeader">
+        <mat-panel-title>
+          <b i18n>Abomerkmale</b>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="accordionContent">
+        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+          <!-- Spalte 1 -->
+          <div class="flex-item" fxFlex="50%">
+            <!-- Alle 5 Merkmale -->
+            <div *ngFor="let dummy of ' '.repeat(5).split(''), let x = index" class="field">
+              <div class="formFieldText"><span i18n>Merkmal</span>&nbsp;{{x+1}}</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput"  (keyup.enter)="searchCODN('ABOMERK' + (x+1), 'merkmal' + (x+1), 'merkmal' + (x+1))" id="{{'merkmal' + (x+1)}}" [value]="abodetails.merkmal[x]">
+                <div (click)="openInModule('CODN', 'merkmal' + (x+1), 'ABOMERK' + (x+1))" class="CodnText">
+                  {{abodetails['merkmal' + (x+1) + '_txt']}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+          </div>
+
+          <!-- Spalte 2 -->
+          <div class="flex-item" fxFlex="50%">
+            <!-- Gueltig ab -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Gültig ab</span>:</span>
+              <mat-form-field class="dateInput">
+                <input matInput [matDatepicker]="picker7" placeholder="" [(ngModel)]="abodetails.gueltigab" (ngModelChange)="loadAlleLeitwege()">
+                <mat-datepicker-toggle matSuffix [for]="picker7"></mat-datepicker-toggle>
+                <mat-datepicker #picker7></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <!-- Gueltig bis -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Gültig bis</span>:</span>
+              <mat-form-field class="dateInput">
+                <input matInput [matDatepicker]="picker8" placeholder="" [(ngModel)]="abodetails.gueltigbis">
+                <mat-datepicker-toggle matSuffix [for]="picker8"></mat-datepicker-toggle>
+                <mat-datepicker #picker8></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <!-- Status -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Status</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('AWABSTAT', 'stat', 'status')" id="status" value="{{abodetails.stat}}">
+                <div (click)="openInModule('CODN', 'stat', 'AWABSTAT')" class="CodnText">
+                  {{abodetails.stat_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- SperrKz -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>SperrKz</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ABOSPERR', 'sperr', 'sperrKz')" id="sperrKz" value="{{abodetails.sperr}}">
+                <div (click)="openInModule('CODN', 'sperr', 'ABOSPERR')" class="CodnText">
+                  {{abodetails.sperr_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Sperr-Datum -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Sperr-Datum</span>:</span>
+              <mat-form-field class="dateInput">
+                <input matInput [matDatepicker]="picker9" placeholder="" [(ngModel)]="abodetails.sperrdatum">
+                <mat-datepicker-toggle matSuffix [for]="picker9"></mat-datepicker-toggle>
+                <mat-datepicker #picker9></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Zusätzliche Angaben -->
+    <mat-expansion-panel class="accordionPanel" [expanded]="expanded.includes(5)" (opened)="setExpanded(5)" (closed)="removeExpanded(5)">
+      <mat-expansion-panel-header class="accordionHeader">
+        <mat-panel-title>
+          <b i18n>Zusätzliche Angaben</b>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="accordionContent">
+        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+          <!-- Spalte 1 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Vertreter 1 -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Vertreter</span>&nbsp;1:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchADRW('vbeznr1', 'abovbeznr1')" id="abovbeznr1" value="{{abodetails.vbeznr1}}">
+                <div (click)="openInModule('ADRW', 'vbeznr1')" class="CodnText">
+                  {{abodetails.vbeznr1_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Geschenk -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Geschenk</span>:</span>
+              <mat-form-field class="formField">
+                <mat-select placeholder="" [(ngModel)]="abodetails.artnr2">
+                  <mat-option></mat-option>
+                  <mat-option *ngFor="let geschenk of geschenkAuswahl" [value]="geschenk.objekt">{{geschenk['obj-kurzbez']}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Bestellzeichen -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Bestellzeichen</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="text" [(ngModel)]="abodetails.bestellzeichen">
+              </mat-form-field>
+            </div>
+
+            <!-- Text vor -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Text vor</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="text" [(ngModel)]="abodetails.posntextkey">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Spalte 2 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Vertreter 2 -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Vertreter</span>&nbsp;2:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchADRW('vbeznr2', 'abovbeznr2')" id="abovbeznr2" value="{{abodetails.vbeznr2}}">
+                <div (click)="openInModule('ADRW', 'vbeznr2')" class="CodnText">
+                  {{abodetails.vbeznr2_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Empfaenger -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Empfänger</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" [(ngModel)]="abodetails.artnr2flag">
+              </mat-form-field>
+            </div>
+
+            <!-- WEMF-Code -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>WEMFCode</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ABOAUMLL', 'wemfcode', 'wemf')" id="wemf" value="{{abodetails.wemfcode}}">
+                <div (click)="openInModule('CODN', 'wemfcode', 'ABOAUMLL')" class="CodnText">
+                  {{abodetails.wemfcode_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Text nach -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Text nach</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="text" [(ngModel)]="abodetails.posvtextkey">
+              </mat-form-field>
+            </div>
+
+            <!-- Ex-AboNr 2 -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Ex-AboNr</span>:</span> <!-- UNKNOWN -->
+              <mat-form-field class="numberInput">
+                <input matInput style="width:50%" type="number" [value]="abodetails.tt_abokontr[0]['ex-vorgnr']" disabled>
+                <input matInput style="width:50%" type="number" [value]="abodetails.tt_abokontr[0]['ex-posnr']" disabled>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Spalte 3 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Vertreter 3 -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Vertreter</span>&nbsp;3:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchADRW('vbeznr3', 'abovbeznr3')" id="abovbeznr3" value="{{abodetails.vbeznr3}}">
+                <div (click)="openInModule('ADRW', 'vbeznr3')" class="CodnText">
+                  {{abodetails.vbeznr3_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Bestellart -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Bestellart</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('BESTART', 'bestart', 'bestellart')" id="bestellart" value="{{abodetails.bestart}}">
+                <div (click)="openInModule('CODN', 'bestart', 'BESTART')" class="CodnText">
+                  {{abodetails.bestart_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Statistik-Art -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Statistik-Art</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('STATIART', 'statiart', 'statistikArt')" id="statistikArt" value="{{abodetails.statiart}}">
+                <div (click)="openInModule('CODN', 'statiart', 'STATIART')" class="CodnText">
+                  {{abodetails.statiart_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Alte-Nr -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Alte-Nr</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" [(ngModel)]="abodetails['alte-nr']">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Kiosk-Abrechnung -->
+    <mat-expansion-panel class="accordionPanel" [expanded]="expanded.includes(6)" (opened)="setExpanded(6)" (closed)="removeExpanded(6)">
+      <mat-expansion-panel-header class="accordionHeader">
+        <mat-panel-title>
+          <b i18n>Kiosk-Abrechnung</b>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="accordionContent">
+        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+          <!-- Spalte 1 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Kiosk-Gruppe -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Kiosk-Gruppe</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ABOKIOGR', 'kioskgr', 'kioskgrup')" id="kioskgrup" value="{{abodetails.kioskgr}}">
+                <div (click)="openInModule('CODN', 'kioskgr', 'ABOKIOGR')" class="CodnText">
+                  {{abodetails.kioskgr_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+          </div>
+
+          <!-- Spalte 2 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Kiosk-Nr -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Kiosk-Nr</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" [(ngModel)]="abodetails.kiosknr">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Spalte 3 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Festlieferung-Checkbox -->
+            <div style="line-height: 54px">
+              <mat-checkbox [(ngModel)]="abodetails.festlief" i18n>Festlieferung</mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Erweiterte Zahlungsbedingungen -->
+    <mat-expansion-panel class="accordionPanel" [expanded]="expanded.includes(7)" (opened)="setExpanded(7)" (closed)="removeExpanded(7)">
+      <mat-expansion-panel-header class="accordionHeader">
+        <mat-panel-title>
+          <b i18n>Erweiterte Zahlungsbedingungen</b>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="accordionContent">
+        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+          <!-- Spalte 1 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Zahlbed -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Zahlbed</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ZBED3', 'zbed1', 'zbed')" id="zbed" value="{{abodetails.zbed1}}">
+                <div (click)="openInModule('CODN', 'zbed1', 'ZBED3')" class="CodnText">
+                  {{abodetails.zbed1_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Einzelpreis -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Einzelpreis</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" [(ngModel)]="abodetails.epreis">
+              </mat-form-field>
+            </div>
+
+            <!-- MwSt-Variante -->
+            <div class="field">
+              <div class="formFieldText" style="white-space: nowrap"><span i18n>MwSt-Variante</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('MWST3', 'ustcode', 'mwstVariante')" id="mwstVariante" value="{{abodetails.ustcode}}">
+                <div (click)="openInModule('CODN', 'ustcode', 'MWST3')" class="CodnText">
+                  {{abodetails.ustcode_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Mahnsperre-Checkbox -->
+            <div style="line-height: 54px">
+              <mat-checkbox [(ngModel)]="abodetails.mahnsperre" i18n>Mahnsperre</mat-checkbox>
+            </div>
+
+            <!-- Rabatt-Betrag -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Rabatt-Betrag</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" [(ngModel)]="abodetails.rabbetr1">
+              </mat-form-field>
+            </div>
+
+            <!-- Rabattschlüssel 1 -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Rabatt</span>&nbsp;1:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('RABKEY3', 'rabkey1', 'rabattkey1')" id="rabattkey1" value="{{abodetails.rabkey1}}">
+                <div (click)="openInModule('CODN', 'rabkey1', 'RABKEY3')" class="CodnText">
+                  {{abodetails.rabkey1_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Rabattschlüssel 2 -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Rabatt</span>&nbsp;2:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('RABKEY3', 'rabkey2', 'rabattkey2')" id="rabattkey2" value="{{abodetails.rabkey2}}">
+                <div (click)="openInModule('CODN', 'rabkey2', 'RABKEY3')" class="CodnText">
+                  {{abodetails.rabkey2_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Rabattschlüssel 3 -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Rabatt</span>&nbsp;3:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('RABKEY3', 'rabkey3', 'rabattkey3')" id="rabattkey3" value="{{abodetails.rabkey3}}">
+                <div (click)="openInModule('CODN', 'rabkey3', 'RABKEY3')" class="CodnText">
+                  {{abodetails.rabkey3_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+          </div>
+
+          <!-- Spalte 2 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Zahlungsart -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Zahlungsart</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ZART', 'zart', 'zahlart')" id="zahlart" value="{{abodetails.zart}}">
+                <div (click)="openInModule('CODN', 'zart', 'ZART')" class="CodnText">
+                  {{abodetails.zart_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Gueltig Bis -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Gültig Bis</span>:</span>
+              <mat-form-field class="dateInput">
+                <input matInput [matDatepicker]="picker11" placeholder="" [(ngModel)]="abodetails.epreisdatum">
+                <mat-datepicker-toggle matSuffix [for]="picker11"></mat-datepicker-toggle>
+                <mat-datepicker #picker11></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <!-- Bank-Nr -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Bank-Nr</span>:</span> <!-- RABB -->
+              <mat-form-field class="formField">
+                <mat-select placeholder="" [(ngModel)]="abodetails.banknr">
+                  <mat-option></mat-option>
+                  <mat-option *ngFor="let bank of bankenAuswahl" [value]="bank.banknr">[{{bank.banknr}}]&nbsp;{{bank.bankname}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Kopie -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Kopie</span>:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" [(ngModel)]="abodetails.kopien">
+              </mat-form-field>
+            </div>
+
+            <!-- Gueltig bis -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Gültig Bis</span>:</span>
+              <mat-form-field class="dateInput">
+                <input matInput [matDatepicker]="picker10" placeholder="" [(ngModel)]="abodetails.rabbis1">
+                <mat-datepicker-toggle matSuffix [for]="picker10"></mat-datepicker-toggle>
+                <mat-datepicker #picker10></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <!-- Rabatt% 1 -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Rabatt</span>%&nbsp;1:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" [(ngModel)]="abodetails.rabatt1">
+              </mat-form-field>
+            </div>
+
+            <!-- Rabatt% 2 -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Rabatt</span>%&nbsp;2:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" [(ngModel)]="abodetails.rabatt2">
+              </mat-form-field>
+            </div>
+
+            <!-- Rabatt% 3 -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Rabatt</span>%&nbsp;3:</span>
+              <mat-form-field class="numberInput">
+                <input matInput placeholder="" type="number" [(ngModel)]="abodetails.rabatt3">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Spalte 3 -->
+          <div class="flex-item" fxFlex="33%">
+            <!-- Konto -->
+            <div class="field">
+              <span class="formFieldText"><span i18n>Konto</span>:</span> <!-- RBKO -->
+              <mat-form-field class="formField">
+                <mat-select placeholder="" [(ngModel)]="abodetails.konto" (ngModelChange)="updateKontoTxt()">
+                  <mat-option value=""></mat-option>
+                  <mat-option *ngFor="let Konto of kontoAuswahl" [value]="Konto.konto">{{Konto.ktobez}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Kostenstelle -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Kostenstelle</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('KST', 'kst', 'koststell')" id="koststell" value="{{abodetails.kst}}">
+                <div (click)="openInModule('CODN', 'kst', 'KST')" class="CodnText">
+                  {{abodetails.kst_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+
+            <!-- Aktion -->
+            <div class="field">
+              <div class="formFieldText"><span i18n>Aktion</span>:</div>
+              <div class="formFieldCODN">
+                <input type="text" class="CodnInput" (keyup.enter)="searchCODN('ABAKTION', 'aktion', 'abaktion')" id="abaktion" value="{{abodetails.aktion}}">
+                <div (click)="openInModule('CODN', 'aktion', 'ABAKTION')" class="CodnText">
+                  {{abodetails.aktion_txt}}&nbsp;
+                </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

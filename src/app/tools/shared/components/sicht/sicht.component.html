@@ -1,0 +1,19 @@
+<!--<div style="margin-left: 13px;">{{selected}}</div>-->
+<!--<mat-form-field  class="example-full-width">-->
+<!--  <mat-select placeholder="Berechtigung" [(value)]="selected" (change)="selectedvalue($event)">-->
+<!--    <mat-option *ngFor="let ber of berecht" [(value)]="ber.stufe">-->
+<!--      {{ ber.beschreibung }}-->
+<!--    </mat-option>-->
+<!--  </mat-select>-->
+<!--</mat-form-field>-->
+
+<!--*ngIf="detailanzeige"-->
+ <!-- START: View-Group -->
+  <mat-button-toggle-group #farosSichten="matButtonToggleGroup" [value]="selected" >
+    <mat-button-toggle *ngFor="let ber of berecht; let i=index"  [(value)]="ber.stufe" matTooltip="{{sight}}: {{ber.beschreibung}}" (change)="selectedvalue($event)">
+      <mat-icon>{{iconarray[ber.beschreibung]}}</mat-icon>
+    </mat-button-toggle>
+
+  </mat-button-toggle-group>
+   <!--<div class="example-selected-value">Selected value: {{farosSichten.value}}</div> -->
+  <!-- ENDE: View-Group -->

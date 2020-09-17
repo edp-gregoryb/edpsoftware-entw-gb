@@ -1,0 +1,15 @@
+<div>
+    <mat-form-field class="example-full-width">
+    <input type="text"  matInput [formControl]="formctrl" [(ngModel)]="mitarbeitervalue" placeholder="Mitarbeiter" i18n-placeholder="Mitarbeiter placeholder@@colleaguesPlaceholder" (ngModelChange)="getMitarbeiter($event)" [matAutocomplete]="auto">
+ 
+ <button mat-button *ngIf="mitarbeiter" matSuffix mat-icon-button aria-label="Clear" (click)="mitarbeiterdelete(mitarbeitervalue='')" >
+     <mat-icon>close</mat-icon>
+   </button>
+ </mat-form-field>
+
+    <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let akt of mitarbeiter" [value]="akt.gesname"  (click)="additemforsearch(akt)">
+            {{ akt.gesname}}
+        </mat-option>
+    </mat-autocomplete>
+ </div>

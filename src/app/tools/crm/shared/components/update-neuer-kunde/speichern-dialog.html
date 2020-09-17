@@ -1,0 +1,23 @@
+<div style="margin: 15px 0; padding: 10px;" class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+    <table style="float: left; min-width: 70%;">
+        <tr>
+            <th>fehlerart</th>
+            <th>fehlercode</th>
+            <th>fehlertext</th>
+        </tr>
+        <tr *ngFor="let item of speicherdata" >
+            <td>{{item.fehlerart}}</td>
+            <td>{{item.fehlercode}}</td>
+            <td>{{item.fehlertext}}</td>
+        </tr>
+    </table>
+
+
+    <div class="clear"></div>
+</div>
+<div style="margin: 15px 0; padding: 10px;" class="container" fxLayout="row" fxLayout.xs="column"  fxLayoutAlign="right" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+    <div style="flex-grow: 1"></div>
+    <button matTooltip="Nein" mat-icon-button (click)="neinSpeichern()"><mat-icon>cleare</mat-icon></button>
+    <button matTooltip="Ja" mat-icon-button (click)="jaSpeichern()"><mat-icon>done</mat-icon></button>
+</div>
+

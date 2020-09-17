@@ -1,0 +1,30 @@
+mat-list {
+
+    overflow: scroll;
+    min-height: 80%;
+    overflow-x: hidden;
+    height: 80%;
+    margin-right: 20px;
+    
+}
+
+::-webkit-scrollbar { 
+    display: none; 
+}
+
+.important {
+    font-size: 20pt;
+    margin-bottom: 20px;
+}
+.aktiviSelect{
+     display: flex;
+  flex-flow: row wrap;
+}
+.sizelabel{
+    display: inline-block;
+    width: 20%;
+}
+
+.example-full-width {
+  width: 100%;
+}

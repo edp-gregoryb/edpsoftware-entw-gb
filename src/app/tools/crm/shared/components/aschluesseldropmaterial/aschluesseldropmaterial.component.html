@@ -1,0 +1,13 @@
+<!--<mat-select style="margin-right: 5%;" class="input-full-width" placeholder="Ausgabe" i18n-placeholder="@@outputPlaceholder" (focus)=showAusgabe(objektvalue) [(ngModel)]="aschluessel" (selectionChange)="selectedAusgabe($event)" >
+  <mat-option i18n="@@empty">leer</mat-option>
+  <mat-option class="input-full-width" *ngFor="let ausgabe of ausgabedata" [value]="ausgabe.aschlussel">
+    {{ ausgabe.ausgbez}}
+  </mat-option>
+</mat-select>-->
+
+<mat-select style="margin-right: 5%;" [ngStyle]="{'width': width}" placeholder="Ausgabe" i18n-placeholder="@@outputPlaceholder" (focus)=showAusgabe(objektvalue) [(ngModel)]="aschluessel" (selectionChange)="selectedAusgabe($event)" >
+  <mat-option i18n="@@empty">leer</mat-option>
+  <mat-option *ngFor="let ausgabe of ausgabedata" [value]="ausgabe.aschlussel">
+    {{ ausgabe.ausgbez}}
+  </mat-option>
+</mat-select>

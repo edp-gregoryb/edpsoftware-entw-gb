@@ -1,0 +1,114 @@
+<app-loading-screen></app-loading-screen>
+<mat-drawer-container class="mainContainer" autosize>
+
+    <mat-drawer #drawer class="sidenavContainer" mode="side">
+        <div style="float: right; padding-left: 5px; padding-right: 5px;">
+            <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+        </div>
+        <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [lastAppModule]="lastAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+    </mat-drawer>
+
+    <div class="appMainframe">
+        <app-defaultheader [currentAppModule]="currentAppModule" [modulename]="modulename" (changeSicht)="sichtchange($event)" (onSidenavToggle)="drawer.toggle()" #header></app-defaultheader>
+
+        <!-- MainApp -->
+
+        <div *ngIf="searchdetail">
+            <mat-card>
+                <mat-card-title i18n="@@searchDetail">Suchkriterien</mat-card-title>
+                <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start stretch" fxLayoutAlign.xs="start start">
+                    <div class="flex-item spalte1" fxFlex="0 0 33%" fxFlex.sm="100%">
+
+                        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="start" style="background-color:white">
+                            <div fxFlex="100%" style="background-color:white; margin: 0 20px 0 20px">
+                                <mat-form-field>
+                                    <input matInput [matDatepicker]="picker" [(ngModel)]="pickervalue" placeholder="von Datum" i18n-placeholder="@@fromDatePlaceholder" (dateInput)="getStartDate($event)">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                                <mat-form-field style="float:right;">
+                                    <input matInput [matDatepicker]="picker1" [(ngModel)]="picker1value" placeholder="bis Datum" i18n-placeholder="@@toDatePlaceholder" (dateInput)="getEndtDate($event)">
+                                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker1></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="start" style="background-color:white">
+                            <div fxFlex="100%" style="background-color:white; margin: 0 20px 0 20px">
+                                <app-timelinekunde [sicht]="sichtlink" [kunde]="kundeLink" (selectedKunde)="kundeselect($event)"></app-timelinekunde>
+
+                            </div>
+                        </div>
+                        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="start" style="background-color:white">
+                            <div fxFlex="100%" style="background-color:white; margin: 0 20px 0 20px">
+                                <app-timelinevermittler [vermittlervonlink]="vermittlerlink" [sicht]="sichtlink" (selectedVermittler)="vermittlerselect($event)"></app-timelinevermittler>
+                            </div>
+                        </div>
+                        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="start" style="background-color:white">
+                            <div fxFlex="100%" style="background-color:white; margin: 0 20px 0 20px">
+                                <app-timelinevertreter [vertretervonlink]="vertreterlink" [sicht]="sichtlink" (selectedVertreter)="vertreterselect($event)"></app-timelinevertreter>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-right:4px"></div>
+                    <div class="flex-item spalte2" fxFlex="0 0 33%" fxFlex.sm="100%">
+
+                        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="start" style="background-color:white">
+                            <div fxFlex="100%" style="background-color:white; margin: 0 20px 0 20px">
+                                <app-timelineobjekt [sicht]="sichtlink" (selectedobjekt)="objektselected($event)"></app-timelineobjekt>
+                            </div>
+                        </div>
+                        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="start" style="background-color:white">
+                            <div fxFlex="100%" style="background-color:white; margin: 0 20px 0 20px">
+                                <app-rubrik [sicht]="sichtlink" [obj]="objvonsearchtemp" (selectedrubrik)="rubrikselected($event)"></app-rubrik>
+                            </div>
+                        </div>
+                        <!--[ngClass]="{ 'hide':!showrubrikwennObj}"-->
+                    </div>
+                    <div style="margin-right:4px"></div>
+                    <div class="flex-item spalte3" fxFlex="0 0 33%" fxFlex.sm="100%">
+                        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="start" style="background-color:white">
+                            <div fxFlex="100%" style="background-color:white; margin: 0 20px 0 20px">
+                                <app-art [sicht]="sichtlink" (selectedart)="artselected($event)"></app-art>
+                            </div>
+                        </div>
+                        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="start" style="background-color:white">
+                            <div fxFlex="100%" style="background-color:white; margin: 0 20px 0 20px">
+                                <app-aufnummer [nummervonlink]="auftragsnummer" (typedaufnr)="newAufnr($event)"></app-aufnummer>
+                            </div>
+                        </div>
+
+                        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="start" style="background-color:white">
+                            <div fxFlex="100%" style="background-color:white; margin: 0 20px 0 20px">
+
+                            </div>
+                        </div>
+                        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="start" style="background-color:white">
+                            <div fxFlex="100%" style="background-color:white; margin: 0 20px 0 20px">
+                                <button mat-icon-button (click)="searchdaten($event)" style="float:right">
+           <i class="material-icons example-margin" >search</i>
+          </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </mat-card>
+            <!--<mat-progress-bar *ngIf="searchauftrag" mode="indeterminate" color="warn"></mat-progress-bar>-->
+            <div style="margin-bottom:10px"></div>
+            <app-auftraglist [kunde]="kundeLink" [vermittler]="vermittlerlink" [vertreter]="vertreterlink" [rubrik]="rubriklink" [aufnummer]="auftragsnummer" [aufart]="aufartlink" [obj]="objvonsearch" [vondatum]="vondatum" [bisdatum]="bisdatum" [sicht]="sichtlink"
+                (rowfordetail)="detailinfo($event)" (tableload)="tablegeladen($event)"></app-auftraglist>
+        </div>
+        <div *ngIf="!searchdetail">
+            <app-auftragdetail [kunde]="kundevonLink" [objekt]="objektvonLink" [aufnr]="aufnrvonLink" [sujetnr]="sujetnrvonLink" [datum]="datumvonLink" (switchback)="backto($event)"></app-auftragdetail>
+        </div>
+
+        <!-- Ende: MainApp -->
+
+    </div>
+</mat-drawer-container>
+<!--<mat-progress-bar  style="position:fixed;top:0;width:100%;z-index:100;" *ngIf="home.progressbar_visible" color="warn" mode="query"></mat-progress-bar>-->

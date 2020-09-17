@@ -1,0 +1,166 @@
+<!-- Dokumente -->
+<h4 i18n>Anhänge</h4>
+<!-- Dokument-Input -->
+
+<div style="width: 800px; background-color: lightgrey">
+    <input type="file" style="float: left;" (change)="selectAnhangFile($event)" #anhangInput>
+    <!--Auswahl Dateityp-->
+    <mat-form-field style="margin-top: -20px;" *ngIf="urlProduct">
+        <mat-label>Dokumenten Typ</mat-label>
+        <mat-select >
+            <mat-option *ngFor="let code of suchresult" [value]="code.code_wert" (click)="selectDokutype(code)" >
+                {{code.code_text}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-icon (click)="addAnhang()" style="cursor: pointer; float: right;">save</mat-icon>
+    <div class="clear"></div>
+</div>
+
+<!-- Lade-Balken -->
+<mat-progress-bar *ngIf="anhangRequestsLoading > 0" style="width: 300px;" mode="indeterminate" color="warn"></mat-progress-bar>
+<br>
+
+<!-- Alle Dokumente Anzeigen -->
+
+<div *ngFor="let anhang of anhaenge">
+    <div style="cursor: pointer; background-color: white; padding: 5px; margin: 5px; min-width: 150px; max-width: 300px;">
+        <div  (click)="openAnhang(anhang)">
+        <!-- Dateiname -->
+        <div *ngIf="anhang.dateiname" style="float: left; word-break: break-all">{{anhang.dateiname}}</div>
+        <div *ngIf="anhang.bildname" style="float: left; word-break: break-all">{{anhang.bildname}}, {{anhang.bildtyp}}</div>
+        </div>
+        <!-- Download-Button -->
+        <mat-icon *ngIf="anhang.bildname" (click)="deleteImage(anhang)" style="cursor: pointer; float: right;">delete</mat-icon>
+        <mat-icon *ngIf="!anhang.bildname" (click)="deleteArtikelAnhang(anhang)" style="cursor: pointer; float: right;">delete</mat-icon>
+        <mat-icon style="float: right; cursor: pointer; margin-right: 10px;" (click)="downloadAnhang(anhang)">save_alt</mat-icon>
+        <div class="clear"></div>
+
+    </div>
+
+</div>
+
+<br><br>
+<!-- Zwischenstrich -->
+<hr style="border-color: grey">
+
+<!-- Kommentare -->
+<h4 i18n>Kommentare</h4>
+
+<!-- textfeld -->
+<div style="width: 600px; max-width: 95%" class="froalaEditor">
+    <br>
+    <!-- Empfaengerauswahl -->
+    <div style="float: left; margin-left: 15px; width: 40%">
+        @
+        <mat-select style="width: 80%" [(ngModel)]="tempEmpf" placeholder="Alle" i18n-placeholder multiple>
+            <mat-option *ngFor="let mitarb of mitarbeiter" [value]="mitarb.mitbeznr">
+                {{mitarb.gesname}}
+            </mat-option>
+        </mat-select>
+    </div>
+
+    <!-- Farbauswahl -->
+    <div class="circle" style="float: right" [ngStyle]="{'background': currentColor}" (click)="chooseColor()"></div>
+    <div class="clear"></div>
+    <br>
+
+    <div id="froa1" [froalaEditor]="getOptions()" [(froalaModel)]="editorContent"   style="min-height: 100px; background-color: white; padding: 5px; border: solid grey 1px;"></div>
+    <br>
+
+    <!-- Kommentar-Anhangauswahl -->
+    <input type="file" style="float: left; margin-left: 15px" (change)="selectFile($event, -1)" #fileInputComment>
+
+    <!-- kommentar hochladen -->
+    <button mat-button class="button" style="float: right; background-color: white" (click)="addComment(-1)" i18n>Kommentieren</button>
+    <div class="clear"></div>
+    <br>
+</div>
+
+<!-- Lade-Balken -->
+<mat-progress-bar *ngIf="kommentarRequestsLoading > 0" style="width: 600px; max-width: 95%;" mode="indeterminate" color="warn"></mat-progress-bar>
+
+<!-- Kommentare -->
+<div class="commentSection">
+    <div *ngFor="let comment of comments; let i = index" class="comment" [ngStyle]="{'background-color': comment[0].farbcode}">
+        <!-- Fuer jeden Kommentar -->
+        <div *ngFor="let com of comment; let j = index">
+
+            <!-- Kommentar ist Basis -->
+            <div *ngIf="j === 0">
+                <!-- Inhalt -->
+                <div [innerHTML]="com.inhalt" style="word-break: break-all"></div>
+                <!-- Anhang (falls vorhanden) -->
+                <div *ngIf="commentsAnhang[i][j]" style="float: left; cursor: pointer; background-color: #e4e4e4; padding: 5px; min-width: 150px; max-width: 300px;" (click)="openFile(commentsAnhang[i][j], $event)">
+                    <div style="float: left; word-break: break-all">{{commentsAnhang[i][j].dateiname}}</div>
+                    <mat-icon style="float: right; cursor: pointer; margin-right: 10px;" (click)="downloadFile(commentsAnhang[i][j], $event)">save_alt</mat-icon>
+                </div>
+                <div *ngIf="commentsAnhang[i][j]" class="clear"></div>
+
+                <!-- Empfaengerauswahl -->
+                <div style="float: left; color: grey">
+                    <div *ngFor="let empf of empfaenger[i][j]">
+                        @{{empf}}
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <mat-icon style="float: right; cursor: pointer" matTooltip="Kommentar löschen" i18n-matTooltip (click)="deleteComment(i, j)">delete</mat-icon>
+                <mat-icon style="float: right; cursor: pointer" matTooltip="Antworten" i18n-matTooltip (click)="reply(i)">reply</mat-icon>
+                <span *ngIf="i === replyingTo">
+                    <mat-icon style="float: right; cursor: pointer" matTooltip="Abbrechen" i18n-matTooltip (click)="reply(-1)">clear</mat-icon>
+                </span>
+                <div class="clear"></div>
+
+                <!-- textfeld -->
+                <div *ngIf="i === replyingTo" style="margin: 5px 10px;" class="froalaEditor">
+                    <br>
+                    <!-- Empfaengerauswahl -->
+                    <div style="float: left; margin-left: 15px; width: 40%">
+                        @
+                        <mat-select style="width: 80%" [(ngModel)]="tempEmpfReply" placeholder="Alle" i18n-placeholder multiple>
+                            <mat-option *ngFor="let mitarb of mitarbeiter" [value]="mitarb.mitbeznr">
+                                {{mitarb.gesname}}
+                            </mat-option>
+                        </mat-select>
+                    </div>
+                    <br><br>
+
+                    <div id="froa2" [froalaEditor]="getOptions()"  [(froalaModel)]="replyContent" style="min-height: 100px; background-color: white; padding: 5px; border: solid grey 1px;"></div>
+                    <br>
+
+                    <!-- Kommentar-Anhangauswahl -->
+                    <input type="file" style="float: left; margin-left: 15px" (change)="selectFile($event, com.kommentarid)" #fileInputReply>
+
+                    <!-- kommentar hochladen -->
+                    <button mat-button class="button" style="float: right; background-color: white" (click)="addComment(com.kommentarid)" i18n>Kommentieren</button>
+                    <div class="clear"></div>
+                    <br>
+                </div>
+            </div>
+
+            <!-- Kommentar ist Antwort -->
+            <div *ngIf="j !== 0" class="subcomment">
+                <!-- Inhalt -->
+                <div [innerHTML]="com.inhalt" style="word-break: break-all"></div>
+                <!-- Anhang (falls vorhanden) -->
+                <div *ngIf="commentsAnhang[i][j]" style="float: left; cursor: pointer; background-color: #e4e4e4; padding: 5px; min-width: 150px; max-width: 300px;" (click)="openFile(commentsAnhang[i][j])">
+                    <div style="float: left; word-break: break-all">{{commentsAnhang[i][j].dateiname}}</div>
+                    <mat-icon style="float: right; cursor: pointer; margin-right: 10px;" (click)="downloadFile(commentsAnhang[i][j])">save_alt</mat-icon>
+                </div>
+                <div *ngIf="commentsAnhang[i][j]" class="clear"></div>
+
+                <!-- Empfaengerauswahl -->
+                <div style="float: left; color: grey">
+                    <div *ngFor="let empf of empfaenger[i][j]">
+                        @{{empf}}
+                    </div>
+                </div>
+
+                <!-- Button -->
+                <mat-icon style="float: right; cursor: pointer" matTooltip="Kommentar löschen" i18n-matTooltip (click)="deleteComment(i, j)">delete</mat-icon>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+</div>

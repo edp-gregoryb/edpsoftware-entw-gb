@@ -1,0 +1,24 @@
+<div class="termindialog">
+<mat-toolbar ><!--[color]="myColor"-->
+      <div class="mat-toolbar-tools">
+           <h2 translate="Termindetail"></h2>
+        <span flex></span>
+       <div style="font-size: 1.0em;" i18n="@@check">test</div>
+      </div>
+      <span class="example-fill-remaining-space"></span>
+      <button mat-icon-button (click)="dialogRef.close()">
+      <i class="material-icons">clear</i>
+      </button>
+    </mat-toolbar>
+    <div mat-dialog-title> <span i18n="@@appointmentDetail">Termindetail</span></div>
+    <div md-dialog-content>
+    <button mat-raised-button  style="text-align:left" aria-label="termindetail" (click)="openTermindetail()">
+                <span i18n="@@appointmentDetail">Termindetail</span>
+            </button><br/>
+    <button mat-raised-button  style="text-align:left" aria-label="timeline">
+                <span i18n="@@timeline">Timeline</span>
+            </button><br/>
+    </div>
+    <span>{{param1}}</span>
+ <!-- <button mat-raised-button (click)="dialogRef.close()">Close dialog</button>-->
+</div>

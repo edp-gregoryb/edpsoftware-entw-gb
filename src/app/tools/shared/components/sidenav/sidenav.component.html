@@ -1,0 +1,82 @@
+<div class="sidenavContent">
+
+	<mat-form-field color="accent" class="sidenavFullWidth" *ngIf="sidenavExpanded">
+    <input matInput type="text" placeholder="Schnellzugriff" i18n-placeholder="@@quickAccessPlaceholder"><br>
+  </mat-form-field>
+
+	<div> <!-- currently used Module -->
+		<button class="appModuleItem currentAppModule" mat-icon-button><mat-icon><span class="showCircle">{{currentAppModuleDetails.icon}}</span></mat-icon><span class="appName" *ngIf="sidenavExpanded"><div class="sidenavAppName"><div style="text-align:left;">{{currentAppModuleDetails.shorthand}}<br class="sidenavAppNameBR">{{currentAppModuleDetails.name}}</div></div></span></button>	
+		<div *ngIf="!sidenavExpanded" style="text-align:center;margin-top:-5px;margin-bottom:10px;"><small>{{currentAppModuleDetails.shorthand}}</small></div>
+	</div>
+	<!--<div>
+		<button class="appModuleItem currentAppModule" mat-icon-button><mat-icon><span class="showCircle">{{currentAppModuleDetails.icon}}</span></mat-icon><span class="appName" *ngIf="sidenavExpanded">{{currentAppModuleDetails.shorthand}} {{currentAppModuleDetails.name}}</span></button>	
+		<div *ngIf="!sidenavExpanded" style="text-align:center;margin-top:-5px;margin-bottom:10px;"><small>{{currentAppModuleDetails.shorthand}}</small></div>
+	</div>-->
+	<div> 
+		<button (click)="switchtolastmoduleNeu()" class="appModuleItem currentAppModule" mat-icon-button><mat-icon aria-label="button back">keyboard_backspace</mat-icon> </button>
+		<!-- <div *ngIf="!sidenavExpanded" style="text-align:center;margin-top:-5px;margin-bottom:10px;"><small>{{lastAppModuleDetails.shorthand}}</small></div> -->
+	</div>
+	<!-- <div *ngIf="lastAppModule"> 
+		<button (click)="switchtolastmodule(lastAppModuleDetails.route)" class="appModuleItem currentAppModule" mat-icon-button><mat-icon aria-label="button back">keyboard_backspace</mat-icon><span class="appName" *ngIf="sidenavExpanded">{{lastAppModuleDetails.shorthand}} {{lastAppModuleDetails.name}}</span></button>
+		<div *ngIf="!sidenavExpanded" style="text-align:center;margin-top:-5px;margin-bottom:10px;"><small>{{lastAppModuleDetails.shorthand}}</small></div>
+	</div> -->
+
+	<div class="sidenavDivider"></div>
+	<!--<div>-->
+	<!--	<span style="margin-left: 7px;"><mat-icon >visibility</mat-icon></span>-->
+	<!--	<app-sicht [detailanzeige]="sidenavExpanded"  (sichtvalue)="valuesicht($event)"></app-sicht>-->
+	<!--</div>-->
+	 
+	 
+	<!-- <div class="sidenavDivider"></div>-->
+	
+	<div style="color: #333;"> <!-- Home Module -->
+		<button (click)="switchtohome()" class="appModuleItem" mat-icon-button><mat-icon aria-label="Home">home</mat-icon><span class="appName" *ngIf="sidenavExpanded" i18n="@@capital@@home">HOME</span></button>
+		<div *ngIf="!sidenavExpanded" style="text-align:center;margin-top:-5px;margin-bottom:10px;"><small i18n="@@capital@@home">HOME</small></div>
+	</div>
+	
+	<div> <!-- START: alle Module -->
+    <div *ngFor="let module of sidenavedModules" matTooltip="{{module.name}} ({{module.shorthand}})" matTooltipShowDelay="800" matTooltipPosition="right"> <!--  (click)="navigateModule(module)" -->
+      <button (click)="switchtomodule(appModuleDetails(module).route)" class="appModuleItem" mat-icon-button><mat-icon>{{module.icon}}</mat-icon><span class="appName" *ngIf="sidenavExpanded">{{module.name}}</span></button>	
+			<div *ngIf="!sidenavExpanded" style="text-align:center;margin-top:-5px;margin-bottom:10px;"><small>{{module.shorthand}}</small></div>
+    </div>
+  </div> <!-- ENDE: alle Module -->
+	
+
+</div> 
+
+
+
+<!--<mat-autocomplete #auto="mdAutocomplete">-->
+<!--   <mat-option *ngFor="let funktion of funktionen" [value]="funktion" (click)="funktionselected(funktion)">-->
+<!--      {{ funktion }}-->
+<!--   </mat-option>-->
+<!--</mat-autocomplete>-->
+<!--<span>Suchen Sie nach Module-Code oder Aktivitäten</span>-->
+
+<!--<div>-->
+
+<!--     <mat-form-field class="input-full-width" *ngIf="sidenavsmall">-->
+<!--   <input type="text"  matInput placeholder="Aktives Module" [(ngModel)]="aktivesmodule" >-->
+<!--</mat-form-field>-->
+<!--<mat-icon *ngIf="sidenavsmall" style="float:left;margin: -47px 5px 0 0;color:gainsboro">{{iconname}}</mat-icon>-->
+<!--<div *ngIf="!sidenavsmall" class="cardsmall"><mat-icon  style="float:left;margin-top: 23px;font-size:32px;color:gainsboro" mdTooltip="Aktives Module!" mdTooltipPosition="right">{{iconname}}</mat-icon>-->
+<!--<br><br></div>-->
+<!--</div><hr *ngIf="sidenavsmall" style="margin-bottom:0px"><br>-->
+<!--<span *ngIf="sidenavsmall">Favoriten</span>-->
+<!--<mat-grid-list cols="1" rowHeight="30px">-->
+<!--  <mat-grid-tile-->
+<!--      *ngFor="let tile of tiles"-->
+<!--      [colspan]="tile.cols"-->
+<!--      [rowspan]="tile.rows"-->
+<!--      >-->
+<!--      <div class="card" [ngClass]="{'cardsmall': !sidenavsmall}" (click)="linktosite(tile.text)">-->
+<!--         <mat-icon *ngIf="sidenavsmall" style="float:left;margin-top: 10px;color:gainsboro" mdTooltip="{{tile.text}}" mdTooltipPosition="right">{{tile.icon}}</mat-icon>-->
+<!--          <mat-icon *ngIf="!sidenavsmall" style="float:left;margin-top: 23px;font-size:32px;color:gainsboro" mdTooltip="{{tile.text}}" mdTooltipPosition="right">{{tile.icon}}</mat-icon>-->
+<!--      <div *ngIf="sidenavsmall" class="container" (click)="linktosite(tile.text)">-->
+<!--        <p >{{tile.text}}</p>-->
+        <!--<p class="title">{{tile.ueberschrift}}</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--  </mat-grid-tile>-->
+<!--</mat-grid-list>-->

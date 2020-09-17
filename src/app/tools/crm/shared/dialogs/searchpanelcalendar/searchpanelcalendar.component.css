@@ -1,0 +1,9 @@
+.termindialog {
+    width: 17em;
+    height: 25em;
+    position: top;
+}
+.example-fill-remaining-space {
+ 
+  flex: 1 1 auto;
+}

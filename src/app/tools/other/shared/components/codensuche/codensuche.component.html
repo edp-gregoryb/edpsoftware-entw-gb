@@ -1,0 +1,63 @@
+
+<div style="margin: 15px 0; padding: 10px; background-color: #eee">
+  <h4>Suchkriterien</h4>
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+    <div class="item item-1" fxFlex="30%" fxFlexOrder="1" fxLayoutGap="10px">
+      <mat-form-field class="size100" fxFlex>
+        <input matInput type="text" placeholder="Code-Art" [(ngModel)]="cart">
+      </mat-form-field>
+      <mat-form-field class="size100" fxFlex>
+        <input matInput type="text" placeholder="Code-Wert" [(ngModel)]="cwert">
+      </mat-form-field>
+    </div>
+
+    <!--<div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px" fxLayoutGap.xs="0" >-->
+    <div class="item item-2" fxFlex="30%" fxFlexOrder="2" fxLayoutGap="10px">
+    <mat-form-field class="size100" fxFlex>
+      <input matInput type="text" placeholder="Sprache" [(ngModel)]="sprache" >
+    </mat-form-field>
+      <mat-form-field class="size100" fxFlex>
+        <input matInput type="text" placeholder="Code-Text" [(ngModel)]="ctext" >
+      </mat-form-field>
+    </div>
+    <div class="item item-3" fxFlex="30%" fxFlexOrder="3" fxLayoutGap="10px">
+      <mat-form-field class="size100" fxFlex>
+        <input matInput type="text" placeholder="Firma" [(ngModel)]="codefirma" >
+      </mat-form-field>
+      <div style="padding-top: 48px"></div>
+      <button mat-raised-button color="primary" (click)="getCode()" >Suchen</button>
+      <button mat-raised-button color="primary" (click)="codnAbbrechen()">Abbrechen</button>
+    </div>
+  </div>
+</div>
+
+<div style="margin-bottom: 15px;"></div>
+
+<div style="margin: 15px 0; padding: 10px;" class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="left" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+  <table *ngIf="hatcode" style="float: left; min-width: 70%;">
+    <tr>
+      <th (click)="sort(code_wert)">Code-wert</th>
+      <th (click)="sort(code_text)">Code-text</th>
+      <th (click)="sort(code_text1)">Code-text1</th>
+      <th (click)="sort(code_text2)">Code-text2</th>
+      <th (click)="sort(code_sprache)">Sprache</th>
+      <th (click)="sort(code_firma)">Firma</th>
+      <th (click)="sort(code_art)">Code-art</th>
+      <th (click)="sort(code_Kz)">Kz</th>
+    </tr>
+
+    <tr *ngFor="let item of suchresult" (click)="openCodeart(item)" (dblclick)="directChoose(item)" [ngClass]="{'highlight' : momentanerWert == item.code_wert}">
+      <td>{{item.code_wert}}</td>
+      <td>{{item.code_text}}</td>
+      <td>{{item.code_text1}}</td>
+      <td>{{item.code_text2}}</td>
+      <td>{{item.sprache}}</td>
+      <td>{{item.firma}}</td>
+      <td>{{item.code_art}}</td>
+      <td>{{item.code_Kz}}</td>
+    </tr>
+  </table>
+
+  <button mat-raised-button style="float: left; max-height: 50px;" color="primary" (click)="codnEmpty()">Leere Auswahl</button>
+  <div class="clear"></div>
+</div>

@@ -1,0 +1,140 @@
+<div class="toolbar" [ngClass]="{'showSelectedItems': showSelectedItems}" *ngIf="showHeader">
+    <h2 *ngIf="!showSelectedItems">{{ title }}</h2>
+    <p class="showSelectedItems" *ngIf="showSelectedItems">
+        {{ numberOfSelectedItems }}
+        <ng-container *ngIf="numberOfSelectedItems === 1" i18n="@@dataSet">Datensatz</ng-container>
+        <ng-container *ngIf="numberOfSelectedItems > 1" i18n="@@dataSets">Datensätze</ng-container>
+        <span i18n="@@choosen">ausgewählt</span>
+    </p>
+</div>
+<div class="table-container">
+    <thead>
+        <tr>
+            <!--<th class="select" *ngIf="rowSelect === 'multiple' && selectStyle === 'checkbox' || rowSelect === 'single' && selectStyle === 'checkbox'">-->
+            <!--    <mat-checkbox (change)="selectAll()" [(ngModel)]="selectAllSelected" name="selectAll" [disabled]="rowSelect === 'single'"></mat-checkbox>-->
+            <!--</th>-->
+            <ng-container *ngFor="let c of columns">
+                <ng-container *ngIf="c.align === 'left'">
+                    <ng-container *ngIf="!c.width">
+                        <th class="left" [ngClass]="{'selected': orderBy === c.property, 'formular': style === 'formular'}" (click)="reorder(c.property)">
+                            {{c.name}}
+                            <ng-container *ngIf="c.sortIcon">
+                                <mat-icon class="sort" *ngIf="upwards || orderBy !== c.property">keyboard_arrow_up</mat-icon>
+                                <mat-icon class="sort" *ngIf="!upwards && orderBy === c.property">keyboard_arrow_down</mat-icon>
+                            </ng-container>
+                        </th>
+                    </ng-container>
+                    <ng-container *ngIf="c.width">
+                        <th class="left" [ngClass]="{'selected': orderBy === c.property, 'formular': style === 'formular'}" [style.width]="c.width" (click)="reorder(c.property)">
+                            {{c.name}}
+                            <ng-container *ngIf="c.sortIcon">
+                                <mat-icon class="sort" *ngIf="upwards || orderBy !== c.property">keyboard_arrow_up</mat-icon>
+                                <mat-icon class="sort" *ngIf="!upwards && orderBy === c.property">keyboard_arrow_down</mat-icon>
+                            </ng-container>
+                        </th>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="c.align === 'right'">
+                    <ng-container *ngIf="!c.width">
+                        <th class="right" [ngClass]="{'selected': orderBy === c.property, 'formular': style === 'formular'}" (click)="reorder(c.property)">
+                            <ng-container *ngIf="c.sortIcon">
+                                <mat-icon class="sort" *ngIf="upwards || orderBy !== c.property">keyboard_arrow_up</mat-icon>
+                                <mat-icon class="sort" *ngIf="!upwards && orderBy === c.property">keyboard_arrow_down</mat-icon>
+                            </ng-container>
+                            {{c.name}}
+                        </th>
+                    </ng-container>
+                    <ng-container *ngIf="c.width">
+                        <th class="right" [ngClass]="{'selected': orderBy === c.property, 'formular': style === 'formular'}" [style.width]="c.width"
+                            (click)="reorder(c.property)">
+                            <ng-container *ngIf="c.sortIcon">
+                                <mat-icon class="sort" *ngIf="upwards || orderBy !== c.property">keyboard_arrow_up</mat-icon>
+                                <mat-icon class="sort" *ngIf="!upwards && orderBy === c.property">keyboard_arrow_down</mat-icon>
+                            </ng-container>
+                            {{c.name}}
+                        </th>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngIf="pagedData">
+            <tr *ngFor="let d of pagedData[showPage]" (click)="select(d.tempRecordIndex)" [ngClass]="{'selected': selected[d.tempRecordIndex] && selectStyle === 'background'}">
+                <!--<td class="select" *ngIf="rowSelect === 'multiple' && selectStyle === 'checkbox' || rowSelect === 'single' && selectStyle === 'checkbox'">-->
+                <!--    <mat-checkbox [(ngModel)]="selected[d.tempRecordIndex]" (change)="select(d.tempRecordIndex)"></mat-checkbox>-->
+                <!--</td>-->
+                <ng-container *ngFor="let c of columns">
+                    <ng-container *ngIf="c.format === 'date'">
+                        <ng-container *ngIf="c.align === 'left'">
+                            <td class="left" [ngClass]="{'formular': style === 'formular'}">{{d[c.property] | date:'dd.MM.y'}}</td>
+                        </ng-container>
+                        <ng-container *ngIf="c.align === 'right'">
+                            <td class="right" [ngClass]="{'formular': style === 'formular'}">{{d[c.property] | date:'dd.MM.y'}}</td>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="c.format === 'icon'">
+                        <ng-container *ngIf="c.align === 'left'">
+                            <td class="left" [ngClass]="{'formular': style === 'formular'}"><mat-icon>{{d[c.property]}}</mat-icon></td>
+                        </ng-container>
+                        <ng-container *ngIf="c.align === 'right'">
+                            <td class="right" [ngClass]="{'formular': style === 'formular'}"><mat-icon>{{d[c.property]}}</mat-icon></td>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="c.format !== 'date' && c.format !== 'icon'">
+                        <ng-container *ngIf="c.align === 'left'">
+                            <td class="left" [ngClass]="{'formular': style === 'formular'}">{{d[c.property]}}</td>
+                        </ng-container>
+                        <ng-container *ngIf="c.align === 'right'">
+                            <td class="right" [ngClass]="{'formular': style === 'formular'}">{{d[c.property]}}</td>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+            </tr>
+        </ng-container>
+        <tr *ngIf="showSumme">
+            <ng-container *ngFor="let c of columns; let i = index">
+                <ng-container *ngIf="c.total">
+                    <ng-container *ngIf="c.align === 'left'">
+                        <td class="left" [ngClass]="{'formular': style === 'formular'}">{{c.totalLeftText}} {{total[i]}} {{c.totalRightText}}</td>
+                    </ng-container>
+                    <ng-container *ngIf="c.align === 'right'">
+                        <td class="right" [ngClass]="{'formular': style === 'formular'}">{{c.totalLeftText}} {{total[i]}} {{c.totalRightText}}</td>
+                    </ng-container>
+                </ng-container>
+                <td *ngIf="!c.total"></td>
+            </ng-container>
+        </tr>
+    </tbody>
+</div>
+<div class="pagination" *ngIf="showFooter">
+    <ng-container *ngIf="multiplePages">
+        <ng-container *ngIf="pagedData">
+            <p class="element">Seite:</p>
+            <mat-select class="element" [(ngModel)]="showPage" name="showPage" (change)="setIndex()">
+                <mat-option *ngFor="let p of pagedData; let i = index" [value]="i">
+                    {{ i + 1 }}
+                </mat-option>
+            </mat-select>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="showNumberOfRowsSelect">
+        <ng-container *ngIf="data">
+            <p class="element">Zeilen pro Seite:</p>
+            <mat-select class="element" [(ngModel)]="numberOfRows" name="numberOfRows" (change)="paginate()" [ngClass]="{'paddingRight12': !multiplePages}">
+                <mat-option *ngFor="let n of numberOfRowsSelectable" [value]="n">
+                    {{ n }}
+                </mat-option>
+            </mat-select>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="multiplePages">
+        <p class="element">{{ lowerIndex }} - {{ upperIndex }} <span i18n="@@of">von</span> {{ numberOfRecords }}</p>
+        <button mat-icon-button class="element" (click)="previous()">
+            <mat-icon>navigate_before</mat-icon>
+        </button>
+        <button mat-icon-button (click)="next()">
+            <mat-icon>navigate_next</mat-icon>
+        </button>
+    </ng-container>
+</div>

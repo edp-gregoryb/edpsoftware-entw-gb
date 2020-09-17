@@ -1,0 +1,23 @@
+<app-loading-screen></app-loading-screen>
+<mat-drawer-container class="mainContainer" autosize (window:resize)="windowResize()">
+
+  <mat-drawer #drawer class="sidenavContainer" mode="side">
+    <div style="float: right; padding-left: 5px; padding-right: 5px;">
+      <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+    </div>
+    <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [lastAppModule]="lastAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+  </mat-drawer>
+
+  <div class="appMainframe">
+    <div><app-headeranzeige [currentAppModule]="currentAppModule" [modulename]="modulename" (onSidenavToggle)="drawer.toggle()"></app-headeranzeige></div>
+    <mat-progress-bar style="position:fixed;top:0;width:100%;z-index:100;" *ngIf="progressbar_visible" color="warn" mode="query"></mat-progress-bar>
+    <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+      <!--<div class="flex-item" fxFlex="25%"><app-search-panel [termines]="termines"></app-search-panel>  </div>-->
+      <!--<div class="flex-item" fxFlex="43%"><app-main-panel></app-main-panel></div>-->
+      <!--<div class="flex-item" fxFlex="32%"><app-info-panel></app-info-panel> </div>-->
+      <div class="flex-item" fxFlex="25%" [ngStyle]="{'height.px': innerheight}" style="overflow: scroll;"><app-testsearchpanel [vonFazit]="schalterFazit" [nichtAgenda]="schalterNichtAgenda" [vonAgenda]="schalterAgenda" [rapnrvonfazit]="rapnrvonfazit" (termincountchanged)="termincountchanged($event)" (rapnrchanged)="newRapnr($event)" (beznrchanged)="newBeznr($event)" (terminchanged)="newTermin($event)" [postp15]="plus15" (postponetermin)="postp($event)"></app-testsearchpanel></div>
+      <div class="flex-item" fxFlex="43%" [ngStyle]="{'height.px': innerheight}" style="overflow: scroll;"><app-mainpanelhead *ngIf="showMainPanel" (progressbar)="progressbar" [rapnr]="newrap" [beznr]="newbez" [datumToday]="datumJaNein" (rapnrvonfazit)="rapnrvonfazitchanged($event)" (kundenbezvonfazit)="kundenbezvonfazitchanged($event)" (terminpost15)="postpone15($event)" [postponerefresh]="plusp"></app-mainpanelhead></div>
+      <div class="flex-item" fxFlex="32%" [ngStyle]="{'height.px': innerheight}" style="overflow: scroll;"><app-infopanel *ngIf="newTerm" [showContent]="showMainPanel" [termin]="newTerm" [fromModul]="currentAppModule" [selectedInfoTab]="selectedInfoTab"></app-infopanel></div>
+    </div>
+  </div>
+</mat-drawer-container>

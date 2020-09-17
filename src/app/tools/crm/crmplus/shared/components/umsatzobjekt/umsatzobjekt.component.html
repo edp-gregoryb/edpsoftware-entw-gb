@@ -1,0 +1,36 @@
+<div>
+   <mat-form-field class="example-full-width">
+   <input type="text"  matInput [formControl]="formctrl"  [(ngModel)]="objektvalue" placeholder="Objekte" i18n-placeholder="@@objectsPlaceholder" (ngModelChange)="getObjekte($event)" [matAutocomplete]="auto">
+    <button mat-button *ngIf="objektvalue" matSuffix mat-icon-button aria-label="Clear" (click)="objektvalue=''" >
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>
+
+<mat-autocomplete #auto="matAutocomplete">
+   <mat-option *ngFor="let obj of objekte" [value]="obj.objekt" (click)="additemforsearch(obj)">
+      {{ obj.objekt}}
+   </mat-option>
+</mat-autocomplete>
+</div>
+<!---->
+<form [formGroup]="filter">
+<div formArrayName="itemforsearch">
+    
+    <div *ngFor="let _itemforsearch of filter.get('itemforsearch')?.controls; let i = index" >
+<!--fxLayoutAlign="center"-->
+            <div [formGroupName]="i"  class="container" fxLayout fxLayout.xs="column"  fxLayoutGap="10px" fxLayoutGap.xs="0">
+                <div >
+                    <div >
+                        <!--<div class="item item-1" fxFlex="30%" fxFlexOrder="1">Objekte:</div>-->
+                        <div style="float:left"><input matInput   formControlName="objekt"></div>
+                        <div style="float:left"><input matInput   formControlName="objektbez"></div>
+                        <div style="float:right; margin-top:-10px" ><button mat-icon-button (click)="deleteitemforsearch(i)" ><mat-icon>delete</mat-icon></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</form>
+
+

@@ -1,0 +1,96 @@
+<div  style="height: 700px; position: static;" >
+<mat-toolbar color="primary">
+  <span i18n="@@featureSearch" >Merkmal Suche</span>
+   <span class="example-spacer"></span>
+<button mat-icon-button mat-dialog-close  style="float:right"><mat-icon>clear</mat-icon></button>
+</mat-toolbar>
+
+<br>
+
+<mat-form-field>
+  <input matInput placeholder="Art" i18n-placeholder="@@artPlaceholder" [(ngModel)]="merkmalsuchtext" (keydown)="onKeydown($event)">
+</mat-form-field>
+
+  <mat-form-field>
+  <input matInput placeholder="Merkmal1" i18n-placeholder="@@feature1Placeholder" [(ngModel)]="merkmalsuchtext1" (keydown)="onKeydown($event)">
+</mat-form-field>
+
+  <mat-form-field>
+  <input matInput placeholder="Merkmal2" i18n-placeholder="@@feature2Placeholder" [(ngModel)]="merkmalsuchtext2" (keydown)="onKeydown($event)">
+</mat-form-field>
+
+  <mat-form-field>
+  <input matInput placeholder="Merkmal3" i18n-placeholder="@@feature3Placeholder" [(ngModel)]="merkmalsuchtext3" (keydown)="onKeydown($event)">
+</mat-form-field>
+<div style="margin: 15px 0; padding: 10px;" class="container" fxLayout="row" fxLayout.xs="column"  fxLayoutAlign="right" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+    <div style="flex: 1 1 auto;"></div>
+<button mat-icon-button (click)="searchmerkmale()" (keydown)="onKeydown($event)"><mat-icon>search</mat-icon></button>
+</div>
+<div *ngIf="showaddedmerkmal">
+  <mat-list>
+   <h3 md-subheader i18n="@@savedFeatures">ausgewählte Merkmale</h3>
+   <mat-list-item *ngFor="let merk of merkmalarray; let i = index">
+      <mat-icon mat-list-icon (click)="deleteItem(i)">delete</mat-icon>
+       <p mat-line> {{merk.mkmerk1}}, {{merk.mkmerk1Bez}}, {{merk.mkmerk2}}, {{merk.mkmerk2Bez}}, {{merk.mkmerk3}}, {{merk.mkmerk3Bez}}, {{merk.mkmart}} </p>
+  </mat-list-item>
+  </mat-list>
+    <div style="margin: 15px 0; padding: 10px;" class="container" fxLayout="row" fxLayout.xs="column"  fxLayoutAlign="right" fxLayoutGap="10px" fxLayoutGap.xs="0" >
+    <div style="flex: 1 1 auto;"></div>
+    <button mat-flat-button [mat-dialog-close]="">Abbrechen</button><button mat-flat-button (click)="saveMerkmale(merkmalarray)">Speichern</button>
+    </div>
+</div>
+
+<!--<app-material-table [title]="''" [showHeader]="false" [showFooter]="true" [showSumme]="false" [json]="merkmalsuchlist"-->
+<!--      [columns]="merkmalCols" [numberOfRows]="5" [numberOfRowsSelectable]="numberOfRowsSelectable" [rowSelect]="'single'"-->
+<!--      [selectStyle]="'background'" [style]="''" (onRowSelect)="onRowSelect($event)"></app-material-table>-->
+
+<div class="example-container mat-elevation-z8">
+    <mat-table #table [dataSource]="dataSource">
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="mkmart">
+            <mat-header-cell *matHeaderCellDef i18n="@@Art">Art </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.mkmart}} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="mkmerk1">
+            <mat-header-cell *matHeaderCellDef i18n="@@NrMerkmal1">Nr-Merkmal1 </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.mkmerk1 }} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="mkmerk1Bez">
+            <mat-header-cell *matHeaderCellDef i18n="@@Merkmal1">Merkmal1 </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.mkmerk1Bez}} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="mkmerk2">
+            <mat-header-cell *matHeaderCellDef i18n="@@NrMerkmal2">Nr-Merkmal2 </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.mkmerk2}} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="mkmerk2Bez">
+            <mat-header-cell *matHeaderCellDef i18n="@@Merkmal2">Merkmal2 </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.mkmerk2Bez}} </mat-cell>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="mkmerk3">
+            <mat-header-cell *matHeaderCellDef i18n="@@NrMerkmal3">Nr-Merkmal3 </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.mkmerk3}} </mat-cell>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="mkmerk3Bez">
+            <mat-header-cell *matHeaderCellDef i18n="@@Merkmal3">Merkmal3 </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.mkmerk3Bez}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"></mat-row>
+    </mat-table>
+</div>
+</div>

@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Soll die Adresse {{data.bbeznr.beznr}} gelöscht werden?</h1>
+<div mat-dialog-content>
+
+
+</div>
+<div mat-dialog-actions>
+    <!--    <button mat-button (click)="onNoClick()">No Thanks</button>-->
+    <button mat-button [mat-dialog-close]="" cdkFocusInitial>Nein</button>
+    <button mat-button (click)="deleteKunde(data)">JA</button>
+</div>

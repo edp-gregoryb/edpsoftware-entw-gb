@@ -1,0 +1,32 @@
+<h1 mat-dialog-title i18n="@@objectChoice">Objektauswahl</h1>
+
+<div md-dialog-content>
+
+  <span i18n="@@chooseObject2">Bitte wählen Sie ein Objekt aus</span>:<br>
+  
+  <mat-form-field style="min-width: 350px">
+    <input matInput placeholder="Objekt" i18n-placeholder="@@object" [matAutocomplete]="dialogObjektAuto" [formControl]="dialogObjektCtrl">
+  </mat-form-field>
+  
+  <mat-autocomplete #dialogObjektAuto="matAutocomplete" [displayWith]="dialogObjektDisplayFn"> <!-- (panelClosingActions)="messageUser('')" -->
+    <!--<mat-option *ngFor="let obj of dialogFormObjekte | async" [value]="obj"> <!-- (onSelectionChange)="messageUser(obj)" -->
+    
+    <!--<mat-option *ngFor="let obj of dialogFormObjekte | async" [value]="obj" (onSelectionChange)="sendBackObjekt(dialogObjektCtrl.value);">-->
+    <mat-option *ngFor="let obj of dialogFormObjekte | async" [value]="obj" (onSelectionChange)="sendBackObjekt(obj.obj_bezeichnung);">
+      {{ obj.obj_bezeichnung}}
+    </mat-option>      
+  </mat-autocomplete> <!-- <button mat-icon-button (click)="dialogObjektCtrl.reset()" tabindex="-1"><mat-icon>clear</mat-icon></button> -->
+
+  <br><small><span i18n="@@howToChooseObjectA">Geben Sie bitte die ersten paar Buchstaben des gewünschten Titels ein.</span><br><span i18n="@@howToChooseObjectB">Per Mausklick oder [ENTER] wird die getroffene Auswahl ans System übergeben.</span></small><br>
+
+
+  <!--<p>gewählt ist: {{dialogObjektCtrl.value | json}}</p>-->
+</div>
+
+<!--<div md-dialog-actions>-->
+  
+<!--  <button mat-raised-button mat-dialog-close="" tabindex="-1">abbrechen</button>-->
+<!--  &nbsp;-->
+<!--  <button mat-raised-button mat-dialog-close="{{dialogObjektCtrl.value | json}}" color="primary">auswählen</button>-->
+  
+<!--</div>-->

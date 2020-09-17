@@ -1,0 +1,192 @@
+<div id="druckvorschau_alignment_spacer" style="height: 0px;">&nbsp;</div>
+
+<div class="druckvorschau_vorlage1" id="druckvorschau">
+  
+  <div id="header">
+    <br><br>
+    <!--<img id="mainTemplateLogo" src="{{'../../assets/' + templatedata.instanz + '/logo_.png'}}" />-->
+    <img id="mainTemplateLogo" src="{{'assets/' + templatedata.instanz + '/logo.png'}}" />
+  </div>
+  <span id="tbheader"></span>
+  <div>
+    
+    <!-- <small> -->
+      <span id="adressblock" class="print-element a4-hoch-1">
+        {{verkaufsdokument.controls.bestadr1.value}}<br *ngIf="verkaufsdokument.controls.bestadr2.value != ''">
+        {{verkaufsdokument.controls.bestadr2.value}}<br *ngIf="verkaufsdokument.controls.bestadr3.value != ''">
+        {{verkaufsdokument.controls.bestadr3.value}}<br *ngIf="verkaufsdokument.controls.bestadr4.value != ''">
+        {{verkaufsdokument.controls.bestadr4.value}}<br *ngIf="verkaufsdokument.controls.bestadr5.value != ''">
+        {{verkaufsdokument.controls.bestadr5.value}}<br *ngIf="verkaufsdokument.controls.bestadr6.value != ''">
+        {{verkaufsdokument.controls.bestadr6.value}}<br *ngIf="verkaufsdokument.controls.bestadr7.value != ''">
+        {{verkaufsdokument.controls.bestadr7.value}}<br *ngIf="verkaufsdokument.controls.bestadr8.value != ''">
+        {{verkaufsdokument.controls.bestadr8.value}}<br *ngIf="verkaufsdokument.controls.bestadr9.value != ''">
+        {{verkaufsdokument.controls.bestadr9.value}}<br>
+        <br><br><br><br><br><br>
+      </span>
+      
+      
+      <div class="print-element a4-hoch-1">
+        {{verkaufsdokument.controls.ausstelldatum.value  | date :  "dd.MM.yyyy"}}
+        <br><br><br><br>
+      </div>
+      
+      <div class="print-element a4-hoch-1 dokumenttitel" *ngIf="verkaufsdokument.controls.sujet.value != ''"><b>{{verkaufsdokument.controls.sujet.value}}<br><br><br></b></div>
+      
+      <!--<div class="print-element a4-hoch-1">-->
+      <!--  {{verkaufsdokument.controls.indivAnrede.value}}-->
+      <!--  <br><br><br><br>-->
+      <!--</div>-->
+      
+      <pre class="print-element a4-hoch-1">{{verkaufsdokument.controls.indivAnrede.value}}<br><br></pre>
+      
+      <pre id="einleitungstext" class="print-element a4-hoch-1">{{verkaufsdokument.controls.indivEinleitungstext.value}}</pre>
+      
+      <!--<div class="angebotsblock a4-hoch-1" *ngFor="let titel of verkaufsdokument.controls.titel.controls; let i=index">-->
+    <table class="print-element a4-hoch-1">
+      <tr *ngIf="verkaufsdokument.controls.vermname.value != ''">
+        <td class="angebotsspalte1"><span i18n="@@agent">Agentur/Vermittler</span>:</td><td class="right">{{verkaufsdokument.controls.vermname.value}}</td>
+      </tr>
+    </table>
+         <div class="angebotsblock a4-hoch-1" *ngFor="let titel of getTasks(verkaufsdokument); let i=index">
+          <div  *ngFor="let werbemittel of verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls; let j=index">
+        <table class="print-element a4-hoch-1">
+          <tr *ngIf="verkaufsdokument.controls.titel.controls[i].controls.objBezeichnung.value != ''">
+            <td class="angebotsspalte1">Titel<span *ngIf="verkaufsdokument.controls.titel.length>1"> {{i+1}}</span>:</td><td class="right">{{verkaufsdokument.controls.titel.controls[i].controls.objBezeichnung.value}}</td>
+          </tr>
+          <tr *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.auflage.value != ''">
+            <td class="angebotsspalte1"><span i18n="@@edition">Auflage/Reichweite</span>:</td><td class="right">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.auflage.value | number}} <span i18n="@@exemplars">Exemplare</span></td>
+          </tr>
+        </table>
+          
+        <!--<div  *ngFor="let werbemittel of verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls; let j=index">-->
+           <div class="werbeformatblock print-element a4-hoch-1">
+          <!-- Block Werbemittel mit unbestimmten Buchungen -->                        
+          <table *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value == 'A'">
+            <tr>
+              <td class="angebotsspalte1"><span i18n="@@yourAd">Ihre Werbung</span>:</td><td class="right">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsanzahl.value}} x {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformat.value}} <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatTyp.value == 'mm'" >({{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge1.value}} {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge1Label.value}} * {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge2.value}} mm {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge2Label.value}})</span></td>
+            </tr>
+            <!-- Platzierung -->
+            <tr *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.platzierung.value != ''">
+              <td>Platzierung: </td><td class="right">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.platzierung.value}}</td>
+            </tr>
+          </table>
+          
+          <!-- Block Werbemittel mit exakten Buchungen -->
+          <table *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value != 'A'">
+            <tr>
+              <td class="angebotsspalte1"><span i18n="@@yourAd">Ihre Werbung</span>:</td><td class="right">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsanzahl.value}}x {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformat.value}} <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatTyp.value == 'mm'" >({{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge1.value}} {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge1Label.value}} * {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge2.value}} mm {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatDismenge2Label.value}})</span></td>
+            </tr>
+            <tr>
+              <td i18n="@@appearance">Erscheinung:</td>                    
+              <td class="right">{{verkaufsdokument.controls.titel.controls[i].controls.rubBezeichnung.value}} {{erscheinungsdatenAufbereiten(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsausgbez.value,0)}}
+                <!--<p *ngFor="let ersch of verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsausgbez.value">-->
+                <!--  --{{ersch.value}}--,-- -->
+                <!--</p>-->
+              </td>
+            </tr>
+            <tr *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value != 'A' &&
+                      verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.insertionsschlussAnzeige.value == true">
+              <td><span i18n="@@announcementEnd">Anzeigenschluss</span>: </td><td class="right">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.insertionsschlussDatum.value  | date :  "dd.MM.yyyy"}}
+                <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.buchungsartErscheinung.value != 'A' &&
+                      verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.insertionsschlussUhrzeit.value != '00:00'">, <span i18n="@@tillTimeA">bis</span> {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.insertionsschlussUhrzeit.value}} <span i18n="@@tillTimeB">Uhr </span> </span> <span i18n="@@for">für</span> {{erscheinungsdatenAufbereiten(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsausgbez.value,1)}}
+              </td>
+            </tr>
+            <!-- Platzierung -->
+            <tr *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.platzierung.value != ''">
+              <td><span i18n="@@placement">Platzierung</span>g: </td><td class="right">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.platzierung.value}}</td>
+            </tr>
+          </table>
+          
+          <!--Rabatte-->
+          <table *ngFor="let zusatzpreisposition of verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls; let k=index">
+            <tr *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.bezeichnung.value">
+              <td class="angebotsspalte1">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.bezeichnung.value}}</td>
+              <td class="right"><span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.preisUser.value">
+                  <span *ngIf="((verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.typ.value != '3') &&
+                   (verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.typ.value != '5'))">
+                      CHF </span>{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.preisUser.value | number : '1.2-2'}}
+                  <span *ngIf="((verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.typ.value == '3')
+                   || (verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.controls[k].controls.typ.value == '5'))">%</span>
+                </span>
+              </td>
+            </tr>
+          </table>
+          
+          <!-- Beraterkommission -->
+          <!-- Nur anzeigen, wenn Absolut- oder Prozent-Betrag vorhanden sind -->
+          <table *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.bk.value != 0 || verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.bkBetrag.value != 0">
+            <tr>
+              <td class="angebotsspalte1"><span i18n="Beraterkommission abkürzung@@adviserCommissionAbbrv">BK</span>:</td>
+              <td class="right">
+                <!-- nur anzeigen wenn Prozent-Betrag vorhanden ist -->
+                <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.bk.value != 0">
+                  {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.bk.value | number : '1.2-2'}} %
+                </span>
+                <!-- nur anzeigen wenn Absolut- und Prozent-Betrag vorhanden ist -->
+                <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.bk.value != 0 && verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.bkBetrag.value != 0">
+                  ,&nbsp;
+                </span>
+                <!-- nur anzeigen wenn Absolut-Betrag vorhanden ist -->
+                <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.bkBetrag.value != 0">
+                  CHF {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.bkBetrag.value | number : '1.2-2'}}
+                </span>
+              </td>
+            </tr>
+          </table>
+          
+          <!-- Gesamtpreis für Werbemittel -->
+          <table>
+            <tr>
+              <td class="angebotsspalte1"><span i18n="@@sumPrice">Gesamtpreis</span>:</td>
+              <td class="right" *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value != 0">
+                CHF {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value | number : '1.2-2'}} <span i18n="@@exclusiveMwSt">exkl. MwSt.</span>
+<!--                <span *ngIf="(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisAmasys.value != 0) && (verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisAmasys.value != verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value)"> <span i18n="@@inPlaceOf">anstatt</span> {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisAmasys.value | number : '1.2-2'}}</span>-->
+
+              </td>
+              <td class="right">
+<!--                <span>{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value | number : '1.2-2'}}</span>-->
+              </td>
+              <!--<td class="right" *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value == 0">-->
+                <!--<span i18n="@@clarification">in Abklärung</span>-->
+              <!--</td>-->
+            </tr>
+          </table>
+          
+          <table *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.hinweis.value != ''">
+            <tr>
+              <td class="angebotsspalte1"><span i18n="@@special">Spezielles</span>:</td>
+              <td class="right"><pre class="pre-reset">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.hinweis.value}}</pre></td>
+            <tr>
+          </table>
+          </div>
+          <div *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.seitenumbruch.value == true" class="print-element seitenumbruch_marker seitenumbruch" style="height:0px;"></div>
+        
+        </div> <!-- Werbemittel -->
+      </div> <!-- Ende Angebotsblock -->
+      <div id="dokumentSchluss" class="print-element a4-hoch-1">
+          <pre>{{verkaufsdokument.controls.indivSchlusssatz.value}}</pre>
+          <p>
+              <span i18n="@@salutations">Freundliche Grüsse</span>
+              <br><br>
+              {{verkaufsdokument.controls.verfasser1.value}}
+              <br>
+              {{verkaufsdokument.controls.verfasser1funktion.value}}
+              <br><br>
+              <b>{{templatedata.firmenbezeichnung}}</b>
+              <br><br>
+              <span *ngIf="verkaufsdokument.controls.verfasser1tel.value">T {{verkaufsdokument.controls.verfasser1tel.value}}</span>
+              <br>
+              {{verkaufsdokument.controls.verfasser1mail.value}}
+          </p>
+      </div>
+    <!-- </small> -->
+  </div>
+  <!-- Footer -->
+  <div id="footer" class="a4-hoch-1" style="page-break-after: always; margin-bottom: 55px"> <!-- margin, damit Chrome 66-Systemfooter überdeckt wird -->
+    
+      <small><span innerHTML="{{templatedata.fusszeile}}"></span><span class="page-number"></span></small>
+  </div>
+  <!-- damit Seitenumbruch in jedem Fall richtig funktionert, 12.04.2018 fp -->
+  <div class="print-element a4-quer-1">&nbsp;</div>
+  
+</div> <!-- Ende Druckvorschau-DIV -->

@@ -1,0 +1,58 @@
+.toolBar {
+    float: left;
+}
+
+.toolbar mat-icon {
+    cursor: pointer;
+}
+
+.highlight{
+    background: #BBB;
+}
+
+.mat-table {
+    overflow-x: scroll;
+}
+
+.mat-row, .mat-header-row {  
+    min-width: 2000px;  
+    width: 100%;  
+}
+
+.button {
+    border: solid grey 1px;
+    border-radius: 3px;
+    margin: 0 5px 5px 5px;
+}
+ 
+.formField {
+    padding-left: 10px;
+}
+
+.formFieldText {
+    line-height: 54px;
+    cursor: default !important;
+}
+
+.hinzufuegenIcon {
+    cursor: pointer;
+}
+
+.hinzufuegenIcon:hover {
+    background-color: rgb(204, 204, 204);
+}
+
+.clear {
+    clear: both;
+}
+
+.test::-webkit-scrollbar {
+    display: block !important;
+    height: 10px;
+    width: 100%;
+    background-color: #EEE;
+}
+
+.test::-webkit-scrollbar-thumb {
+    background: rgb(203, 203, 203);
+}

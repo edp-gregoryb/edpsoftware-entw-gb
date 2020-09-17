@@ -1,0 +1,15 @@
+<div>
+    <mat-form-field class="example-full-width">
+    <input type="text"  matInput [formControl]="formctrl" [(ngModel)]="aktivitaetvalue" placeholder="Aktivität" i18n-placeholder="@@activity" (ngModelChange)="getAktivitaet($event)" [matAutocomplete]="auto">
+ 
+ <button mat-button *ngIf="aktivitaetvalue" matSuffix mat-icon-button aria-label="Clear" (click)="aktivitaetdelete(aktivitaetvalue='')" >
+     <mat-icon>close</mat-icon>
+   </button>
+ </mat-form-field>
+ 
+ <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let akt of aktivitaet" [value]="akt.bes" (click)="additemforsearch(akt)">
+       {{ akt.bes}}
+    </mat-option>
+ </mat-autocomplete>
+ </div>

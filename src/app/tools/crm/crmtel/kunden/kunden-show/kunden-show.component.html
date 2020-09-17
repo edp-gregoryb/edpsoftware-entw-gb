@@ -1,0 +1,21 @@
+<app-loading-screen></app-loading-screen>
+<mat-drawer-container class="mainContainer" autosize (window:resize)="windowResize()">
+
+    <mat-drawer #drawer class="sidenavContainer" mode="side">
+        <div style="float: right; padding-left: 5px; padding-right: 5px;">
+            <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" i18n-matTooltip="@@sidenavSizeTT" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+        </div>
+        <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [lastAppModule]="lastAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+    </mat-drawer>
+
+    <div class="appMainframe">
+        <div><app-headeranzeige [currentAppModule]="currentAppModule" [modulename]="modulename" (searchvalues)="getSearchvaluesKunde($event)" (onSidenavToggle)="drawer.toggle()"></app-headeranzeige></div>
+        <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+            <div class="flex-item" fxFlex="25%" [ngStyle]="{'height.px': innerheight}"><app-testsearchpanel [vonFazit]="schalterFazit" [parameterfursuche]="newSearchVal" [termzeitvonfazit]="termzeitvonfazit" [nichtAgenda]="schalterNichtAgenda" [vonAgenda]="schalterAgenda" [kundenbez_neu]="kudenbezvonneu" [zeiteventfurneuenterminevent]="zeiteventfurneuentermin" (termincountchanged)="termincountchanged($event)" (rapnrchanged)="newRapnr($event)" (beznrchanged)="newBeznr($event)" (terminchanged)="newTermin($event)" (keintermin)="keineInfoanzeige($event)"></app-testsearchpanel></div>
+            <div *ngIf="keineMittelAnzeige; else showflexheader" class="flex-item" fxFlex="43%" [ngStyle]="{'height.px': innerheight}" style="overflow: scroll;"><app-mainpanelhead [rapnr]="newrap" [beznr]="newbez" (kundenbezvonfazit)="kundenbezvonfazitchanged($event)" (kundenbezvonneu)="kundenbezvonneuchanged($event)" (termzeitvonfazit)="termzeitvonfazitchanged($event)" (gleichertermin)="gleicherterminevent($event)"></app-mainpanelhead></div>
+            <div *ngIf="neuerTerminkeineAnzeige; else showflex" class="flex-item" fxFlex="32%" [ngStyle]="{'height.px': innerheight}"><app-infopanel [showContent]="showMainPanel" [termin]="newTerm" [selectedInfoTab]="selectedInfoTab"></app-infopanel></div>
+            <ng-template #showflex><div class="flex-item" fxFlex="32%"></div></ng-template>
+            <ng-template #showflexheader><div class="flex-item" fxFlex="43%"></div></ng-template>
+        </div>
+    </div>
+</mat-drawer-container>

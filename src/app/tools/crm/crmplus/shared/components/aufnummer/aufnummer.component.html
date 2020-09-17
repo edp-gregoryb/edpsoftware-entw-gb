@@ -1,0 +1,7 @@
+<mat-form-field class="example-form-field">
+  <input matInput type="text" placeholder="Auftrag" i18n-placeholder="@@order" [(ngModel)]="auftragsnr" (ngModelChange)="aufnummerchange($event)" />
+
+  <button mat-button *ngIf="auftragsnr" matSuffix mat-icon-button aria-label="Clear" (click)="auftragsnrdelete(auftragsnr='')">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>

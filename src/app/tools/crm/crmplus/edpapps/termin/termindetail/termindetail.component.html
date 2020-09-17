@@ -1,0 +1,84 @@
+<!--<div><app-headeranzeige (searchvalues)="getSearchvaluesKunde($event)" ></app-headeranzeige></div>-->
+<!--<div class="ui-g-12" style="background-color: #f4f4f4">-->
+<app-loading-screen></app-loading-screen>
+<mat-drawer-container class="mainContainer" autosize>
+
+    <mat-drawer #drawer class="sidenavContainer" mode="side">
+        <div style="float: right; padding-left: 5px; padding-right: 5px;">
+            <button style="margin-top: 15px;margin-bottom: 15px; color: #333;" mat-icon-button (click)="sidenavExpanded = !sidenavExpanded"><mat-icon style="font-size: 16px;" aria-label="icon-button expand/narrow sidenav" matTooltip="Sidenav erweitern/verkleinern" matTooltipShowDelay="800" matTooltipPosition="right">compare_arrows</mat-icon></button>
+        </div>
+        <app-sidenav [sidenavExpanded]="sidenavExpanded" [currentAppModule]="currentAppModule" [lastAppModule]="lastAppModule" [licensedModules]="licensedModules" [sidenavedModules]="sidenavmodules"></app-sidenav>
+    </mat-drawer>
+
+    <div class="appMainframe">
+        <app-defaultheader [currentAppModule]="currentAppModule" [modulename]="modulename" (changeSicht)="sichtchange($event)" (onSidenavToggle)="drawer.toggle()" #header></app-defaultheader>
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  <div fxFlexOrder="1" fxFlex="60%">     
+  <app-mainpanelhead [rapnr]="rapnrvonlink" [beznr]="kundevonlink" [terminneu]="terminneu" [returnlink]="returnlink" [kundevonsuche]="kundevonsuche"  (kundenbezvonfazit)="kundenbezvonfazitchanged($event)" (kundenbezvonneu)="kundenbezvonneuchanged($event)"  (termzeitvonfazit)="termzeitvonfazitchanged($event)" (gleichertermin)="gleicherterminevent($event)"  ></app-mainpanelhead>
+  </div> 
+  <div *ngIf="!terminneu" fxFlexOrder="2" fxFlex="40%">
+  <app-infopanel [termin]="newTerm"></app-infopanel>
+  </div> 
+  </div>
+      </div>
+</mat-drawer-container>
+  <!--<div *ngFor="let termin of termindetails; let i=index">-->
+
+
+  <!--<form [formGroup]="filter">-->
+  <!--  <div formArrayName="itemforsearch">-->
+
+  <!--    <div *ngFor="let _itemforsearch of filter.get('itemforsearch')?.controls; let i = index">-->
+
+  <!--      <div [formGroupName]="i" class="container" fxLayout fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="0">-->
+  <!--        <div>-->
+  <!--          <mat-card>-->
+  <!--            <mat-card-header>-->
+  <!--              <mat-card-title>Kunde</mat-card-title>-->
+  <!--            </mat-card-header>-->
+  <!--            <mat-card-content>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="45%"><input matInput placeholder="Kundennummer" formControlName="kundennummer" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="2" fxFlex="45%"><input matInput placeholder="Name" formControlName="kundenname" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="45%"><input matInput placeholder="Zusatz 1" formControlName="kundenzusatz1" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="2" fxFlex="45%"><input matInput placeholder="Zusatz 2" formControlName="kundenzusatz2" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="45%"><input matInput placeholder="Strasse" formControlName="kundenstrasse" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="2" fxFlex="45%"><input matInput placeholder="Ort" formControlName="kundenort" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="30%"><input matInput placeholder="Telefon" formControlName="kundentelpriv" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="30%"><input matInput placeholder="Telefon Geschäft" formControlName="kundentelgedi" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="30%"><input matInput placeholder="Telefon Mobile" formControlName="kundentelnatel" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="90%"><input matInput placeholder="Email" formControlName="kundenemail" /></mat-form-field>-->
+
+  <!--            </mat-card-content>-->
+  <!--          </mat-card>-->
+  <!--          <mat-card>-->
+  <!--            <mat-card-header>-->
+  <!--              <mat-card-title>Agentur</mat-card-title>-->
+  <!--            </mat-card-header>-->
+  <!--            <mat-card-content>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="45%"><input matInput placeholder="Agenturnummer" formControlName="agenturnummer" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="2" fxFlex="45%"><input matInput placeholder="Name" formControlName="agenturname" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="45%"><input matInput placeholder="Zusatz 1" formControlName="agenturzusatz1" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="2" fxFlex="45%"><input matInput placeholder="Zusatz 2" formControlName="agenturzusatz2" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="45%"><input matInput placeholder="Strasse" formControlName="agenturstrasse" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="2" fxFlex="45%"><input matInput placeholder="Ort" formControlName="agenturort" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="30%"><input matInput placeholder="Telefon" formControlName="agenturtelpriv" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="30%"><input matInput placeholder="Telefon Geschäft" formControlName="agenturtelgedi" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="30%"><input matInput placeholder="Telefon Mobile" formControlName="agenturtelnatel" /></mat-form-field>-->
+  <!--              <mat-form-field class="example-full-width" fxFlexOrder="1" fxFlex="90%"><input matInput placeholder="Email" formControlName="agenturemail" /></mat-form-field>-->
+  <!--            </mat-card-content>-->
+  <!--          </mat-card>-->
+  <!--           <mat-card>-->
+  <!--            <mat-card-header>-->
+  <!--              <mat-card-title>Termin</mat-card-title>-->
+  <!--            </mat-card-header>-->
+  <!--            <mat-card-content>-->
+              
+  <!--            </mat-card-content>-->
+  <!--          </mat-card>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+  <!--</form>-->
+
+<!--</div>-->

@@ -1,0 +1,40 @@
+
+<button mat-icon-button mat-dialog-close  style="float:right"><mat-icon>clear</mat-icon></button>
+<!--<div  style="font-weight: bold;">Suchfeld:-->
+<!--      </div>-->
+
+
+
+<!--<mat-tab-group>-->
+<!--  <mat-tab label="Kunden Auswahl">-->
+<mat-form-field style="width:600px">
+  <input matInput placeholder="Kunden Suchfeld" i18n-placeholder="@@clientSearchBoxPlaceholder" [(ngModel)]="kundesuchtext" >
+</mat-form-field>
+
+<button mat-icon-button (click)="getkundemitsuche(kundesuchtext)"><mat-icon>search</mat-icon></button>
+
+ <app-material-table [title]="'Kundensuche'" [showHeader]="false" [showFooter]="true" [json]="results" 
+      [columns]="kundenCols" [numberOfRows]="10" [rowSelect]="'single'" 
+      [selectStyle]="'background'" [style]="'formular'" (onRowSelect)="onRowSelect($event)"></app-material-table>
+
+<!--  </mat-tab>-->
+<!--  <mat-tab label="Kunden Details">-->
+<!--    <div class="flex-container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="start">-->
+<!--    <div class="flex-item" fxFlex="50%">-->
+      <!--<app-mainpanelhead [rapnr]="kundenrap" [beznr]="kundenbez"></app-mainpanelhead>-->
+<!--      </div>-->
+<!--    <div class="flex-item" fxFlex="50%">-->
+<!--  <app-infopanel [termin]="kundeninfo"></app-infopanel>-->
+<!--  </div>-->
+<!--  </div>-->
+  
+<!--  </mat-tab>-->
+<!--</mat-tab-group>-->
+
+
+ 
+
+<div>
+<button  mat-icon-button mat-dialog-close (click)="addNeuerKunde()"><mat-icon >create_new_folder</mat-icon></button>
+<button  mat-icon-button mat-dialog-close (click)="anzeigeDetails()"><mat-icon >search</mat-icon></button>
+</div>

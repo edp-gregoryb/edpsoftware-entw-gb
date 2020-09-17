@@ -1,0 +1,55 @@
+/*.mat-column-vertreter, .mat-column-sujetnr  {*/
+/*    max-width: 70px;*/
+/*}*/
+/* .mat-column-aufart {*/
+/*    max-width: 30px;*/
+/*}*/
+
+/*.mat-column-nettoNetto {*/
+/*    max-width: 60px*/
+/*}*/
+
+/*.mat-column-NAME,  .mat-column-sujet {*/
+/*    max-width: 140px;*/
+/*}*/
+/*.mat-column-datum , .mat-column-ndatum{*/
+/*     max-width: 130px;*/
+/*}*/
+
+/*.mat-form-field {*/
+/*  font-size: 14px;*/
+/*  width: 100%;*/
+/*}*/
+
+/*.mat-column-objekt {*/
+/*     max-width: 70px;*/
+/*}*/
+
+/* .mat-column-aufart {*/
+/*    max-width: 40px;*/
+/*}*/
+/*.mat-column-aufnr {*/
+/*    max-width: 70px;*/
+/*}*/
+/*.mat-column-sujetnr {*/
+/*     max-width: 40px;*/
+/*}*/
+/*.mat-header-row {*/
+/*    min-width: 750px;*/
+    
+/*}*/
+.mat-column-select {
+  overflow: initial;
+}
+
+.hidden-row {
+  display: none;
+}
+.example-header {
+  min-height: 64px;
+  padding: 8px 24px 0;
+}
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}

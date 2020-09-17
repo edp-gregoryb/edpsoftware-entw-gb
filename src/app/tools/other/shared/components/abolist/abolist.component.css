@@ -1,0 +1,23 @@
+.card {
+    padding: 10px 10px 10px 10px;
+    background-color: #EEE;
+    text-align: left;
+    margin: 10px 10px 10px 10px;
+    box-shadow: 0 3px 3px 0 rgba(0,0,0,0.2),0 0px 0px 0 rgba(0,0,0,0.19)!important;
+}
+
+/*.demo {
+    overflow: scroll;
+    min-height: 30%;
+    margin-right: 10px;
+}*/
+
+.angezeigt {
+    background-color: #c5010e;
+    box-shadow: 1px 6px 3px 1px rgba(0,0,0,0.2),0 -1px 2px 0 rgba(0,0,0,0.19)!important;
+    color: white;
+}
+
+.angezeigt_new {
+    border: solid rgb(255, 116, 116) 5px;
+}

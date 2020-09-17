@@ -1,0 +1,70 @@
+<!-- leerer step, sodass step mit den artikel senkrecht uebereinstimmen -->
+
+<div class="step"></div>
+<!-- Alle Steps -->
+
+<div *ngFor="let step of article; let j = index" >
+
+  <div *ngIf="j === 0">
+    <div *ngFor="let dummy of ' '.repeat(step[0][0].sreihenfolge).split('')" class="step"> <pre>{{dummy}}</pre></div>
+
+  </div>
+  <div *ngIf="j > 0 && (step[0][0].sreihenfolge - article[j-1][0][0].sreihenfolge) > 0">
+    <div *ngFor="let dummy of ' '.repeat((step[0][0].sreihenfolge - article[j-1][0][0].sreihenfolge) - 1).split('')" class="step"></div>
+  </div>
+  <!-- titel -->
+  <span *ngIf="step[0] && step[0][0] && step[0][0].sbez !== ''" class="step"><b><span class="overflowDots">{{step[0][0].sbez}}</span></b></span>
+  <span *ngIf="!step[0] || !step[0][0] || step[0][0].sbez === ''" class="step">-</span>
+</div>
+
+<div class="clear"></div>
+
+<!-- erstes feld (allgemeine infos) -->
+<div class="article" style="cursor: default" *ngIf="article && article[0] && article[0][0] && article[0][0][0]">
+  <!-- artikel bearbeiten -->
+  <mat-icon class="editArticle" (click)="getElement()" routerLink="/workflow/workflow-show/newOrEditArticle" [queryParams]="{ newArticle: 'false', objId: article[0][0][0].objekt, aschlusselId: article[0][0][0].aschlussel, objektartikel: article[0][0][0].objektartikel, elm: ausserindex }">input</mat-icon>
+  <!-- artikel-info -->
+  <mat-icon class="editArticle" (click)="getElement()" routerLink="/workflow/workflow-show/articleInfo/{{article[0][0][0].objekt}}/{{article[0][0][0].aschlussel}}/{{article[0][0][0].objektartikel}}" [queryParams]="{elm: ausserindex}">attach_file</mat-icon>
+
+  <div class="clear"></div>
+  <!-- objektartikel -->
+  <span class="overflowDots" style="font-size: 1.2em;">{{article[0][0][0].objektartikel}}</span>
+  <br>
+</div>
+
+<!-- Alle Tasks -->
+<div *ngFor="let step of article; let j = index">
+  <app-objektcontainersection [step]="step" [article]="article" [stepsunlocked]="stepsunlocked" [taskprogress]="taskprogress"
+                              [ausserindex]="ausserindex" [jindex]="j" (sectionPosition)="sectionPosition($event)"></app-objektcontainersection>
+  <!-- padding zwischen steps -->
+<!--  <div *ngIf="j === 0">-->
+<!--    <div *ngFor="let dummy of ' '.repeat(step[0][0].sreihenfolge).split('')" class="step"></div>-->
+<!--  </div>-->
+<!--  <div *ngIf="j > 0 && (step[0][0].sreihenfolge - article[j-1][0][0].sreihenfolge) > 0">-->
+<!--    <div *ngFor="let dummy of ' '.repeat((step[0][0].sreihenfolge - article[j-1][0][0].sreihenfolge) - 1).split('')" class="step step"></div>-->
+<!--  </div>-->
+<!--  &lt;!&ndash;ein step &ndash;&gt;-->
+<!--  <div class="step step-content">-->
+<!--    &lt;!&ndash; alle tasks &ndash;&gt;-->
+<!--    <div *ngFor="let task of step; let p = index">-->
+<!--      <div *ngIf="task[0] && stepsunlocked && stepsunlocked[ausserindex]">-->
+<!--        &lt;!&ndash; task freigeschaltet &ndash;&gt;-->
+<!--        <div *ngIf="stepsunlocked[ausserindex][j] === true" class="task" (click)="getPositon($event)" [ngStyle]="{'background-color': getBackgroundColor(ausserindex, j, p)}" routerLink="/workflow/workflow-show/detailinfo/{{task[0].objekt}}/{{task[0].objektartikel}}/{{task[0].aufgabengruppeid}}" [queryParams]="{ aschlussel: task[0].aschlussel, hohe: elementRef}">-->
+<!--          <span *ngIf="task[0].agbez" class="overflowDots">{{task[0].agbez}}</span>-->
+<!--          <span *ngIf="!task[0].agbez">-</span>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; task noch nicht freigeschaltet &ndash;&gt;-->
+<!--        <div *ngIf="stepsunlocked[ausserindex][j] === false" class="taskLocked">-->
+<!--          <span *ngIf="task[0].agbez" class="overflowDots">{{task[0].agbez}}</span>-->
+<!--          <span *ngIf="!task[0].agbez">-</span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+</div>
+
+<div class="clear"></div>
+
+<br>
+<hr style="border-color: grey">
+<br>

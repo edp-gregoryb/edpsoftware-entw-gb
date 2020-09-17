@@ -1,0 +1,15 @@
+<div>
+   <mat-form-field class="example-full-width">
+   <input type="text"  matInput [formControl]="formctrl" [(ngModel)]="objektvalue" placeholder="Objekte" i18n-placeholder="Objekte placeholder@@objectsPlaceholder" (ngModelChange)="getObjekte($event)" [matAutocomplete]="auto">
+
+<button mat-button *ngIf="objektvalue" matSuffix mat-icon-button aria-label="Clear" (click)="objdelete(objektvalue='')" >
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>
+
+<mat-autocomplete #auto="matAutocomplete">
+   <mat-option *ngFor="let obj of objekte" [value]="obj.objekt" (click)="additemforsearch(obj)">
+      {{ obj.objekt}}
+   </mat-option>
+</mat-autocomplete>
+</div>

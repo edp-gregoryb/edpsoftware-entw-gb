@@ -1,0 +1,42 @@
+ .mat-column-sdiffproz {
+    max-width: 80px;
+}
+ .mat-column-sdiffabs {
+    max-width: 80px;
+}
+ .mat-column-sbudget {
+    max-width: 80px;
+}
+ .mat-column-sbdiffproz {
+    max-width: 50px;
+}
+ .mat-column-feld1bez {
+    max-width: 300px;
+}
+ .mat-column-sTOTAL {
+    max-width: 100px;
+}
+ .mat-column-sTOTALVJ {
+    max-width: 100px;
+}
+ .mat-column-sTOTALNJ {
+    max-width: 100px;
+}
+ .mat-column-sbdiffabs {
+    max-width: 80px;
+}
+.mat-table {
+  overflow: auto;
+  /*max-height: 500px;*/
+}
+
+.cell-rechts {
+  display:flex !important;
+  justify-content:flex-end!important;
+  
+}
+.header-rechts {
+  display:flex;
+  justify-content:flex-end;
+  cursor: pointer;
+}

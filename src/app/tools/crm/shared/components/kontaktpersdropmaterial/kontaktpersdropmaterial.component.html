@@ -1,0 +1,22 @@
+
+<mat-select #mySelect class="input-full-width" placeholder="Kontaktperson" i18n-placeholder="@@contactPersonPlaceholder"  [(ngModel)]="kontaktpers"  (openedChange)="showupdatedelneu($event)" (selectionChange)="selectedKontaktperson($event)" class="crop">
+
+  <mat-option class="input-full-width" *ngFor="let kontakpers of kontaktpersondata" [value]="kontakpers.beznr" > 
+    <div class="crop">{{ kontakpers.gesname}}<span *ngIf="kontakpers.funktion">, {{kontakpers.funktion}}</span> <span *ngIf="kontakpers.objektverantwortlicher">, {{kontakpers.objektverantwortlicher}}
+  </span>
+    <span *ngIf="panelOpen" style="float: right">
+      <button mat-button (click)="openmenu($event, kontakpers.gesname)" [matMenuTriggerFor]="menu">
+        <span >
+        <mat-icon>more_vert</mat-icon>
+          </span>
+      </button>
+    <mat-menu #menu="matMenu">
+  <button *ngIf="delete" mat-menu-item (click)="deletekontaktpers(kontakpers)">Löschen</button>
+  <button *ngIf="update" mat-menu-item (click)="updateKontaktpers(kontakpers)">Ändern</button>
+  <button *ngIf="new" mat-menu-item (click)="neueKontaktpers()">Neu</button>
+</mat-menu>
+    </span>
+  </div>
+  </mat-option>
+
+</mat-select>

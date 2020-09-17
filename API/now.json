@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "builds": [{ "src": "server.js", "use": "@now/node-server" }],
+  "routes": [
+    {
+      "src": "/getRenderTable",
+      "dest": "/server.js",
+      "methods": ["GET"]
+    },
+    {
+      "src": "/refreshPage",
+      "dest": "/server.js",
+      "methods": ["GET"]
+    },
+    {
+      "src": "/refreshProgress",
+      "dest": "/server.js",
+      "methods": ["GET"]
+    },
+    {
+      "src": "/addObjekt",
+      "dest": "/server.js",
+      "methods": ["GET"]
+    },
+    {
+      "src": "/login",
+      "dest": "/server.js",
+      "methods": ["GET"]
+    },
+    {
+      "src": "/logout",
+      "dest": "/server.js",
+      "methods": ["GET"]
+    },
+    {
+      "src": "/auth",
+      "dest": "/server.js",
+      "methods": ["POST"]
+    }
+  ]
+}

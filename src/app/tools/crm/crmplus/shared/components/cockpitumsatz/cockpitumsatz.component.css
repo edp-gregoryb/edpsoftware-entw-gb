@@ -1,0 +1,31 @@
+.posrel {
+   position: relative;
+  top: -40px;
+  left: -200px;
+ z-index:1
+ 
+}
+.posrel1 {
+   position: relative;
+  top: -40px;
+  left: -280px;
+ z-index:1
+ 
+}
+.posrel2 {
+   position: relative;
+  top: -40px;
+  left: -360px;
+ z-index:1
+ 
+}
+.posrel3 {
+   position: absolute;
+   top: 45px;
+   
+
+  
+   z-index:1;
+
+   
+}

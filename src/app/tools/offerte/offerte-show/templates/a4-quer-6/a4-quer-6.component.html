@@ -1,0 +1,258 @@
+<div id="druckvorschau_alignment_spacer" style="height: 0px;">&nbsp;</div>
+
+<div class="druckvorschau_vorlage2 style" id="druckvorschau">
+
+    <div id="header" class="a4-quer-6" style="margin-top: 29px">
+        <img id="mainTemplateLogo" src="{{'assets/' + templatedata.instanz + '/logo.png'}}"/>
+    </div>
+
+    <div>
+
+        <!--<p>*** Template im Aufbau ***</p> -->
+
+        <table class="print-element a4-quer-6 infotable">
+            <tr>
+                <td class="infotable_spalte1"><span i18n="@@clientNumber2">Kunden-Nr.</span>:</td>
+                <td class="infotable_spalte2">{{verkaufsdokument.controls.kundBeznr.value}}</td>
+                <td class="infotable_spalte3"><span i18n="@@yourContact">Ihr Kontakt</span>:</td>
+                <td class="infotable_spalte4">{{verkaufsdokument.controls.verfasser1.value}}</td>
+            </tr>
+            <tr>
+                <td class="infotable_spalte1"><span i18n="@@client">Kunde</span>:</td>
+                <!--<td class="infotable_spalte2"><span>{{verkaufsdokument.controls.bestadr1.value}}</span><span *ngIf="verkaufsdokument.controls.bestadr2.value != ''">, {{verkaufsdokument.controls.bestadr2.value}}</span><span *ngIf="verkaufsdokument.controls.bestadr3.value != ''">, {{verkaufsdokument.controls.bestadr3.value}}</span></td>-->
+                <td class="infotable_spalte2"><span>{{verkaufsdokument.controls.bestName.value}}</span></td>
+                <td class="infotable_spalte3" i18n="@@email">E-Mail:</td>
+                <td class="infotable_spalte4">{{verkaufsdokument.controls.verfasser1mail.value}}</td>
+            </tr>
+            <tr>
+                <td class="infotable_spalte1"><span i18n="@@place">Ort</span>:</td>
+                <td class="infotable_spalte2">{{verkaufsdokument.controls.bestOrt.value}}</td>
+                <td class="infotable_spalte3"><span i18n="@@phone">Telefon</span>:</td>
+                <td class="infotable_spalte4">{{verkaufsdokument.controls.verfasser1tel.value}}</td>
+            </tr>
+            <tr>
+                <td class="infotable_spalte1"><span i18n="@@client">Kunde</span>:</td> <!-- oder Agentur -->
+                <td class="infotable_spalte2">{{verkaufsdokument.controls.bestZustaendiger.value}}</td>
+                <td class="infotable_spalte3"><span i18n="@@date">Datum</span>:</td>
+                <td class="infotable_spalte4">{{verkaufsdokument.controls.ausstelldatum.value   | date :  "dd.MM.yyyy"}}</td>
+            </tr>
+            <tr *ngIf="verkaufsdokument.controls.vermname.value != ''">
+                <td class="infotable_spalte1"><span i18n="@@agent">Vermittler</span>:</td>
+                <td class="infotable_spalte2">{{verkaufsdokument.controls.vermname.value}}</td>
+            </tr>
+        </table>
+
+        <!-- Spacer (statt Margin-Bottom in infotable) -->
+        <div class="print-element a4-quer-6" style="height: 30px;max-height: 30px;"></div>
+
+        <div class="print-element a4-quer-6 dokumenttitel" *ngIf="verkaufsdokument.controls.sujet.value != ''"><b>{{verkaufsdokument.controls.sujet.value}}<br><br></b></div>
+
+        <table class="print-element a4-quer-6">
+            <tr>
+                <td><pre *ngIf="verkaufsdokument.controls.indivEinleitungstext.value!=''">{{verkaufsdokument.controls.indivEinleitungstext.value}}</pre></td>
+            </tr>
+        </table>
+
+        <table id="tbheader" class="print-element a4-quer-6 offerttabelle offerttabelleheader"> <!-- Header Table -->
+            <tr>
+                <td class="objektspalte" i18n="@@title">Titel</td>
+
+                <td class="kostenerscheinungsspalte"><span i18n="@@gp">GP</span><br><span i18n="@@mm" style="margin-right: 20px;">mm</span><br><span style="margin-right: 30px;font-size: 8px">CHF</span><span style="margin-right: -20px;font-size: 8px">CHF</span></td>
+
+                <td class="pzspalte"> <span i18n="@@plazierung">Plazierung </span><br><span i18n="@@zuschlag">Zuschlag</span><br><span style="margin-right: 30px;font-size: 8px">%</span><span style="margin-right: -20px;font-size: 8px">CHF</span></td>
+                <td class="adockrabspalte"> <span i18n="@@andockrab">AdockRab </span><br><span></span><br><span style="margin-right: 30px;font-size: 8px">%</span><span style="margin-right: -20px;font-size: 8px">CHF</span></td>
+
+                <td class="spezialrabattspalte"><span i18n="@@spezrab">SpezRab</span><br><span></span><br><span style="margin-right: 30px;font-size: 8px">%</span><span style="margin-right: -20px;font-size: 8px">CHF</span></td>
+
+                <td class="abschlussrabattspalte"><span i18n="@@rabmerabbet">Rab/MeRab/Bet</span><br><span></span><br><span style="margin-right: 30px;font-size: 8px">%</span><span style="margin-right: -20px;font-size: 8px">CHF</span></td>
+
+
+                <td class="bkspalte"><span i18n="@@bkjup">BK/JUP</span><br><span></span><br><span style="margin-right: 30px;font-size: 8px">%</span><span style="margin-right: -20px;font-size: 8px">CHF</span></td>
+
+                <td class="einstecken" style="padding-right: 5px;"><span  i18n="@@ein">Ein</span>-<br><span i18n="@@stecken">stecken</span></td>
+
+                <td class="repro" style="padding-right: 5px;"><span i18n="@@repro">Repro</span></td>
+
+
+                <td class="anzerscheinungsspalte" style="padding-right: 5px;"><span i18n="@@nrOfEditionsA">Anzahl</span><br><span i18n="@@nrOfEditionsB">Ersch.</span></td>
+                <td class="totalnettonettospalte"><span i18n="@@totalNetSlashNetA">Total</span><br><span i18n="@@totalNetSlashNetB">Netto/Netto</span></td>
+            </tr>
+        </table>
+
+        <div *ngFor="let titel of getTasks(verkaufsdokument); let i=index"> <!-- Titel-Loop -->
+
+
+
+            <table class="print-element a4-quer-6 offerttabelle offerttabelleitems" >
+                <!-- Titel-Info -->
+                <tr>
+                    <td class="objektspalte objektspalteinfo linierechts" *ngIf="verkaufsdokument.controls.titel.controls[i].controls.objBezeichnung.value != ''">
+                        <b>{{verkaufsdokument.controls.titel.controls[i].controls.objBezeichnung.value}}</b>
+                        <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.zusatzinfo.value != ''"><br>
+                            <i>{{verkaufsdokument.controls.titel.controls[i].controls.zusatzinfo.value}}</i>
+                        </span>
+                    </td>
+
+                    <td class="kostenerscheinungsspaltehalb linierechts">&nbsp;</td>
+                    <td class="kostenerscheinungsspaltehalb linierechts">&nbsp;</td>
+
+
+                    <td class="pzspaltehalbproz linierechts">&nbsp;</td>
+                    <td class="pzspaltehalb linierechts">&nbsp;</td>
+
+                    <td class="adockrabspaltehalbproz linierechts">&nbsp;</td>
+                    <td class="adockrabspaltehalb linierechts">&nbsp;</td>
+
+                    <td class="spezialrabattprozentspaltehalb linierechts">&nbsp;</td>
+                    <td class="spezialrabattspaltehalb linierechts">&nbsp;</td>
+
+                    <td class="abschlussrabattspaltehalbproz linierechts">&nbsp;</td>
+                    <td class="abschlussrabattspaltehalb linierechts">&nbsp;</td>
+
+                    <td class="bkspaltehalbproz linierechts">&nbsp;</td>
+                    <td class="bkspaltehalb linierechts">&nbsp;</td>
+
+                    <td class="einstecken linierechts">&nbsp;</td>
+
+                    <td class="repro linierechts">&nbsp;</td>
+
+
+                    <td class="anzerscheinungsspalte linierechts">&nbsp;</td>
+                    <td class="totalnettonettospalte">&nbsp;</td>
+                </tr>
+            </table>
+            <div *ngFor="let werbemittel of verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls; let j=index" >
+                <!--<table class="print-element a4-quer-6 offerttabelle offerttabelleitems" *ngFor="let werbemittel of verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls; let j=index" >-->
+                <table class="print-element a4-quer-6 offerttabelle offerttabelleitems" >
+
+                    <tr >
+
+                        <!-- objektspalteinfo in Class entfernt 3.1.18/RPS -->
+                        <td class="objektspalte werbemittel linierechts">{{verkaufsdokument.controls.titel.controls[i].controls.rubBezeichnung.value}}
+                            <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.urubBezeichnung.value!=''">, {{verkaufsdokument.controls.titel.controls[i].controls.urubBezeichnung.value}}</span>
+                            <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatFarbanz.value === '0'">, <span i18n="@@commaBlackWhite">s/w</span>
+                            </span>
+                            <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatFarbanz.value === '4'">, <span i18n="@@commaColored">farbig</span></span>
+                            <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatFarbanz.value !== '0' && verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatFarbanz.value !== '4'"></span>
+                            <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformat.value.length > 8">
+                                <br>{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformat.value}}</span>
+                            <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.hinweis.value != ''">
+                                <br>{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.hinweis.value}}</span>
+                            <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformat.value.length <=8"><br>
+                                <span i18n="@@productionSize">Produktionsgrösse (B x H)</span>: {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.werbeformatProdgroesse.value}}</span>
+                            <br>
+                            <span>{{erscheinungsdatenAufbereiten(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsausgbez.value,0)}}</span>
+                        </td>
+                        <td class="kostenerscheinungsspaltehalb linierechts">
+                            {{findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,"GP").preisUser | number : '1.2-2'}}
+                        </td>
+                        <td class="kostenerscheinungsspaltehalb linierechts">
+                            {{findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,"GP").preisUserTotal | number : '1.2-2'}}
+                        </td>
+
+                        <td class="pzspaltehalbproz linierechts">
+                            {{findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,"PZ").preisUser | number : '1.2-2'}}
+                        </td>
+                        <td class="pzspaltehalb linierechts">
+                            {{findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,"PZ").preisUserTotal | number : '1.2-2'}}
+                        </td>
+
+                        <td class="adockrabspaltehalbproz linierechts">
+                            {{findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,"AdockRab").preisUser | number : '1.2-2'}}
+                        </td>
+                        <td class="adockrabspaltehalb linierechts">
+                            {{findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,"AdockRab").preisUserTotal | number : '1.2-2'}}
+                        </td>
+
+                        <td class="spezialrabattprozentspaltehalb linierechts">
+                            <span *ngIf="findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,'SpezRabBr')!=''
+                    || findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,'SpezRabNe')!='' ||
+                    findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,'WohltRab')!='' ||
+                    findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,'GratisIns')!='' ">
+                      {{(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value | sPprozent) | number : '1.0-2'}}</span>
+                        </td>
+                        <!--*verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsanzahl.value-->
+                        <td class="spezialrabattspaltehalb linierechts">
+                            <span *ngIf="findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,'SpezRabBr')!=''
+                    || findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,'SpezRabNe')!='' ||
+                    findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,'WohltRab')!='' ||
+                    findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,'GratisIns')!=''">
+                      {{(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value | sPfranken)*verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsanzahl.value | number : '1.2-2'}}</span>
+                        </td>
+
+                        <td class="abschlussrabattspaltehalbproz linierechts">
+                       <span *ngIf="findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,'BetrRab')!='' ||
+                       findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,'WR')!=''  ||
+                       findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,'BetrRabMan')!='' ">
+                       {{(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value |whprozent) | number : '1.0-2'}}</span>
+                        </td>
+                        <td class="abschlussrabattspaltehalb linierechts">
+                      <span *ngIf="findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,'BetrRab')!='' ||
+                      findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,'WR')!=''  ||
+                      findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,'BetrRabMan')!='' ">
+                        {{(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value | findandadd)*verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsanzahl.value  | number : '1.2-2'}}</span>
+                        </td>
+
+                        <td class="bkspaltehalbproz linierechts">
+                            <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.bkBetrag.value!=0">
+                                {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.bk.value | number : '1.2-2'}}</span>
+                        </td>
+
+                        <td class="bkspaltehalb linierechts">
+                            <span *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.bkBetrag.value!=0">
+                                {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.bkBetrag.value | number : '1.2-2'}}</span>
+                        </td>
+
+
+                        <td class="einstecken linierechts">
+                            {{findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,"Einstecken").preisUserTotal | number : '1.2-2'}}
+                        </td>
+
+                        <td class="repro linierechts">
+                            {{findValue(verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.zusatzpreispositionen.value,"Repo").preisUserTotal | number : '1.2-2'}}
+                        </td>
+
+
+
+
+                        <td class="anzerscheinungsspalte linierechts">{{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.erscheinungsanzahl.value}}</td>
+                        <td class="totalnettonettospalte">
+                            {{verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.preisUser.value  | number : '1.2-2'}}</td>
+                    </tr>
+                    <!--<tr>-->
+                    <!--<div *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.seitenumbruch.value == true" class="print-element seitenumbruch_marker seitenumbruch" style="height:0px;"></div>-->
+                    <!--</tr>-->
+                </table>
+                <div *ngIf="verkaufsdokument.controls.titel.controls[i].controls.werbemittel.controls[j].controls.seitenumbruch.value == true" class="print-element seitenumbruch_marker seitenumbruch" style="height:0px;"></div>
+            </div>
+        </div>
+        <!--          </td>-->
+        <!--        </tr>-->
+        <!--</table>-->
+
+        <table class="print-element a4-quer-6 offerttabelle offerttabellefooter">
+            <tr><td></td>
+                <!--   <td colspan="15">&nbsp;Ihre Investitionen<div style="float:right;padding-right: 5px">-->
+                <!-- <span>{{ totalpreissumme() | number : '1.2-2' }}</span>-->
+                <!--</div> </td>-->
+            </tr>
+        </table>
+
+        <span class="print-element a4-quer-6"><br><br></span>
+        <table class="print-element a4-quer-6" >
+            <tr>
+                <td><pre *ngIf="verkaufsdokument.controls.indivSchlusssatz.value!=''">{{verkaufsdokument.controls.indivSchlusssatz.value}}</pre>
+                    <span i18n="@@businessconditionsWOmwst">Daten-, Tarif- und Grössenänderungen vorbehalten. Die Preise verstehen sich in CHF, exkl. Mehrwertsteuer. Es gelten die allgemeinen Geschäftsbedingungen.</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!-- Footer -->
+    <div id="footer" class="a4-quer-6" style="page-break-after: always;height:10px; margin-bottom: 54px"> <!-- margin, damit Chrome 66-Systemfooter überdeckt wird -->
+        <span class="page-number"></span>
+
+    </div>
+    <!-- damit Seitenumbruch in jedem Fall richtig funktionert, 12.04.2018 fp -->
+    <div class="print-element a4-quer-1">&nbsp;</div>
+
+</div> <!-- Ende Druckvorschau-DIV -->
